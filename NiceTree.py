@@ -36,13 +36,14 @@ def leaf(tree):
     if(tree.getRight() != None):
         return leaf(tree.getRight())
 
-    if(not tree.getBag()):
+    if(len(tree.getBag()) > 0):
         tree.left = createLeaf(tree.getBag())
         return
 
 #def convertToNiceTree():
 
 def createLeaf(bag):
-    if(not bag):
-        return NiceTree(createLeaf(bag[-1]), None, bag, BagType.IV)
+    print(bag)
+    if(len(bag) > 0):
+        return NiceTree(createLeaf(bag[1:]), None, bag, BagType.IV)
     return NiceTree(None, None, [], BagType.L)
