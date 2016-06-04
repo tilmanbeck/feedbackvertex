@@ -1,6 +1,5 @@
 class Tree:
-    def __init__(self, parent=None, left=None, right=None, bag=[]):
-        self.parent = parent
+    def __init__(self, left=None, right=None, bag=[]):
         self.left = left
         self.right = right
         self.bag = bag

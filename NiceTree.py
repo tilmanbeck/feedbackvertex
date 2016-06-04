@@ -3,11 +3,18 @@ import Tree
 def leaf(tree):
     if(tree.getLeft() != None):
         return leaf(tree.getLeft())
+
     if(tree.getRight() != None):
         return leaf(tree.getRight())
 
+    if(not bag):
+        tree.left = createLeaf(bag)
+    pass
 
-
+def createLeaf(bag):
+    if(not bag):
+        return NiceTree(createLeaf(bag[-1]),None,bag,'I')
+    return NiceTree(None,None,[],'Leaf')
 
 def convertToNiceTree():
     pass
