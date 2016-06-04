@@ -15,21 +15,21 @@ class Tree:
 
 def print_tree_indented(self, level=0):
     if self == None:
-        print '  '
+        print('  ')
         return
-    print '  ' * level + str(self.bag)
+    print(str(self.bag))
     print_tree_indented(self.left, level+1)
     print_tree_indented(self.right, level+1)
 
 #leaf node creation
 #
 
-bc = Tree(bcg, None,['b','c'])
-bcg = Tree(bc,abg,ecg,['b','c','g'])
-ecg = Tree(efg,ecd,['e','c','g'])
 ecd = Tree(None,None,['e','d','c'])
 efg = Tree(None,None,['g', 'f', 'e'])
 abg = Tree(None,None,['b', 'g', 'a'])
+ecg = Tree(efg,ecd,['e','c','g'])
+bcg = Tree(abg,ecg,['b','c','g'])
+bc = Tree(bcg, None,['b','c'])
 
 print_tree_indented(bc)
 
