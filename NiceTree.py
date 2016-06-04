@@ -31,14 +31,13 @@ def print_NiceTree_indented(self, level=0):
 
 def leaf(tree):
     if(tree.getLeft() != None):
-        return leaf(tree.getLeft())
+        leaf(tree.getLeft())
 
     if(tree.getRight() != None):
-        return leaf(tree.getRight())
+        leaf(tree.getRight())
 
     if(len(tree.getBag()) > 0):
         tree.left = createLeaf(tree.getBag())
-        return
 
 #def convertToNiceTree():
 
