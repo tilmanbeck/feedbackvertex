@@ -30,19 +30,19 @@ def print_NiceTree_indented(self, level=0):
     print_NiceTree_indented(self.right, level+1)
 
 def leaf(tree):
+
     if(tree.getLeft() != None):
         leaf(tree.getLeft())
 
     if(tree.getRight() != None):
         leaf(tree.getRight())
 
-    if(len(tree.getBag()) > 0):
+    if((len(tree.getBag()) > 0) and (tree.getLeft() == None) and (tree.getRight() == None)):
         tree.left = createLeaf(tree.getBag())
 
 #def convertToNiceTree():
 
 def createLeaf(bag):
-    print(bag)
-    if(len(bag) > 0):
-        return NiceTree(createLeaf(bag[1:]), None, bag, BagType.IV)
+    if(len(bag) > 1):
+        return NiceTree(createLeaf(bag[1:]), None, bag[1:], BagType.IV)
     return NiceTree(None, None, [], BagType.L)
