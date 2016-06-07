@@ -23,9 +23,9 @@ class NiceTree:
 
 def print_NiceTree_indented(self, level=0):
     if self == None:
-        print('  ')
+        print(str(level) + ' none')
         return
-    print(str(self.bag))
+    print(str(level) + ' ' + str(self.bag))
     print_NiceTree_indented(self.left, level+1)
     print_NiceTree_indented(self.right, level+1)
 
