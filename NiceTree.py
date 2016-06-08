@@ -4,6 +4,7 @@
 # single exponential time' [Cygan,Nederlof,Pilipczuk,Rooij,Wojtaszczyk]
 
 from BagType import BagType
+import copy
 
 class NiceTree:
     def __init__(self, left=None, right=None, bag=[], bagType=None):
@@ -129,13 +130,13 @@ def hasNoSpecialName(ntree):
         hasNoSpecialName(ntree.getRight())
     else:
         child = getChild(ntree)
-        ntreeBag = ntree.getBag()
-        childBag = child.getBag()
-        if(ntreeBag != None and childBag != None):
+        ntreeBag = copy.copy(ntree.getBag())
+        if(child != None and ntreeBag != None):
+            childBag = child.getBag()
             intersection = getIntersection(ntreeBag, childBag)
             print('node: ' + str(ntree))
             print('child: ' + str(child))
-            print('intersection: ' + str(intersection))
+            #print('intersection: ' + str(intersection))
             forgetList = getBagDifference(ntreeBag, intersection)
             introduceList = getBagDifference(childBag, intersection)
             # forgetList = list of vertices which have to be removed from the bag
@@ -150,12 +151,15 @@ def hasNoSpecialName(ntree):
             if((len(forgetList) + len(introduceList)) > 1):
                 if(len(forgetList) > 0):
                     #case 1
-                    newChild = NiceTree(child,None,ntreeBag.remove(forgetList[0]))
+                    print('forgetting: ' + str(forgetList[0] + ' of ' + str(forgetList)))
+                    newChild = NiceTree(child, None, ntreeBag.remove(forgetList[0]))
+                    print('newchild: ' + str(newChild))
                     ntree.setBagType(BagType.IV)
                     ntree.setLeft(newChild)
                     hasNoSpecialName(newChild)
                 elif(len(introduceList) > 0):
                     #case 2
+                    print('introducing: ' + str(introduceList[0] + ' of ' + str(introduceList)))
                     newChild = NiceTree(child, None, ntreeBag.add(introduceList[0]))
                     ntree.setBagType(BagType.F)
                     ntree.setLeft(newChild)
