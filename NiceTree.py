@@ -8,8 +8,8 @@ class NiceTree:
         #convertToNiceTree()
         self.bagType = bagType
 
-    def setType(self,type):
-        self.type = type
+    def setBagType(self,bagType):
+        self.bagType = bagType
     def getBagType(self):
         return self.bagType
     def __str__(self):
@@ -20,6 +20,10 @@ class NiceTree:
         return self.left
     def getBag(self):
         return self.bag
+    def setRight(self, right):
+        self.right = right
+    def setLeft(self, left):
+        self.left = left
 
 def print_NiceTree_indented(self, level=0):
     if self == None:
@@ -29,6 +33,14 @@ def print_NiceTree_indented(self, level=0):
     print_NiceTree_indented(self.left, level+1)
     print_NiceTree_indented(self.right, level+1)
 
+# This function traverses the tree in-order
+# and searches for the leaves of the tree
+# (both children non-existent)
+# when it finds one, it concats to the current leaf
+# as many new nodes until the bag is empty
+# (forgetting one vertex per step)
+# so that the last node has an empty bag and
+# gets the type leaf bag
 def leaf(tree):
 
     if(tree.getLeft() != None):
@@ -47,6 +59,13 @@ def createLeaf(bag):
         return NiceTree(createLeaf(bag[1:]), None, bag[1:], BagType.IV)
     return NiceTree(None, None, [], BagType.L)
 
+# This function gets the old root of the tree
+# and introduces new root nodes as long as
+# the bag of the old root is not empty by
+# forgetting one vertex in every step.
+# The newly introduced nodes are marked as
+# forget bags and the last one to be introduced
+# as root with an empty bag (definition 2.3)
 def root(oldRoot):
     bag = oldRoot.getBag()
     while(len(bag)>1):
@@ -54,26 +73,40 @@ def root(oldRoot):
         return root(newRoot)
     return NiceTree(oldRoot,None, [],BagType.R)
 
+# TODO test
+# The join function traverses the given tree in-order
+# and checks for every node if there are two children
+# if yes (and their bags are not equal -> already joined)
+# then we introduce a join bag and two equal children
+# (according to definition 2.3)
+# otherwise we continue traversing
+def join(tree):
+    leftNode = tree.getLeft()
+    rightNode = tree.getRight()
+    if(leftNode!= None and rightNode != None):
+        rightBag = tree.getRight().getBag()
+        leftBag = tree.getLeft().getBag()
+        if(not areEqualBags(rightBag,leftBag)):
+            tree.setBagType(BagType.J)
+            treeBag = tree.getBag()
+            newLeftNode = NiceTree(leftNode, None, treeBag)
+            newRightNode = NiceTree(rightNode, None, treeBag)
+    if(leftNode != None):
+        join(leftNode)
+    if(rightNode != None):
+        join(rightNode)
 
-# def join(tree):
-#     left = tree.getLeft()
-#     leftBag = tree.getLeft().getBag()
-#
-#     right = tree.getRight()
-#     rightBag = tree.getRight().getBag()
-#
-#     bag = tree.getBag()
-#
-#    if(left != None and right != None and leftBag != bag and rightBag != bag):
-
+def areEqualBags(firstBag, scndBag):
+    return len([x for x in firstBag if x not in scndBag]) == 0
 
 
 #def hasNoSpecialName():
 
 
-def getIntersection(bagA, bagB):
-    intersection = list(set(A).intersection(set(B)))
-    return intersection
+# calculates the intersection of two bags
+# example: [a,b,c] and [b,f,g] -> [b]
+def getIntersection(firstBag, scndBag):
+    return list(set(firstBag).intersection(set(scndBag)))
 
 def getForgetAndIntroduceList(treeA,treeB):
     A = treeA.getBag()
@@ -86,6 +119,31 @@ def getForgetAndIntroduceList(treeA,treeB):
     res = [forgetList,introduceList]
     return res
 
+# calculates the difference of two bags
+# example: [a,b,c] and [a] -> [b,c]
 def getBagDifference(firstBag, scndBag):
     return list(set(firstBag).difference(set(scndBag)))
 
+# def hasNoSpecialName(ntree):
+#     if(not hasTwoChildren(ntree)):
+#         child = getChild(ntree)
+#         ntreeBag = ntree.getBag()
+#         childBag = ntree.getBag()
+#         intersection = getIntersection(ntreeBag,childBag)
+#         if(len(intersection) > 0):
+#             forgetList =
+
+
+def getChild(ntree):
+    left = ntree.getLeft()
+    if(left != None):
+        return left
+    return ntree.getRight()
+
+def hasTwoChildren(ntree):
+    if(ntree.getLeft() == None and ntree.getRight() == None):
+        return True
+    return False
+
+
+#order: join, internalstuff, leaf, root
