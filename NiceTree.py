@@ -126,39 +126,42 @@ def areEqualBags(firstBag, scndBag):
 def hasNoSpecialName(ntree):
     if(hasTwoChildren(ntree)):
         hasNoSpecialName(ntree.getLeft())
-        hasNoSpecialName(ntree.getRight)
+        hasNoSpecialName(ntree.getRight())
     else:
         child = getChild(ntree)
         ntreeBag = ntree.getBag()
         childBag = child.getBag()
-        intersection = getIntersection(ntreeBag, childBag)
-        print('node: ' + __str__(ntree))
-        print('child: ' + __str__(child))
-        print('intersection: ' + str(intersection))
-        forgetList = getBagDifference(ntreeBag, intersection)
-        introduceList = getBagDifference(childBag, intersection)
-        # forgetList = list of vertices which have to be removed from the bag
-        # while traversing downwards the tree (we remove one each step)
-        # introduceList = list of vertices which have to be added to the bag
-        # while traversing downwards the tree (we add one each step)
-        # if we know that the sum of those two lists equals 1 or less than
-        # we  know we don't have to introduce/forget vertices
-        # otherwise we have two cases:
-        #   1:  we still have to forget bags
-        #   2:  we have to introduce bags
-        if((len(forgetList) + len(introduceList)) > 1):
-            if(len(forgetList) > 0):
-                #case 1
-                newChild = NiceTree(child,None,ntreeBag.remove(forgetList[0]))
-                ntree.setBagType(BagType.IV)
-                ntree.setLeft(newChild)
-                hasNoSpecialName(newChild)
-            elif(len(introduceList) > 0):
-                #case 2
-                newChild = NiceTree(child, None, ntreeBag.add(introduceList[0]))
-                ntree.setBagType(BagType.F)
-                ntree.setLeft(newChild)
-                hasNoSpecialName(newChild)
+        if(ntreeBag != None and childBag != None):
+            intersection = getIntersection(ntreeBag, childBag)
+            print('node: ' + str(ntree))
+            print('child: ' + str(child))
+            print('intersection: ' + str(intersection))
+            forgetList = getBagDifference(ntreeBag, intersection)
+            introduceList = getBagDifference(childBag, intersection)
+            # forgetList = list of vertices which have to be removed from the bag
+            # while traversing downwards the tree (we remove one each step)
+            # introduceList = list of vertices which have to be added to the bag
+            # while traversing downwards the tree (we add one each step)
+            # if we know that the sum of those two lists equals 1 or less than
+            # we  know we don't have to introduce/forget vertices
+            # otherwise we have two cases:
+            #   1:  we still have to forget bags
+            #   2:  we have to introduce bags
+            if((len(forgetList) + len(introduceList)) > 1):
+                if(len(forgetList) > 0):
+                    #case 1
+                    newChild = NiceTree(child,None,ntreeBag.remove(forgetList[0]))
+                    ntree.setBagType(BagType.IV)
+                    ntree.setLeft(newChild)
+                    hasNoSpecialName(newChild)
+                elif(len(introduceList) > 0):
+                    #case 2
+                    newChild = NiceTree(child, None, ntreeBag.add(introduceList[0]))
+                    ntree.setBagType(BagType.F)
+                    ntree.setLeft(newChild)
+                    hasNoSpecialName(newChild)
+            if(child.getBag() != None):
+                hasNoSpecialName(child)
 
 
 
