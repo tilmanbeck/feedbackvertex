@@ -5,6 +5,8 @@ from NiceTree import root
 from NiceTree import join
 from NiceTree import hasNoSpecialName
 
+edges = [{}, {}]
+
 ecd = NiceTree(None,None,['e','c','d'])
 efg = NiceTree(None,None,['e', 'f', 'g'])
 abg = NiceTree(None,None,['a', 'b', 'g'])
