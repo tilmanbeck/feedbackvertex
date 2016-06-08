@@ -134,7 +134,10 @@ def hasNoSpecialName(ntree):
         ntreeBag = ntree.getBag()
         childBag = child.getBag()
         intersection = getIntersection(ntreeBag, childBag)
-        #TODO
+        #TODO in what cases are we sure that we have to introduce new vertices?
+        #TODO loop over forgetList -> add new forget bags
+        #TODO loop over introduceList -> add new introduce bags
+        #TODO glue it together
         forgetList = getBagDifference(ntreeBag, intersection)
         introduceList = getBagDifference(childBag, intersection)
 
