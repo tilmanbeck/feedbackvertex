@@ -172,6 +172,7 @@ def getIntersection(firstBag, scndBag):
     return list(set(firstBag).intersection(set(scndBag)))
 
 # calculates the difference of two bags
+# ! result depends on order of parameters !
 # example: [a,b,c] and [a] -> [b,c]
 def getBagDifference(firstBag, scndBag):
     return list(set(firstBag).difference(set(scndBag)))
