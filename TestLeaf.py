@@ -3,6 +3,7 @@ from NiceTree import print_NiceTree_indented
 from NiceTree import leaf
 from NiceTree import root
 from NiceTree import join
+from NiceTree import getBagDifference
 
 ecd = NiceTree(None,None,['e','c','d'])
 efg = NiceTree(None,None,['e', 'f', 'g'])
@@ -20,5 +21,8 @@ leaf(bc)
 bc = root(bc)
 print_NiceTree_indented(bc)
 print('------')
+a = ['a','b','c']
+b = ['a','f','g']
+print(getBagDifference(a, b))
 
 

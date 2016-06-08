@@ -124,9 +124,7 @@ def areEqualBags(firstBag, scndBag):
 # has two children, we don't have to examine it
 # as we executed join beforehand
 def hasNoSpecialName(ntree):
-    leftChild = ntree.getLeft()
-    rightChild = ntree.getRight()
-    if(leftChild != None and rightChild != None):
+    if(hasTwoChildren(ntree)):
         hasNoSpecialName(ntree.getLeft())
         hasNoSpecialName(ntree.getRight)
     else:
