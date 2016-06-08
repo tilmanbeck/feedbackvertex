@@ -80,8 +80,12 @@ def getForgetAndIntroduceList(treeA,treeB):
     B = treeB.getBag()
     intersection = getIntersection(A,B)
 
-    forgetList = list(set(A).difference(set(intersection)))
-    introduceList = list(set(B).difference(set(intersection)))
+    forgetList = getBagDifference(A,intersection)
+    introduceList = getBagDifference(B,intersection)
 
     res = [forgetList,introduceList]
     return res
+
+def getBagDifference(firstBag, scndBag):
+    return list(set(firstBag).difference(set(scndBag)))
+
