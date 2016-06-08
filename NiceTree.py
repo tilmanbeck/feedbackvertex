@@ -132,20 +132,29 @@ def hasNoSpecialName(ntree):
         ntreeBag = ntree.getBag()
         childBag = child.getBag()
         intersection = getIntersection(ntreeBag, childBag)
-        #TODO in what cases are we sure that we have to introduce new vertices?
-        #TODO loop over forgetList -> add new forget bags
-        #TODO loop over introduceList -> add new introduce bags
-        #TODO glue it together
+        print('node: ' + __str__(ntree))
+        print('child: ' + __str__(child))
+        print('intersection: ' + str(intersection))
         forgetList = getBagDifference(ntreeBag, intersection)
         introduceList = getBagDifference(childBag, intersection)
-############# testi tester tested den test
+        # forgetList = list of vertices which have to be removed from the bag
+        # while traversing downwards the tree (we remove one each step)
+        # introduceList = list of vertices which have to be added to the bag
+        # while traversing downwards the tree (we add one each step)
+        # if we know that the sum of those two lists equals 1 or less than
+        # we  know we don't have to introduce/forget vertices
+        # otherwise we have two cases:
+        #   1:  we still have to forget bags
+        #   2:  we have to introduce bags
         if((len(forgetList) + len(introduceList)) > 1):
             if(len(forgetList) > 0):
+                #case 1
                 newChild = NiceTree(child,None,ntreeBag.remove(forgetList[0]))
                 ntree.setBagType(BagType.IV)
                 ntree.setLeft(newChild)
                 hasNoSpecialName(newChild)
             elif(len(introduceList) > 0):
+                #case 2
                 newChild = NiceTree(child, None, ntreeBag.add(introduceList[0]))
                 ntree.setBagType(BagType.F)
                 ntree.setLeft(newChild)
@@ -164,16 +173,6 @@ def getIntersection(firstBag, scndBag):
 def getBagDifference(firstBag, scndBag):
     return list(set(firstBag).difference(set(scndBag)))
 
-# def hasNoSpecialName(ntree):
-#     if(not hasTwoChildren(ntree)):
-#         child = getChild(ntree)
-#         ntreeBag = ntree.getBag()
-#         childBag = ntree.getBag()
-#         intersection = getIntersection(ntreeBag,childBag)
-#         if(len(intersection) > 0):
-#             forgetList =
-
-
 def getChild(ntree):
     left = ntree.getLeft()
     if(left != None):
@@ -181,7 +180,7 @@ def getChild(ntree):
     return ntree.getRight()
 
 def hasTwoChildren(ntree):
-    if(ntree.getLeft() == None and ntree.getRight() == None):
+    if(ntree.getLeft() != None and ntree.getRight() != None):
         return True
     return False
 

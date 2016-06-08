@@ -3,7 +3,7 @@ from NiceTree import print_NiceTree_indented
 from NiceTree import leaf
 from NiceTree import root
 from NiceTree import join
-from NiceTree import getBagDifference
+from NiceTree import hasNoSpecialName
 
 ecd = NiceTree(None,None,['e','c','d'])
 efg = NiceTree(None,None,['e', 'f', 'g'])
@@ -14,15 +14,12 @@ bc = NiceTree(bcg, None,['b','c'])
 
 #treeDecomp = [rootNode1, rootNode2]
 
-print_NiceTree_indented(bc)
-print('- - - - - - - - -')
 join(bc)
+hasNoSpecialName(bc)
 leaf(bc)
 bc = root(bc)
 print_NiceTree_indented(bc)
 print('------')
-a = ['a','b','c']
-b = ['a','f','g']
-print(getBagDifference(a, b))
+
 
 
