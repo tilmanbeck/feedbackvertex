@@ -89,7 +89,7 @@ def root(oldRoot):
 def join(tree):
     leftNode = tree.getLeft()
     rightNode = tree.getRight()
-    if(leftNode!= None and rightNode != None):
+    if(hasTwoChildren(tree)):
         rightBag = tree.getRight().getBag()
         leftBag = tree.getLeft().getBag()
         if(not areEqualBags(rightBag,leftBag)):
