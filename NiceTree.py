@@ -54,8 +54,28 @@ def root(oldRoot):
         return root(newRoot)
     return NiceTree(oldRoot,None, [],BagType.R)
 
+
 def join(tree):
-    if(tree.getLeft() != None and tree.getRight() != None):
+    left = tree.getLeft()
+    leftBag = tree.getLeft().getBag()
+
+    right = tree.getRight()
+    rightBag = tree.getRight().getBag()
+
+    bag = tree.getBag()
+
+    if(left != None and right != None and leftBag != bag and rightBag != bag):
 
 
-def hasNoSpecialName():
+#def hasNoSpecialName():
+
+
+def getNonMutualVerticies(treeA,treeB):
+    A = treeA.getBag()
+    B = treeB.getBag()
+
+    ADiff = list(set(A).difference(set(B)))
+    BDiff = list(set(B).difference(set(A)))
+
+    res = [ADiff,BDiff]
+    return res
