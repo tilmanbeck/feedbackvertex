@@ -187,7 +187,10 @@ def hasTwoChildren(ntree):
     if(ntree.getLeft() != None and ntree.getRight() != None):
         return True
     return False
-
+# this function traverse the tree in-order
+# for each edge of the initial graph and
+# should place an extra 'introduce edge bag'
+# above the first node which contains the edge
 def inOrderEdgeBag(ntree, edge):
     if(not hasTwoChildren(ntree)):
        if(hasAtLeastOneChild(ntree)):
