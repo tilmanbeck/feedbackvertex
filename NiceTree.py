@@ -124,10 +124,10 @@ def areEqualBags(firstBag, scndBag):
 # Additionally, we use the assumption that if a node
 # has two children, we don't have to examine it
 # as we executed join beforehand
-def hasNoSpecialName(ntree):
+def addInternalNodes(ntree):
     if(hasTwoChildren(ntree)):
-        hasNoSpecialName(ntree.getLeft())
-        hasNoSpecialName(ntree.getRight())
+        addInternalNodes(ntree.getLeft())
+        addInternalNodes(ntree.getRight())
     else:
         child = getChild(ntree)
         ntreeBag = copy.copy(ntree.getBag())
@@ -152,19 +152,16 @@ def hasNoSpecialName(ntree):
                     newChild = NiceTree(child, None, ntreeBag)
                     ntree.setBagType(BagType.IV)
                     ntree.setLeft(newChild)
-                    hasNoSpecialName(newChild)
+                    addInternalNodes(newChild)
                 elif(len(introduceList) > 0):
                     #case 2
                     ntreeBag.add(introduceList[0])
                     newChild = NiceTree(child, None, ntreeBag)
                     ntree.setBagType(BagType.F)
                     ntree.setLeft(newChild)
-                    hasNoSpecialName(newChild)
+                    addInternalNodes(newChild)
             if(child.getBag() != None):
-                hasNoSpecialName(child)
-
-
-
+                addInternalNodes(child)
 
 # calculates the intersection of two bags
 # example: [a,b,c] and [b,f,g] -> [b]
