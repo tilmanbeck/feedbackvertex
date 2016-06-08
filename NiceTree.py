@@ -138,6 +138,18 @@ def hasNoSpecialName(ntree):
         #TODO glue it together
         forgetList = getBagDifference(ntreeBag, intersection)
         introduceList = getBagDifference(childBag, intersection)
+############# testi tester tested den test
+        if((len(forgetList) + len(introduceList)) > 1):
+            if(len(forgetList) > 0):
+                newChild = NiceTree(child,None,ntreeBag.remove(forgetList[0]))
+                ntree.setBagType(BagType.IV)
+                ntree.setLeft(newChild)
+                hasNoSpecialName(newChild)
+            elif(len(introduceList) > 0):
+                newChild = NiceTree(child, None, ntreeBag.add(introduceList[0]))
+                ntree.setBagType(BagType.F)
+                ntree.setLeft(newChild)
+                hasNoSpecialName(newChild)
 
 
 
