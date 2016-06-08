@@ -2,7 +2,7 @@ from NiceTree import NiceTree
 from NiceTree import print_NiceTree_indented
 from NiceTree import leaf
 from NiceTree import root
-from NiceTree import areEqualBags
+from NiceTree import join
 
 ecd = NiceTree(None,None,['e','c','d'])
 efg = NiceTree(None,None,['e', 'f', 'g'])
@@ -15,12 +15,10 @@ bc = NiceTree(bcg, None,['b','c'])
 
 print_NiceTree_indented(bc)
 print('- - - - - - - - -')
+join(bc)
 leaf(bc)
 bc = root(bc)
 print_NiceTree_indented(bc)
 print('------')
-listA = ['A','B','E','F']
-listB = ['A','C','E','F']
-print(areEqualBags(listA,listB))
 
 

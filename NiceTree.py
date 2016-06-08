@@ -1,3 +1,8 @@
+# class to implement the nice tree decomposition conversion
+# from paper
+# 'Solving connectivity problems parameterized by treewidth in
+# single exponential time' [Cygan,Nederlof,Pilipczuk,Rooij,Wojtaszczyk]
+
 from BagType import BagType
 
 class NiceTree:
@@ -7,6 +12,7 @@ class NiceTree:
         self.bag = bag
         #convertToNiceTree()
         self.bagType = bagType
+        self.labels = []
 
     def setBagType(self,bagType):
         self.bagType = bagType
@@ -24,6 +30,8 @@ class NiceTree:
         self.right = right
     def setLeft(self, left):
         self.left = left
+    def addLabel(self, label):
+        self.labels.append(label)
 
 def print_NiceTree_indented(self, level=0):
     if self == None:
@@ -36,11 +44,8 @@ def print_NiceTree_indented(self, level=0):
 # This function traverses the tree in-order
 # and searches for the leaves of the tree
 # (both children non-existent)
-# when it finds one, it concats to the current leaf
-# as many new nodes until the bag is empty
-# (forgetting one vertex per step)
-# so that the last node has an empty bag and
-# gets the type leaf bag
+# when it finds one, it sets its left child
+# as the result of createLeaf with its bag
 def leaf(tree):
 
     if(tree.getLeft() != None):
@@ -52,8 +57,10 @@ def leaf(tree):
     if((len(tree.getBag()) > 0) and (tree.getLeft() == None) and (tree.getRight() == None)):
         tree.left = createLeaf(tree.getBag())
 
-#def convertToNiceTree():
-
+# creates as many new nodes until the bag is empty
+# (forgetting one vertex per step)
+# so that the last node has an empty bag and
+# gets the type leaf bag
 def createLeaf(bag):
     if(len(bag) > 1):
         return NiceTree(createLeaf(bag[1:]), None, bag[1:], BagType.IV)
@@ -73,7 +80,6 @@ def root(oldRoot):
         return root(newRoot)
     return NiceTree(oldRoot,None, [],BagType.R)
 
-# TODO test
 # The join function traverses the given tree in-order
 # and checks for every node if there are two children
 # if yes (and their bags are not equal -> already joined)
@@ -91,6 +97,8 @@ def join(tree):
             treeBag = tree.getBag()
             newLeftNode = NiceTree(leftNode, None, treeBag)
             newRightNode = NiceTree(rightNode, None, treeBag)
+            tree.setLeft(newLeftNode)
+            tree.setRight(newRightNode)
     if(leftNode != None):
         join(leftNode)
     if(rightNode != None):
@@ -111,12 +119,12 @@ def getIntersection(firstBag, scndBag):
 def getForgetAndIntroduceList(treeA,treeB):
     A = treeA.getBag()
     B = treeB.getBag()
-    intersection = getIntersection(A,B)
+    intersection = getIntersection(A, B)
 
-    forgetList = getBagDifference(A,intersection)
-    introduceList = getBagDifference(B,intersection)
+    forgetList = getBagDifference(A, intersection)
+    introduceList = getBagDifference(B, intersection)
 
-    res = [forgetList,introduceList]
+    res = [forgetList, introduceList]
     return res
 
 # calculates the difference of two bags
