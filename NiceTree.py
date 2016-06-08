@@ -108,24 +108,43 @@ def areEqualBags(firstBag, scndBag):
     return len([x for x in firstBag if x not in scndBag]) == 0
 
 
-#def hasNoSpecialName():
+# A nice tree decomposition (definition 2.3) uses
+# structures of the standard nice tree decomposition.
+# This function takes care that the third property
+# of definition 2.2 of a nice standard nice tree
+# decomposition is guaranteed. We achieve this by
+# introducing forget bags and introduce vertex bags
+# between two connected nodes whose intersection is
+# bigger than one and/or if they contain different
+# vertices.
+# We first 'forget' all vertices of the parent node
+# and from there on we introduce all the vertices
+# which existed in the previous child node
+# Additionally, we use the assumption that if a node
+# has two children, we don't have to examine it
+# as we executed join beforehand
+def hasNoSpecialName(ntree):
+    leftChild = ntree.getLeft()
+    rightChild = ntree.getRight()
+    if(leftChild != None and rightChild != None):
+        hasNoSpecialName(ntree.getLeft())
+        hasNoSpecialName(ntree.getRight)
+    else:
+        child = getChild(ntree)
+        ntreeBag = ntree.getBag()
+        childBag = child.getBag()
+        intersection = getIntersection(ntreeBag, childBag)
+        #TODO
+        forgetList = getBagDifference(ntreeBag, intersection)
+        introduceList = getBagDifference(childBag, intersection)
+
+
 
 
 # calculates the intersection of two bags
 # example: [a,b,c] and [b,f,g] -> [b]
 def getIntersection(firstBag, scndBag):
     return list(set(firstBag).intersection(set(scndBag)))
-
-def getForgetAndIntroduceList(treeA,treeB):
-    A = treeA.getBag()
-    B = treeB.getBag()
-    intersection = getIntersection(A, B)
-
-    forgetList = getBagDifference(A, intersection)
-    introduceList = getBagDifference(B, intersection)
-
-    res = [forgetList, introduceList]
-    return res
 
 # calculates the difference of two bags
 # example: [a,b,c] and [a] -> [b,c]
