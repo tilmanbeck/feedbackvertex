@@ -3,6 +3,9 @@
 # 'Solving connectivity problems parameterized by treewidth in
 # single exponential time' [Cygan,Nederlof,Pilipczuk,Rooij,Wojtaszczyk]
 
+# TODO take care if there are multiple trees which are not interconnected
+# TODO assert isIstance etc
+
 from BagType import BagType
 import copy
 
@@ -185,5 +188,46 @@ def hasTwoChildren(ntree):
         return True
     return False
 
+def inOrderEdgeBag(ntree, edge):
+    if(not hasTwoChildren(ntree)):
+       if(hasAtLeastOneChild(ntree)):
+            if(ntree.getLeft() != None):
+                child = ntree.getLeft()
+                leftChild = True
+            else:
+                child = ntree.getRight()
+                leftChild = False
+            if(containsEdge(edge,child.getBag())):
+                if(child.getBagType() == BagType.IE):
+                    child.addLabel(edge)
+                else:
+                    newNode = NiceTree(child, None, child.getBag(), BagType.IE)
+                    newNode.addLabel(edge)
+                    if(leftChild):
+                        ntree.setLeft(newNode)
+                    else:
+                        ntree.setLeft(newNode)
+            else:
+                inOrderEdgeBag(child, edge)
+    else:
+        #TODO it should break as soon as the node with the edge is found
+        #TODO real in-order traversal?
+        inOrderEdgeBag(ntree.getLeft(), edge)
+        inOrderEdgeBag(ntree.getRight(), edge)
 
-#order: join, internalstuff, leaf, root
+
+
+def hasAtLeastOneChild(ntree):
+    if(ntree.getLeft() == None):
+        if(ntree.getRight() == None):
+            return False
+    return True
+
+def edgeBags(ntree, edges):
+    for edge in edges:
+        inOrderEdgeBag(ntree, edge)
+
+def containsEdge(edge, bag):
+
+
+

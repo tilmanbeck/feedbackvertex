@@ -18,7 +18,9 @@ ecg = NiceTree(efg,ecd,['e', 'c', 'g'])
 bcg = NiceTree(abg,ecg,['b', 'c', 'g'])
 bc = NiceTree(bcg, None,['b', 'c'])
 
-#treeDecomp = [rootNode1, rootNode2]
+
+
+#order: join, internalstuff, leaf, root, edge bags
 
 join(bc)
 addInternalNodes(bc)
