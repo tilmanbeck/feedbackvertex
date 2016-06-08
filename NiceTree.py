@@ -55,27 +55,33 @@ def root(oldRoot):
     return NiceTree(oldRoot,None, [],BagType.R)
 
 
-def join(tree):
-    left = tree.getLeft()
-    leftBag = tree.getLeft().getBag()
+# def join(tree):
+#     left = tree.getLeft()
+#     leftBag = tree.getLeft().getBag()
+#
+#     right = tree.getRight()
+#     rightBag = tree.getRight().getBag()
+#
+#     bag = tree.getBag()
+#
+#    if(left != None and right != None and leftBag != bag and rightBag != bag):
 
-    right = tree.getRight()
-    rightBag = tree.getRight().getBag()
-
-    bag = tree.getBag()
-
-    if(left != None and right != None and leftBag != bag and rightBag != bag):
 
 
 #def hasNoSpecialName():
 
 
-def getNonMutualVerticies(treeA,treeB):
+def getIntersection(bagA, bagB):
+    intersection = list(set(A).intersection(set(B)))
+    return intersection
+
+def getForgetAndIntroduceList(treeA,treeB):
     A = treeA.getBag()
     B = treeB.getBag()
+    intersection = getIntersection(A,B)
 
-    ADiff = list(set(A).difference(set(B)))
-    BDiff = list(set(B).difference(set(A)))
+    forgetList = list(set(A).difference(set(intersection)))
+    introduceList = list(set(B).difference(set(intersection)))
 
-    res = [ADiff,BDiff]
+    res = [forgetList,introduceList]
     return res
