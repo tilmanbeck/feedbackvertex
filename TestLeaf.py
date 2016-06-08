@@ -16,7 +16,7 @@ bc = NiceTree(bcg, None,['b','c'])
 
 join(bc)
 hasNoSpecialName(bc)
-#leaf(bc)
+leaf(bc)
 bc = root(bc)
 print_NiceTree_indented(bc)
 print('------')

@@ -134,9 +134,6 @@ def hasNoSpecialName(ntree):
         if(child != None and ntreeBag != None):
             childBag = child.getBag()
             intersection = getIntersection(ntreeBag, childBag)
-            print('node: ' + str(ntree))
-            print('child: ' + str(child))
-            #print('intersection: ' + str(intersection))
             forgetList = getBagDifference(ntreeBag, intersection)
             introduceList = getBagDifference(childBag, intersection)
             # forgetList = list of vertices which have to be removed from the bag
@@ -151,16 +148,15 @@ def hasNoSpecialName(ntree):
             if((len(forgetList) + len(introduceList)) > 1):
                 if(len(forgetList) > 0):
                     #case 1
-                    print('forgetting: ' + str(forgetList[0] + ' of ' + str(forgetList)))
-                    newChild = NiceTree(child, None, ntreeBag.remove(forgetList[0]))
-                    print('newchild: ' + str(newChild))
+                    ntreeBag.remove(forgetList[0])
+                    newChild = NiceTree(child, None, ntreeBag)
                     ntree.setBagType(BagType.IV)
                     ntree.setLeft(newChild)
                     hasNoSpecialName(newChild)
                 elif(len(introduceList) > 0):
                     #case 2
-                    print('introducing: ' + str(introduceList[0] + ' of ' + str(introduceList)))
-                    newChild = NiceTree(child, None, ntreeBag.add(introduceList[0]))
+                    ntreeBag.add(introduceList[0])
+                    newChild = NiceTree(child, None, ntreeBag)
                     ntree.setBagType(BagType.F)
                     ntree.setLeft(newChild)
                     hasNoSpecialName(newChild)
