@@ -46,3 +46,16 @@ def createLeaf(bag):
     if(len(bag) > 1):
         return NiceTree(createLeaf(bag[1:]), None, bag[1:], BagType.IV)
     return NiceTree(None, None, [], BagType.L)
+
+def root(oldRoot):
+    bag = oldRoot.getBag()
+    while(len(bag)>1):
+        newRoot = NiceTree(oldRoot,None,bag[1:], BagType.F)
+        return root(newRoot)
+    return NiceTree(oldRoot,None, [],BagType.R)
+
+def join(tree):
+    if(tree.getLeft() != None and tree.getRight() != None):
+
+
+def hasNoSpecialName():
