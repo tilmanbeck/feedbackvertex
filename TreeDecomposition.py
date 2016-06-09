@@ -8,6 +8,7 @@
 
 from BagType import BagType
 import copy
+import string
 
 class TreeDecomposition:
     def __init__(self, left=None, right=None, bag=None, bagType=None):
@@ -241,34 +242,59 @@ def hasAtLeastOneChild(ntree):
 def containsEdge(edge, bag):
     return len(set(edge).intersection(set(bag))) == 2
 
-def saveHeader():
-    file = open("treeDecomposition.txt","w")
+
+index = 0
+def incrementIndex():
+    global index
+    index += 1
+def saveHeader(file):
     file.write("graph NiceTreeDecomposition {\n")
     file.write("size=\"1,1\";\n")
-    file.close()
+    file.write("node [shape=box];\n")
 
-def saveNodes(ntree):
-    file = open("treeDecomposition.txt","a")
-    file.write(str(ntree.getBag()) + " [label=\"" + str(ntree.getBagType()) + " " + str(ntree.getBag()) + "\"];\n")
-    file.close()
-    if(ntree.getLeft() != None):
-        saveNodes(ntree.getLeft())
-    if(ntree.getRight() != None):
-        saveNodes(ntree.getRight())
+def saveNodes(file,ntree):
+    #write the node
+    global index
+    nodeSymbol = getNextSymbol()
+    incrementIndex()
+    file.write(getEdgeLine(nodeSymbol, ntree))
+    leftChild = ntree.getLeft()
+    rightChild = ntree.getRight()
+    left = False
+    right = False
+    if(leftChild != None):
+        leftSymbol = getNextSymbol()
+        incrementIndex()
+        file.write(getEdgeLine(leftSymbol, leftChild))
+        file.write(nodeSymbol + " -- " + leftSymbol  + " [type=s];\n")
+        left = True
+    if(rightChild != None):
+        rightSymbol = getNextSymbol()
+        incrementIndex()
+        file.write(getEdgeLine(rightSymbol, rightChild))
+        file.write(nodeSymbol + " -- " + rightSymbol + " [type=s];\n")
+        right = True
+    if left: saveNodes(file, leftChild)
+    if right: saveNodes(file, rightChild)
 
-def saveEdges(edges):
-    file = open("treeDecomposition.txt", "a")
-    for e in edges:
-        file.write(str(e) + "\n")
+def getEdgeLine(symbol, ntree):
+    return symbol + " [label=\"{{" + str(ntree.getBagType().value) + "|" + str(ntree.getBag()) + "}}\"];\n"
 
-def saveFinish():
-    file = open("treeDecomposition.txt","a")
+
+def saveFinish(file):
     file.write("}")
-    file.close()
 
 def saveTreeDecomposition(ntree, edges):
-    saveHeader()
-    saveNodes(ntree)
-    saveEdges(edges)
-    saveFinish()
+    file = open("treeDecomposition.txt", "w")
+    saveHeader(file)
+    saveNodes(file, ntree)
+    #saveEdges(file, edges)
+    saveFinish(file)
+    file.close()
+
+def getNextSymbol():
+    alph = list(string.ascii_uppercase)
+    return alph[index%24] + str(index // 24)
+
+
 

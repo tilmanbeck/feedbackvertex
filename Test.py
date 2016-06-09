@@ -6,6 +6,9 @@ from TreeDecomposition import join
 from TreeDecomposition import addInternalNodes
 from TreeDecomposition import saveTreeDecomposition
 from TreeDecomposition import edgeBags
+from TreeDecomposition import getNextSymbol
+from BagType import BagType
+from Graphviz import GraphVisualization
 
 # example graph G
 vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
@@ -33,5 +36,7 @@ print_NiceTree_indented(bc)
 print('------')
 
 #saveTreeDecomposition(bc,edges)
+gv = GraphVisualization(bc)
+gv.createGraph()
 
 
