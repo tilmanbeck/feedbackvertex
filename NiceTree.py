@@ -232,5 +232,34 @@ def edgeBags(ntree, edges):
 
 #def containsEdge(edge, bag):
 
+def saveHeader():
+    file = open("treeDecomposition.txt","w")
+    file.write("graph NiceTreeDecomposition {\n")
+    file.write("size=\"1,1\";\n")
+    file.close()
 
+def saveNodes(ntree):
+    file = open("treeDecomposition.txt","a")
+    file.write(str(ntree.getBag()) + " [label=\"" + str(ntree.getBagType()) + " " + str(ntree.getBag()) + "\"];\n")
+    file.close()
+    if(ntree.getLeft() != None):
+        saveNodes(ntree.getLeft())
+    if(ntree.getRight() != None):
+        saveNodes(ntree.getRight())
+
+def saveEdges(edges):
+    file = open("treeDecomposition.txt", "a")
+    for e in edges:
+        file.write(str(e) + "\n")
+
+def saveFinish():
+    file = open("treeDecomposition.txt","a")
+    file.write("}")
+    file.close()
+
+def saveTreeDecomposition(ntree, edges):
+    saveHeader()
+    saveNodes(ntree)
+    saveEdges(edges)
+    saveFinish()
 

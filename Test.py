@@ -4,6 +4,7 @@ from NiceTree import leaf
 from NiceTree import root
 from NiceTree import join
 from NiceTree import addInternalNodes
+from NiceTree import saveTreeDecomposition
 
 # example graph G
 vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
@@ -29,5 +30,6 @@ bc = root(bc)
 print_NiceTree_indented(bc)
 print('------')
 
+saveTreeDecomposition(bc,edges)
 
 
