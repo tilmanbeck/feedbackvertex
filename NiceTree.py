@@ -230,7 +230,7 @@ def edgeBags(ntree, edges):
     for edge in edges:
         inOrderEdgeBag(ntree, edge)
 
-def containsEdge(edge, bag):
+#def containsEdge(edge, bag):
 
 
 
