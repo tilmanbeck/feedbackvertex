@@ -231,7 +231,7 @@ def edgeBags(ntree, edges):
         inOrderEdgeBag(ntree, edge)
 
 def containsEdge(edge, bag):
-    passs
+    pass
 
 def saveHeader():
     file = open("treeDecomposition.txt","w")
