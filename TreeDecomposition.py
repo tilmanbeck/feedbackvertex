@@ -3,7 +3,6 @@
 # 'Solving connectivity problems parameterized by treewidth in
 # single exponential time' [Cygan,Nederlof,Pilipczuk,Rooij,Wojtaszczyk]
 
-# TODO take care if there are multiple trees which are not interconnected
 # TODO assert isIstance etc, class name, class functions, bag as set
 # TODO getTreewidth
 
@@ -73,17 +72,10 @@ def createLeaf(bag):
         return TreeDecomposition(createLeaf(bag[1:]), None, bag[1:], BagType.IV)
     return TreeDecomposition(None, None, [], BagType.L)
 
-# This function gets the old root of the tree
-# and introduces new root nodes as long as
-# the bag of the old root is not empty by
-# forgetting one vertex in every step.
-# The newly introduced nodes are marked as
-# forget bags and the last one to be introduced
-# as root with an empty bag (definition 2.3)
 def childIsSmaller(oldRoot):
     return getBagDifference(oldRoot.getBag(),getChild(oldRoot).getBag()) == 1
 
-
+# used to define the BagType of the old root
 def root(oldRoot):
     if(childIsSmaller(oldRoot)):
         oldRoot.setBagType(BagType.IV)
@@ -91,6 +83,13 @@ def root(oldRoot):
         oldRoot.setBagType(BagType.F)
     return initRoot(oldRoot)
 
+# This function gets the old root of the tree
+# and introduces new root nodes as long as
+# the bag of the old root is not empty by
+# forgetting one vertex in every step.
+# The newly introduced nodes are marked as
+# forget bags and the last one to be introduced
+# as root with an empty bag (definition 2.3)
 def initRoot(oldRoot):
     bag = oldRoot.getBag()
     while(len(bag)>1):
@@ -177,10 +176,6 @@ def addInternalNodes(ntree):
                     ntree.setBagType(BagType.F)
                     ntree.setLeft(newChild)
                     addInternalNodes(newChild)
-            #if(len(forgetList) == 1 and len(introduceList) == 0 and child.getBagType() == None):
-                #child.setBagType(BagType.IV)
-            #if(len(introduceList) == 1 and len(forgetList) == 0 and child.getBagType() == None):
-                #child.setBagType(BagType.F)
             if(child.getBag() != None):
                 addInternalNodes(child)
 
