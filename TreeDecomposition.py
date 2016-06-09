@@ -4,19 +4,20 @@
 # single exponential time' [Cygan,Nederlof,Pilipczuk,Rooij,Wojtaszczyk]
 
 # TODO take care if there are multiple trees which are not interconnected
-# TODO assert isIstance etc
+# TODO assert isIstance etc, class name, class functions, bag as set
+# TODO getTreewidth
 
 from BagType import BagType
 import copy
 
-class NiceTree:
-    def __init__(self, left=None, right=None, bag=[], bagType=None):
+class TreeDecomposition:
+    def __init__(self, left=None, right=None, bag=None, bagType=None):
         self.left = left
         self.right = right
         self.bag = bag
         #convertToNiceTree()
         self.bagType = bagType
-        self.labels = []
+        self.label = {}
 
     def setBagType(self,bagType):
         self.bagType = bagType
@@ -34,14 +35,15 @@ class NiceTree:
         self.right = right
     def setLeft(self, left):
         self.left = left
-    def addLabel(self, label):
-        self.labels.append(label)
-
+    def setLabel(self, label):
+        self.label = label
+    def getLabel(self):
+        return self.label
 def print_NiceTree_indented(self, level=0):
     if self == None:
         print(str(level) + ' none')
         return
-    print(str(level) + ' ' + str(self.bag))
+    print(str(level) + ' ' + str(self.bag) + ' ' + str(self.getBagType()) + ' ' + str(self.getLabel()))
     print_NiceTree_indented(self.left, level+1)
     print_NiceTree_indented(self.right, level+1)
 
@@ -59,6 +61,7 @@ def leaf(tree):
         leaf(tree.getRight())
 
     if((len(tree.getBag()) > 0) and (tree.getLeft() == None) and (tree.getRight() == None)):
+        tree.setBagType(BagType.IV)
         tree.left = createLeaf(tree.getBag())
 
 # creates as many new nodes until the bag is empty
@@ -67,8 +70,8 @@ def leaf(tree):
 # gets the type leaf bag
 def createLeaf(bag):
     if(len(bag) > 1):
-        return NiceTree(createLeaf(bag[1:]), None, bag[1:], BagType.IV)
-    return NiceTree(None, None, [], BagType.L)
+        return TreeDecomposition(createLeaf(bag[1:]), None, bag[1:], BagType.IV)
+    return TreeDecomposition(None, None, [], BagType.L)
 
 # This function gets the old root of the tree
 # and introduces new root nodes as long as
@@ -77,12 +80,23 @@ def createLeaf(bag):
 # The newly introduced nodes are marked as
 # forget bags and the last one to be introduced
 # as root with an empty bag (definition 2.3)
+def childIsSmaller(oldRoot):
+    return getBagDifference(oldRoot.getBag(),getChild(oldRoot).getBag()) == 1
+
+
 def root(oldRoot):
+    if(childIsSmaller(oldRoot)):
+        oldRoot.setBagType(BagType.IV)
+    else:
+        oldRoot.setBagType(BagType.F)
+    return initRoot(oldRoot)
+
+def initRoot(oldRoot):
     bag = oldRoot.getBag()
     while(len(bag)>1):
-        newRoot = NiceTree(oldRoot,None,bag[1:], BagType.F)
-        return root(newRoot)
-    return NiceTree(oldRoot,None, [],BagType.R)
+        newRoot = TreeDecomposition(oldRoot, None, bag[1:], BagType.F)
+        return initRoot(newRoot)
+    return TreeDecomposition(oldRoot, None, [], BagType.R)
 
 # The join function traverses the given tree in-order
 # and checks for every node if there are two children
@@ -99,8 +113,8 @@ def join(tree):
         if(not areEqualBags(rightBag,leftBag)):
             tree.setBagType(BagType.J)
             treeBag = tree.getBag()
-            newLeftNode = NiceTree(leftNode, None, treeBag)
-            newRightNode = NiceTree(rightNode, None, treeBag)
+            newLeftNode = TreeDecomposition(leftNode, None, treeBag)
+            newRightNode = TreeDecomposition(rightNode, None, treeBag)
             tree.setLeft(newLeftNode)
             tree.setRight(newRightNode)
     if(leftNode != None):
@@ -152,17 +166,21 @@ def addInternalNodes(ntree):
                 if(len(forgetList) > 0):
                     #case 1
                     ntreeBag.remove(forgetList[0])
-                    newChild = NiceTree(child, None, ntreeBag)
+                    newChild = TreeDecomposition(child, None, ntreeBag, BagType.F)
                     ntree.setBagType(BagType.IV)
                     ntree.setLeft(newChild)
                     addInternalNodes(newChild)
                 elif(len(introduceList) > 0):
                     #case 2
                     ntreeBag.add(introduceList[0])
-                    newChild = NiceTree(child, None, ntreeBag)
+                    newChild = TreeDecomposition(child, None, ntreeBag, BagType.IV)
                     ntree.setBagType(BagType.F)
                     ntree.setLeft(newChild)
                     addInternalNodes(newChild)
+            #if(len(forgetList) == 1 and len(introduceList) == 0 and child.getBagType() == None):
+                #child.setBagType(BagType.IV)
+            #if(len(introduceList) == 1 and len(forgetList) == 0 and child.getBagType() == None):
+                #child.setBagType(BagType.F)
             if(child.getBag() != None):
                 addInternalNodes(child)
 
@@ -187,37 +205,36 @@ def hasTwoChildren(ntree):
     if(ntree.getLeft() != None and ntree.getRight() != None):
         return True
     return False
+
+# execute inOrderEdgeBag for each edge
+def edgeBags(ntree, edges):
+    for edge in edges:
+        inOrderEdgeBag(ntree, edge, False)
+
 # this function traverse the tree in-order
 # for each edge of the initial graph and
 # should place an extra 'introduce edge bag'
 # above the first node which contains the edge
-def inOrderEdgeBag(ntree, edge):
-    if(not hasTwoChildren(ntree)):
-       if(hasAtLeastOneChild(ntree)):
-            if(ntree.getLeft() != None):
-                child = ntree.getLeft()
-                leftChild = True
+def inOrderEdgeBag(ntree, edge, found):
+    if(not found):
+        leftChild = ntree.getLeft()
+        rightChild = ntree.getRight()
+        if(leftChild != None):
+            if(containsEdge(edge,leftChild.getBag())):
+                newNode = TreeDecomposition(leftChild, None, leftChild.getBag(), BagType.IE)
+                newNode.setLabel(edge)
+                ntree.setLeft(newNode)
+                return inOrderEdgeBag(ntree, edge, True)
             else:
-                child = ntree.getRight()
-                leftChild = False
-            if(containsEdge(edge,child.getBag())):
-                if(child.getBagType() == BagType.IE):
-                    child.addLabel(edge)
-                else:
-                    newNode = NiceTree(child, None, child.getBag(), BagType.IE)
-                    newNode.addLabel(edge)
-                    if(leftChild):
-                        ntree.setLeft(newNode)
-                    else:
-                        ntree.setLeft(newNode)
+                return inOrderEdgeBag(leftChild, edge, False)
+        if(rightChild != None):
+            if(containsEdge(edge,rightChild.getBag())):
+                newNode = TreeDecomposition(rightChild, None, rightChild.getBag(), BagType.IE)
+                newNode.setLabel(edge)
+                ntree.setLeft(newNode)
+                return inOrderEdgeBag(ntree, edge, True)
             else:
-                inOrderEdgeBag(child, edge)
-    else:
-        #TODO it should break as soon as the node with the edge is found
-        #TODO real in-order traversal?
-        inOrderEdgeBag(ntree.getLeft(), edge)
-        inOrderEdgeBag(ntree.getRight(), edge)
-
+                return inOrderEdgeBag(rightChild, edge, False)
 
 
 def hasAtLeastOneChild(ntree):
@@ -226,12 +243,8 @@ def hasAtLeastOneChild(ntree):
             return False
     return True
 
-def edgeBags(ntree, edges):
-    for edge in edges:
-        inOrderEdgeBag(ntree, edge)
-
 def containsEdge(edge, bag):
-    pass
+    return len(set(edge).intersection(set(bag))) == 2
 
 def saveHeader():
     file = open("treeDecomposition.txt","w")
