@@ -6,10 +6,14 @@ from TreeDecomposition import join
 from TreeDecomposition import addInternalNodes
 from TreeDecomposition import saveTreeDecomposition
 from TreeDecomposition import edgeBags
-from TreeDecomposition import getNextSymbol
+from TreeDecomposition import containsEdge
 from BagType import BagType
 from Graphviz import GraphVisualization
 
+# https://www.researchgate.net/figure/221426649_fig1_Fig-1-An-example-of-an-H-coloring-of-G-is-the-mapping-A-a-A-d-A-f-1
+
+
+#TODO fix bug with root node
 # example graph G
 vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
@@ -38,5 +42,6 @@ print('------')
 #saveTreeDecomposition(bc,edges)
 gv = GraphVisualization(bc)
 gv.createGraph()
+print(containsEdge(['e', 'c', 'g'], ['g','c']))
 
 

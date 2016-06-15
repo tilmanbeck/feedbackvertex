@@ -222,7 +222,7 @@ def inOrderEdgeBag(ntree, edge, found):
                 ntree.setLeft(newNode)
                 return inOrderEdgeBag(ntree, edge, True)
             else:
-                return inOrderEdgeBag(leftChild, edge, False)
+                inOrderEdgeBag(leftChild, edge, False)
         if(rightChild != None):
             if(containsEdge(edge,rightChild.getBag())):
                 newNode = TreeDecomposition(rightChild, None, rightChild.getBag(), BagType.IE)
@@ -230,7 +230,7 @@ def inOrderEdgeBag(ntree, edge, found):
                 ntree.setLeft(newNode)
                 return inOrderEdgeBag(ntree, edge, True)
             else:
-                return inOrderEdgeBag(rightChild, edge, False)
+                inOrderEdgeBag(rightChild, edge, False)
 
 
 def hasAtLeastOneChild(ntree):
