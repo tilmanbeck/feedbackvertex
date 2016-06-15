@@ -54,7 +54,7 @@ class GraphVisualization:
         leftSymbol = self.getNextSymbol()
         g.node(leftSymbol, self.getLabel(leftChild))
         g.edge(nodeSymbol,leftSymbol)
-        self.addChildren(ntree, g, leftSymbol)
+        self.addChildren(leftChild, g, leftSymbol)
 
     def addChildren(self, ntree, g, oldSymbol):
         assert isinstance(g, gv.Graph)
@@ -118,7 +118,7 @@ class GraphVisualization:
         self.addNodesAndEdges(self.tree, g)
         g = self.apply_styles(g, styles)
         filename = g.save('graph','/home/devnull/Development/python/effalg/feedbackvertex/')
-        #fucking render doesnt work so i save it
+        # render doesnt work so i save it
         #render(filename='/home/devnull/Development/python/effalg/feedbackvertex/graph')
 
 
