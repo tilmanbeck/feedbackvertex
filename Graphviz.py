@@ -92,6 +92,7 @@ class GraphVisualization:
         styles = {
             'graph': {
                 'label': 'Nice Tree Decomposition',
+                'labelloc': 'top',
                 'fontsize': '16',
                 'fontcolor': 'white',
                 'bgcolor': '#333333',
