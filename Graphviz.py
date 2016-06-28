@@ -95,7 +95,7 @@ class GraphVisualization:
                 'fontsize': '16',
                 'fontcolor': 'white',
                 'bgcolor': '#333333',
-                'rankdir': 'BT',
+                'rankdir': 'TB',
             },
             'nodes': {
                 'fontname': 'Helvetica',
@@ -117,9 +117,9 @@ class GraphVisualization:
         g = gv.Graph(format='svg')
         self.addNodesAndEdges(self.tree, g)
         g = self.apply_styles(g, styles)
-        filename = g.save('graph','/home/devnull/Development/python/effalg/feedbackvertex/')
+        filename = g.save('graph', '.')
         # render doesnt work so i save it
-        #render(filename='/home/devnull/Development/python/effalg/feedbackvertex/graph')
+        g.render(filename='./graph')
 
 
 
