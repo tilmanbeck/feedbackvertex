@@ -76,10 +76,12 @@ def calculateIndicesRec(value, missingNodes, indices):
 # print(containsEdge(['e', 'c', 'g'], ['g','c']))
 
 vertices = ['a','b','c']
+
 edges = [{'a','b'}, {'b','c'}]
-k = 3
-N = 5
-weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
+k = 2
+N = 4
+#weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
+weights = {'a':1,'b':3,'c':2}
 print(weights)
 
 bc = TreeDecomposition(None,None, ['b', 'c'])
@@ -93,6 +95,23 @@ edgeBags(ab,edges)
 gv = GraphVisualization(ab)
 gv.createGraph()
 
+def writeToFile(filename,array,fst,stepInfo):
+    f = open(filename, 'a')
+    f.write(stepInfo)
+    f.write("\n")
+    for i in range(0,fst):
+        f.write(str(i))
+        f.write("\n")
+        f.write(str(array[i]))
+        f.write("\n\n")
+    f.write("-----------------------------------------------\n")
+
+    #for i in range(0,fst):
+    #    for j in range(0,scn):
+    #        for k in range(0,thi):
+    #            f.write(str(array[i,j,k]))
+
+
 def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
     #in-order traversal
     indices = {vertices[i]: i for i in range(0,len(vertices))}
@@ -105,14 +124,15 @@ def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
 
 def inorder(node, indices, data, k, N, terminals):
     if(node.getLeft() != None):
-        inorder(node.getLeft(),indices, data, k, N, terminals)
+        data = inorder(node.getLeft(),indices, data, k, N, terminals)
     if(node.getRight() != None):
-        inorder(node.getRight(),indices, data, k, N, terminals)
+        data = inorder(node.getRight(),indices, data, k, N, terminals)
     if(node.bagType == BagType.L):
-        return
+        return data
     if(node.bagType == BagType.IV):
+        newData = np.zeros((len(vertices)**3,k,k*N))
         introducedVertex = node.getLabel()
-
+        print("introduced vertex: " + str(introducedVertex))
         indexInArray = indices.get(introducedVertex)
         bla = list(indices.values())
         for j in range(0,len(bla)):
@@ -128,8 +148,8 @@ def inorder(node, indices, data, k, N, terminals):
         for x in newIndices:
             for y in range(0,k):
                 for z in range(0,k*N):
-                    if(terminals.__contains__(introducedVertex)):
-                        data[x,y,z] = 0
+                    if not(terminals.__contains__(introducedVertex)):
+                        newData[x,y,z] = data[x,y,z]
         #if new vertex is colored 1
         bla[indexInArray] = 1
         newIndices = calculateIndices(bla,rest)
@@ -137,10 +157,7 @@ def inorder(node, indices, data, k, N, terminals):
             for y in range(0,k):
                 for z in range(0,k*N):
                     if(y - 1  >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < k*N)):
-                        data[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
-                    else:
-                        data[x,y,z] = 0
-        print("indices for coloring new vertex 1: " + str(newIndices))
+                        newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
         #if new vertex is colored 2
         bla[indexInArray] = 2
         newIndices = calculateIndices(bla,rest)
@@ -148,13 +165,10 @@ def inorder(node, indices, data, k, N, terminals):
             for y in range(0,k):
                 for z in range(0,k*N):
                     if(terminals[0] != introducedVertex):
-                        data[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
-                    else:
-                        data[x,y,z] = 0
-        print("indices for coloring new vertex 2: " + str(newIndices))
-
-        return
-    return
+                        newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
+        writeToFile('data.txt',newData,3**3, "after IV " +str(introducedVertex))
+        return newData
+    return data
 
 
 count(vertices,edges,ab,['a','b'],k,N,weights)
