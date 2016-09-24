@@ -129,6 +129,44 @@ def inorder(node, indices, data, k, N, terminals):
         data = inorder(node.getRight(),indices, data, k, N, terminals)
     if(node.bagType == BagType.L):
         return data
+    if(node.bagType == BagType.IE):
+        newData = np.zeros((len(vertices)**3,k,k*N))
+        firstVertex = node.getLabel().pop()
+        scndVertex = node.getLabel().pop()
+        # create list for all indices
+        listOfAllIndices = [i for i in range(0,len(indices.values())**3)]
+        val = [0 for i in range(0,len(indices))]
+        #what are we doing here? we need all indices except those where one of the edges is colored 1 and the other one 2
+        #and vice versa. so we take all indices and remove mentioned from all indices
+
+        # TODO make nice and export into seperate function
+        val[indices.get(firstVertex)] = 1
+        val[indices.get(scndVertex)] = 2
+        keys = list(indices.keys())
+        keys.remove(firstVertex)
+        keys.remove(scndVertex)
+        missingNodes = []
+        for key in keys:
+            missingNodes.append(indices.get(key))
+        first = calculateIndices(val,missingNodes)
+
+        val[indices.get(firstVertex)] = 2
+        val[indices.get(scndVertex)] = 1
+        keys = list(indices.keys())
+        keys.remove(firstVertex)
+        keys.remove(scndVertex)
+        missingNodes = []
+        for key in keys:
+            missingNodes.append(indices.get(key))
+        scnd = calculateIndices(val, missingNodes)
+
+        clearedIndices = [x for x in listOfAllIndices if x not in (first+scnd)]
+        for x in clearedIndices:
+            for y in range(0,k):
+                for z in range(0,k*N):
+                    newData[x,y,z] = data[x,y,z]
+        writeToFile('data.txt',newData,3**3, "after IE " +str(node.getLabel()))
+        return newData
     if(node.bagType == BagType.IV):
         newData = np.zeros((len(vertices)**3,k,k*N))
         introducedVertex = node.getLabel()
