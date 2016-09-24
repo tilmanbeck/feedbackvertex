@@ -21,30 +21,7 @@ class GraphVisualization:
         self.tree = treeDecomposition
 
     def getLabel(self, ntree):
-        return str(ntree.getBagType().value) + "|" + str(ntree.getBag())
-
-    # def addNodesAndEdges(self, ntree, g, old):
-    #     assert isinstance(g, gv.Graph)
-    #     nodeSymbol = self.getNextSymbol()
-    #     print(nodeSymbol)
-    #     print(self.getLabel(ntree))
-    #     g.node(nodeSymbol,self.getLabel(ntree))
-    #     leftChild = ntree.getLeft()
-    #     rightChild = ntree.getRight()
-    #     left = False
-    #     right = False
-    #     if(leftChild != None):
-    #         leftSymbol = self.getNextSymbol()
-    #         g.node(leftSymbol, self.getLabel(leftChild))
-    #         g.edge(nodeSymbol,leftSymbol)
-    #         left = True
-    #     if(rightChild != None):
-    #         rightSymbol = self.getNextSymbol()
-    #         g.node(rightSymbol,self.getLabel(rightChild))
-    #         g.edge(nodeSymbol, rightSymbol)
-    #         right = True
-    #     if left: self.addNodesAndEdges(leftChild, g)
-    #     if right: self.addNodesAndEdges(rightChild, g)
+        return str(ntree.getBagType().value) + " | " + str(ntree.getBag()) + " | label: " + str(ntree.getLabel())
 
     def addNodesAndEdges(self, ntree, g):
         assert isinstance(g, gv.Graph)
@@ -58,7 +35,6 @@ class GraphVisualization:
 
     def addChildren(self, ntree, g, oldSymbol):
         assert isinstance(g, gv.Graph)
-        #nodeSymbol = self.getNextSymbol()
         leftChild = ntree.getLeft()
         rightChild = ntree.getRight()
         left = False
@@ -118,9 +94,9 @@ class GraphVisualization:
         g = gv.Graph(format='svg')
         self.addNodesAndEdges(self.tree, g)
         g = self.apply_styles(g, styles)
-        filename = g.save('graph', '.')
+        # filename = g.save('graph', '.')
         # render doesnt work so i save it
-        g.render(filename='./graph')
+        g.render(filename='./graph', view=True)
 
 
 

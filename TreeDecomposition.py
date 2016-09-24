@@ -62,6 +62,7 @@ def leaf(tree):
 
     if((len(tree.getBag()) > 0) and (tree.getLeft() == None) and (tree.getRight() == None)):
         tree.setBagType(BagType.IV)
+        tree.setLabel(str(tree.getBag()[0]))
         tree.left = createLeaf(tree.getBag())
 
 # creates as many new nodes until the bag is empty
@@ -70,7 +71,9 @@ def leaf(tree):
 # gets the type leaf bag
 def createLeaf(bag):
     if(len(bag) > 1):
-        return TreeDecomposition(createLeaf(bag[1:]), None, bag[1:], BagType.IV)
+        newBag = TreeDecomposition(createLeaf(bag[1:]), None, bag[1:], BagType.IV)
+        newBag.setLabel(str(bag[1]))
+        return newBag
     return TreeDecomposition(None, None, [], BagType.L)
 
 def childIsSmaller(oldRoot):
@@ -78,10 +81,13 @@ def childIsSmaller(oldRoot):
 
 # used to define the BagType of the old root
 def root(oldRoot):
-    if(childIsSmaller(oldRoot)):
+    bagDiff = getBagDifference(oldRoot.getBag(),getChild(oldRoot).getBag())
+    if(bagDiff == 1):
         oldRoot.setBagType(BagType.IV)
+        oldRoot.setLabel(str(bagDiff[0]))
     else:
         oldRoot.setBagType(BagType.F)
+        oldRoot.setLabel(str(getBagDifference(getChild(oldRoot).getBag(), oldRoot.getBag())[0]))
     return initRoot(oldRoot)
 
 # This function gets the old root of the tree
@@ -95,6 +101,7 @@ def initRoot(oldRoot):
     bag = oldRoot.getBag()
     while(len(bag)>1):
         newRoot = TreeDecomposition(oldRoot, None, bag[1:], BagType.F)
+        newRoot.setLabel(str(bag[0]))
         return initRoot(newRoot)
     return TreeDecomposition(oldRoot, None, [], BagType.R)
 
@@ -167,14 +174,18 @@ def addInternalNodes(ntree):
                     #case 1
                     ntreeBag.remove(forgetList[0])
                     newChild = TreeDecomposition(child, None, ntreeBag, BagType.F)
+                    newChild.setLabel(str(introduceList[0]))
                     ntree.setBagType(BagType.IV)
+                    ntree.setLabel(str(forgetList[0]))
                     ntree.setLeft(newChild)
                     addInternalNodes(newChild)
                 elif(len(introduceList) > 0):
                     #case 2
                     ntreeBag.add(introduceList[0])
                     newChild = TreeDecomposition(child, None, ntreeBag, BagType.IV)
+                    newChild.setLabel(str(introduceList[0]))
                     ntree.setBagType(BagType.F)
+                    ntree.setLabel(str(forgetList[0]))
                     ntree.setLeft(newChild)
                     addInternalNodes(newChild)
             if(child.getBag() != None):
