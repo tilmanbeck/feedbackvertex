@@ -48,50 +48,50 @@ def calculateIndicesRec(value, missingNodes, indices):
 
 # https://www.researchgate.net/figure/221426649_fig1_Fig-1-An-example-of-an-H-coloring-of-G-is-the-mapping-A-a-A-d-A-f-1
 # example graph G
-# vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-# edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
-#          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
-#          {'c', 'd'}, {'d', 'e'}]
-#
-# ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
-# efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
-# abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
-# ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
-# bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
-# bc = TreeDecomposition(bcg, None, ['b', 'c'])
-#
-# #order: join, internalstuff, leaf, root, edge bags
-# #print('------')
-# bc = root(bc)
-# leaf(bc)
-# join(bc)
-# addInternalNodes(bc)
-# edgeBags(bc,edges)
-# print_NiceTree_indented(bc)
-# print('------')
+vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
+         {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
+         {'c', 'd'}, {'d', 'e'}]
+
+ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
+efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
+abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
+ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
+bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
+bc = TreeDecomposition(bcg, None, ['b', 'c'])
+
+#order: join, internalstuff, leaf, root, edge bags
+#print('------')
+bc = root(bc)
+leaf(bc)
+join(bc)
+addInternalNodes(bc)
+edgeBags(bc,edges)
+#print_NiceTree_indented(bc)
+#print('------')
 #
 # #saveTreeDecomposition(bc,edges)
-# gv = GraphVisualization(bc)
-# gv.createGraph()
+gv = GraphVisualization(bc)
+gv.createGraph()
 # print(containsEdge(['e', 'c', 'g'], ['g','c']))
 
-vertices = ['a','b','c']
+#vertices = ['a','b','c']
+#edges = [{'a','b'}, {'b','c'}]
 
-edges = [{'a','b'}, {'b','c'}]
-k = 2
-N = 4
+k = 5
+N = 20
 weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
 # weights = {'a':1,'b':3,'c':2}
 # print(weights)
 #
-bc = TreeDecomposition(None,None, ['b', 'c'])
-ab = TreeDecomposition(bc,None,['a','b'])
+#bc = TreeDecomposition(None,None, ['b', 'c'])
+#ab = TreeDecomposition(bc,None,['a','b'])
 
-ab = root(ab)
-leaf(ab)
-join(ab)
-addInternalNodes(ab)
-edgeBags(ab,edges)
+#ab = root(ab)
+#leaf(ab)
+#join(ab)
+#addInternalNodes(ab)
+#edgeBags(ab,edges)
 # # v = GraphVisualization(ab)
 # # v.createGraph()
 
@@ -116,17 +116,17 @@ def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
     #in-order traversal
     k = k + 1
     indices = {vertices[i]: i for i in range(0,len(vertices))}
-
-    data = np.zeros((len(vertices)**3,k,k*N))
+    data = np.zeros((3 ** len(vertices),k,(k-1)*N))
     for i in range(0, len(vertices)**3):
         data[i,0,0] = 1    # leaf initialization
     # we search for a solution with k nodes but the arrays indices start at 0
     result = inorder(niceTreeDecomp, indices, data,k,N,terminals)
-    #writeToFile('result.txt', 'w', result, 3 ** 3, "result ")
-    for j in range(0,k*N):
+    writeToFile('result.txt', 'w', result, 3**7, "result ")
+    print(result.shape)
+    for j in range(0,(k-1)*N):
         if((result[0,k-1,j] % 2) == 1):
                 print("yes there is a solution")
-
+                print(result.shape)
 
 
 def inorder(node, indices, data, k, N, terminals):
@@ -137,7 +137,7 @@ def inorder(node, indices, data, k, N, terminals):
     if(node.bagType == BagType.L):
         return data
     if(node.bagType == BagType.R):
-        newData = np.zeros((len(vertices) ** 3, k, k * N))
+        newData = np.zeros((3 ** len(vertices), k, (k - 1) * N))
         forgottenVertex = 'b'
 
         missingNodes = list(indices.values())
@@ -155,7 +155,7 @@ def inorder(node, indices, data, k, N, terminals):
 
         for x in range(0, len(listForForgottenZero)):
             for y in range(0, k):
-                for z in range(0, k * N):
+                for z in range(0, (k -1) * N):
                     value = data[listForForgottenZero[x], y, z] + data[listForForgottenOne[x], y, z] + data[
                         listForForgottenTwo[x], y, z]
                     newData[listForForgottenZero[x], y, z] = value
@@ -165,7 +165,7 @@ def inorder(node, indices, data, k, N, terminals):
         # writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
         return newData
     if(node.bagType == BagType.IE):
-        newData = np.zeros((len(vertices)**3,k,k*N))
+        newData = np.zeros((3 ** len(vertices),k,(k-1)*N))
         label = str(node.getLabel())
         firstVertex = node.getLabel().pop()
         scndVertex = node.getLabel().pop()
@@ -179,16 +179,16 @@ def inorder(node, indices, data, k, N, terminals):
         clearedIndices = [x for x in listOfAllIndices if x not in indicesToBeRemoved]
         for x in clearedIndices:
             for y in range(0,k):
-                for z in range(0,k*N):
+                for z in range(0,(k-1)*N):
                     newData[x,y,z] = data[x,y,z]
         for x in indicesToBeRemoved:
             for y in range(0,k):
-                for z in range(0,k*N):
+                for z in range(0,(k-1)*N):
                     newData[x,y,z] = 0
         #writeToFile('data.txt','a',newData,3**3, "after IE " + label)
         return newData
     if(node.bagType == BagType.IV):
-        newData = np.zeros((len(vertices)**3,k,k*N))
+        newData = np.zeros((3 ** len(vertices),k,(k-1)*N))
         introducedVertex = node.getLabel()
         indexInArray = indices.get(introducedVertex)
         bla = list(indices.values())
@@ -204,7 +204,7 @@ def inorder(node, indices, data, k, N, terminals):
         newIndices = calculateIndices(bla,rest)
         for x in newIndices:
             for y in range(0,k):
-                for z in range(0,k*N):
+                for z in range(0,(k-1)*N):
                     if not(terminals.__contains__(introducedVertex)):
                         newData[x,y,z] = data[x,y,z]
                     else:
@@ -215,8 +215,8 @@ def inorder(node, indices, data, k, N, terminals):
         newIndices = calculateIndices(bla,rest)
         for x in newIndices:
             for y in range(0,k):
-                for z in range(0,k*N):
-                    if(y - 1  >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < k*N)):
+                for z in range(0,(k-1)*N):
+                    if(y - 1  >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < (k-1)*N)):
                         newData[x, y, z] = data[x, y-1, z-weights.get(introducedVertex)]
                     else:
                         newData[x, y, z] = 0
@@ -226,9 +226,9 @@ def inorder(node, indices, data, k, N, terminals):
         newIndices = calculateIndices(bla,rest)
         for x in newIndices:
             for y in range(0,k):
-                for z in range(0,k*N):
+                for z in range(0,(k-1)*N):
                     if(terminals[0] != introducedVertex):
-                        if (y - 1 >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < k * N)):
+                        if (y - 1 >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < (k-1)*N)):
                             newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
                         else:
                             newData[x,y,z] = 0
@@ -236,7 +236,7 @@ def inorder(node, indices, data, k, N, terminals):
         #writeToFile('data.txt','a',newData,3**3, "after IV " +str(introducedVertex))
         return newData
     if(node.bagType == BagType.F):
-        newData = np.zeros((len(vertices) ** 3, k, k * N))
+        newData = np.zeros((3 ** len(vertices), k, (k-1)*N))
         forgottenVertex = node.getLabel()
         indexInArray = indices.get(forgottenVertex)
 
@@ -255,7 +255,7 @@ def inorder(node, indices, data, k, N, terminals):
 
         for x in range(0,len(listForForgottenZero)):
             for y in range(0,k):
-                for z in range(0, k*N):
+                for z in range(0, (k-1)*N):
                     value = data[listForForgottenZero[x], y, z] + data[listForForgottenOne[x], y, z] + data[listForForgottenTwo[x], y, z]
                     newData[listForForgottenZero[x], y, z] = value
                     newData[listForForgottenOne[x], y, z] = value
@@ -293,6 +293,6 @@ def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
     return first+scnd
 
 
-#count(vertices, edges, bc, ['c', 'd', 'e'], k, N, weights)
-count(vertices, edges, ab, ['a', 'b'], k, N, weights)
+count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
+#count(vertices, edges, ab, ['a', 'b'], k, N, weights)
 
