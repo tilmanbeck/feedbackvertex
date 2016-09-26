@@ -135,32 +135,14 @@ def inorder(node, indices, data, k, N, terminals):
         scndVertex = node.getLabel().pop()
         # create list for all indices
         listOfAllIndices = [i for i in range(0,len(indices.values())**3)]
-        val = [0 for i in range(0,len(indices))]
-        #what are we doing here? we need all indices except those where one of the edges is colored 1 and the other one 2
-        #and vice versa. so we take all indices and remove mentioned from all indices
 
-        # TODO make nice and export into seperate function
-        val[indices.get(firstVertex)] = 1
-        val[indices.get(scndVertex)] = 2
-        keys = list(indices.keys())
-        keys.remove(firstVertex)
-        keys.remove(scndVertex)
-        missingNodes = []
-        for key in keys:
-            missingNodes.append(indices.get(key))
-        first = calculateIndices(val,missingNodes)
+        indicesToBeRemoved = getIndicesForIntroduceEdge(indices, firstVertex, scndVertex)
 
-        val[indices.get(firstVertex)] = 2
-        val[indices.get(scndVertex)] = 1
-        keys = list(indices.keys())
-        keys.remove(firstVertex)
-        keys.remove(scndVertex)
-        missingNodes = []
-        for key in keys:
-            missingNodes.append(indices.get(key))
-        scnd = calculateIndices(val, missingNodes)
-
-        clearedIndices = [x for x in listOfAllIndices if x not in (first+scnd)]
+        #remove the indices where one of the two vertices is either 1 or 2 from the
+        #list of all indices
+        clearedIndices = [x for x in listOfAllIndices if x not in indicesToBeRemoved]
+        print("to be removed: " + str(indicesToBeRemoved))
+        print("cleared: " + str(clearedIndices))
         for x in clearedIndices:
             for y in range(0,k):
                 for z in range(0,k*N):
@@ -207,6 +189,33 @@ def inorder(node, indices, data, k, N, terminals):
         writeToFile('data.txt',newData,3**3, "after IV " +str(introducedVertex))
         return newData
     return data
+
+def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
+    val = [0 for i in range(0,len(indices))]
+    #what are we doing here? we need all indices except those where one of the edges is colored 1 and the other one 2
+    #and vice versa. so we take all indices and remove mentioned from all indices
+
+    val[indices.get(firstVertex)] = 1
+    val[indices.get(scndVertex)] = 2
+    keys = list(indices.keys())
+    keys.remove(firstVertex)
+    keys.remove(scndVertex)
+    missingNodes = []
+    for key in keys:
+        missingNodes.append(indices.get(key))
+    first = calculateIndices(val,missingNodes)
+
+    val[indices.get(firstVertex)] = 2
+    val[indices.get(scndVertex)] = 1
+    keys = list(indices.keys())
+    keys.remove(firstVertex)
+    keys.remove(scndVertex)
+    missingNodes = []
+    for key in keys:
+        missingNodes.append(indices.get(key))
+    scnd = calculateIndices(val, missingNodes)
+
+    return first+scnd
 
 
 count(vertices,edges,ab,['a','b'],k,N,weights)
