@@ -92,8 +92,8 @@ leaf(ab)
 join(ab)
 addInternalNodes(ab)
 edgeBags(ab,edges)
-gv = GraphVisualization(ab)
-gv.createGraph()
+# v = GraphVisualization(ab)
+# v.createGraph()
 
 def writeToFile(filename,array,fst,stepInfo):
     f = open(filename, 'a')
@@ -141,8 +141,6 @@ def inorder(node, indices, data, k, N, terminals):
         #remove the indices where one of the two vertices is either 1 or 2 from the
         #list of all indices
         clearedIndices = [x for x in listOfAllIndices if x not in indicesToBeRemoved]
-        print("to be removed: " + str(indicesToBeRemoved))
-        print("cleared: " + str(clearedIndices))
         for x in clearedIndices:
             for y in range(0,k):
                 for z in range(0,k*N):
@@ -188,6 +186,34 @@ def inorder(node, indices, data, k, N, terminals):
                         newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
         writeToFile('data.txt',newData,3**3, "after IV " +str(introducedVertex))
         return newData
+    if(node.bagType == BagType.F):
+        newData = np.zeros((len(vertices) ** 3, k, k * N))
+        forgottenVertex = node.getLabel()
+        indexInArray = indices.get(forgottenVertex)
+
+        missingNodes = list(indices.values())
+        val = [0 for i in range(0, len(indices))]
+        val[indices.get(forgottenVertex)] = 0
+
+        missingNodes.remove(indices.get(forgottenVertex))
+        listForForgottenZero = calculateIndices(val,missingNodes)
+
+        val[indices.get(forgottenVertex)] = 1
+        listForForgottenOne = calculateIndices(val, missingNodes)
+
+        val[indices.get(forgottenVertex)] = 2
+        listForForgottenTwo = calculateIndices(val, missingNodes)
+
+        for x in range(0,len(listForForgottenZero)):
+            for y in range(0,k):
+                for z in range(0,k*N):
+                    value = data[listForForgottenZero[x], y, z] + data[listForForgottenOne[x], y, z] + data[listForForgottenTwo[x], y, z]
+                    newData[listForForgottenZero[x], y, z] = value
+                    newData[listForForgottenOne[x], y, z] = value
+                    newData[listForForgottenTwo[x], y, z] = value
+
+        return newData
+
     return data
 
 def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
