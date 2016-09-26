@@ -59,9 +59,9 @@ def calculateIndicesRec(value, missingNodes, indices):
 # ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
 # bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
 # bc = TreeDecomposition(bcg, None, ['b', 'c'])
-
-#order: join, internalstuff, leaf, root, edge bags
-# print('------')
+#
+# #order: join, internalstuff, leaf, root, edge bags
+# #print('------')
 # bc = root(bc)
 # leaf(bc)
 # join(bc)
@@ -80,10 +80,10 @@ vertices = ['a','b','c']
 edges = [{'a','b'}, {'b','c'}]
 k = 2
 N = 4
-#weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
-weights = {'a':1,'b':3,'c':2}
-print(weights)
-
+weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
+# weights = {'a':1,'b':3,'c':2}
+# print(weights)
+#
 bc = TreeDecomposition(None,None, ['b', 'c'])
 ab = TreeDecomposition(bc,None,['a','b'])
 
@@ -92,8 +92,8 @@ leaf(ab)
 join(ab)
 addInternalNodes(ab)
 edgeBags(ab,edges)
-# v = GraphVisualization(ab)
-# v.createGraph()
+# # v = GraphVisualization(ab)
+# # v.createGraph()
 
 def writeToFile(filename,mode,array,fst,stepInfo):
     f = open(filename, mode)
@@ -114,15 +114,19 @@ def writeToFile(filename,mode,array,fst,stepInfo):
 
 def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
     #in-order traversal
+    k = k + 1
     indices = {vertices[i]: i for i in range(0,len(vertices))}
-    print(indices)
 
     data = np.zeros((len(vertices)**3,k,k*N))
     for i in range(0, len(vertices)**3):
         data[i,0,0] = 1    # leaf initialization
+    # we search for a solution with k nodes but the arrays indices start at 0
     result = inorder(niceTreeDecomp, indices, data,k,N,terminals)
+    #writeToFile('result.txt', 'w', result, 3 ** 3, "result ")
+    for j in range(0,k*N):
+        if((result[0,k-1,j] % 2) == 1):
+                print("yes there is a solution")
 
-    writeToFile('result.txt', 'w', result, 3 ** 3, "result ")
 
 
 def inorder(node, indices, data, k, N, terminals):
@@ -132,6 +136,34 @@ def inorder(node, indices, data, k, N, terminals):
         data = inorder(node.getRight(),indices, data, k, N, terminals)
     if(node.bagType == BagType.L):
         return data
+    if(node.bagType == BagType.R):
+        newData = np.zeros((len(vertices) ** 3, k, k * N))
+        forgottenVertex = 'b'
+
+        missingNodes = list(indices.values())
+        val = [0 for i in range(0, len(indices))]
+        val[indices.get(forgottenVertex)] = 0
+
+        missingNodes.remove(indices.get(forgottenVertex))
+        listForForgottenZero = calculateIndices(val, missingNodes)
+
+        val[indices.get(forgottenVertex)] = 1
+        listForForgottenOne = calculateIndices(val, missingNodes)
+
+        val[indices.get(forgottenVertex)] = 2
+        listForForgottenTwo = calculateIndices(val, missingNodes)
+
+        for x in range(0, len(listForForgottenZero)):
+            for y in range(0, k):
+                for z in range(0, k * N):
+                    value = data[listForForgottenZero[x], y, z] + data[listForForgottenOne[x], y, z] + data[
+                        listForForgottenTwo[x], y, z]
+                    newData[listForForgottenZero[x], y, z] = value
+                    newData[listForForgottenOne[x], y, z] = value
+                    newData[listForForgottenTwo[x], y, z] = value
+
+        # writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
+        return newData
     if(node.bagType == BagType.IE):
         newData = np.zeros((len(vertices)**3,k,k*N))
         label = str(node.getLabel())
@@ -149,12 +181,15 @@ def inorder(node, indices, data, k, N, terminals):
             for y in range(0,k):
                 for z in range(0,k*N):
                     newData[x,y,z] = data[x,y,z]
-        writeToFile('data.txt','a',newData,3**3, "after IE " + label)
+        for x in indicesToBeRemoved:
+            for y in range(0,k):
+                for z in range(0,k*N):
+                    newData[x,y,z] = 0
+        #writeToFile('data.txt','a',newData,3**3, "after IE " + label)
         return newData
     if(node.bagType == BagType.IV):
         newData = np.zeros((len(vertices)**3,k,k*N))
         introducedVertex = node.getLabel()
-        print("introduced vertex: " + str(introducedVertex))
         indexInArray = indices.get(introducedVertex)
         bla = list(indices.values())
         for j in range(0,len(bla)):
@@ -172,6 +207,9 @@ def inorder(node, indices, data, k, N, terminals):
                 for z in range(0,k*N):
                     if not(terminals.__contains__(introducedVertex)):
                         newData[x,y,z] = data[x,y,z]
+                    else:
+                        newData[x,y,z] = 0
+
         #if new vertex is colored 1
         bla[indexInArray] = 1
         newIndices = calculateIndices(bla,rest)
@@ -179,7 +217,10 @@ def inorder(node, indices, data, k, N, terminals):
             for y in range(0,k):
                 for z in range(0,k*N):
                     if(y - 1  >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < k*N)):
-                        newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
+                        newData[x, y, z] = data[x, y-1, z-weights.get(introducedVertex)]
+                    else:
+                        newData[x, y, z] = 0
+
         #if new vertex is colored 2
         bla[indexInArray] = 2
         newIndices = calculateIndices(bla,rest)
@@ -187,8 +228,12 @@ def inorder(node, indices, data, k, N, terminals):
             for y in range(0,k):
                 for z in range(0,k*N):
                     if(terminals[0] != introducedVertex):
-                        newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
-        writeToFile('data.txt','a',newData,3**3, "after IV " +str(introducedVertex))
+                        if (y - 1 >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < k * N)):
+                            newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
+                        else:
+                            newData[x,y,z] = 0
+
+        #writeToFile('data.txt','a',newData,3**3, "after IV " +str(introducedVertex))
         return newData
     if(node.bagType == BagType.F):
         newData = np.zeros((len(vertices) ** 3, k, k * N))
@@ -210,15 +255,14 @@ def inorder(node, indices, data, k, N, terminals):
 
         for x in range(0,len(listForForgottenZero)):
             for y in range(0,k):
-                for z in range(0,k*N):
+                for z in range(0, k*N):
                     value = data[listForForgottenZero[x], y, z] + data[listForForgottenOne[x], y, z] + data[listForForgottenTwo[x], y, z]
                     newData[listForForgottenZero[x], y, z] = value
                     newData[listForForgottenOne[x], y, z] = value
                     newData[listForForgottenTwo[x], y, z] = value
 
-        writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
+        #writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
         return newData
-
     return data
 
 def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
@@ -249,10 +293,6 @@ def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
     return first+scnd
 
 
-count(vertices,edges,ab,['a','b'],k,N,weights)
-
-
-
-
-
+#count(vertices, edges, bc, ['c', 'd', 'e'], k, N, weights)
+count(vertices, edges, ab, ['a', 'b'], k, N, weights)
 
