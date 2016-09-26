@@ -95,8 +95,8 @@ edgeBags(ab,edges)
 # v = GraphVisualization(ab)
 # v.createGraph()
 
-def writeToFile(filename,array,fst,stepInfo):
-    f = open(filename, 'a')
+def writeToFile(filename,mode,array,fst,stepInfo):
+    f = open(filename, mode)
     f.write(stepInfo)
     f.write("\n")
     for i in range(0,fst):
@@ -122,6 +122,9 @@ def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
         data[i,0,0] = 1    # leaf initialization
     result = inorder(niceTreeDecomp, indices, data,k,N,terminals)
 
+    writeToFile('result.txt', 'w', result, 3 ** 3, "result ")
+
+
 def inorder(node, indices, data, k, N, terminals):
     if(node.getLeft() != None):
         data = inorder(node.getLeft(),indices, data, k, N, terminals)
@@ -131,6 +134,7 @@ def inorder(node, indices, data, k, N, terminals):
         return data
     if(node.bagType == BagType.IE):
         newData = np.zeros((len(vertices)**3,k,k*N))
+        label = str(node.getLabel())
         firstVertex = node.getLabel().pop()
         scndVertex = node.getLabel().pop()
         # create list for all indices
@@ -145,7 +149,7 @@ def inorder(node, indices, data, k, N, terminals):
             for y in range(0,k):
                 for z in range(0,k*N):
                     newData[x,y,z] = data[x,y,z]
-        writeToFile('data.txt',newData,3**3, "after IE " +str(node.getLabel()))
+        writeToFile('data.txt','a',newData,3**3, "after IE " + label)
         return newData
     if(node.bagType == BagType.IV):
         newData = np.zeros((len(vertices)**3,k,k*N))
@@ -184,7 +188,7 @@ def inorder(node, indices, data, k, N, terminals):
                 for z in range(0,k*N):
                     if(terminals[0] != introducedVertex):
                         newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
-        writeToFile('data.txt',newData,3**3, "after IV " +str(introducedVertex))
+        writeToFile('data.txt','a',newData,3**3, "after IV " +str(introducedVertex))
         return newData
     if(node.bagType == BagType.F):
         newData = np.zeros((len(vertices) ** 3, k, k * N))
@@ -212,6 +216,7 @@ def inorder(node, indices, data, k, N, terminals):
                     newData[listForForgottenOne[x], y, z] = value
                     newData[listForForgottenTwo[x], y, z] = value
 
+        writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
         return newData
 
     return data
