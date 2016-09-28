@@ -72,8 +72,8 @@ edgeBags(bc,edges)
 #print('------')
 #
 # #saveTreeDecomposition(bc,edges)
-gv = GraphVisualization(bc)
-gv.createGraph()
+#gv = GraphVisualization(bc)
+#gv.createGraph()
 # print(containsEdge(['e', 'c', 'g'], ['g','c']))
 
 #vertices = ['a','b','c']
@@ -263,8 +263,9 @@ def inorder(node, indices, data, k, N, terminals):
         return newData
     if(node.bagType == BagType.J):
         newData = np.zeros((3 ** len(vertices), k, (k-1)*N))
+        colorings = calculateIndices([0 for i in range(0,len(vertices))],[i for i in range(0,len(vertices))])
 
-        for x in indices:
+        for x in colorings:
             for y in range(0, k):
                 for z in range(0, (k - 1) * N):
                     value = 0
@@ -274,7 +275,9 @@ def inorder(node, indices, data, k, N, terminals):
                     # and w1+w2 = z + sum of the weights of the nodes with coloring 1 or 2
                     # accumulationBound1 refers to the bound in the paper for the 'i' index
                     # resp. accumulationBound2 to the bound in the paper for 'w' index
-                    indexAsNodeList = getIndexAsList(x)
+                    print("x:"+str(x))
+                    print("nr of vertices:"+str(len(vertices)))
+                    indexAsNodeList = getIndexAsList(x,len(vertices))
                     coloredNodes = getNodesByColoring(indexAsNodeList,[1,2],indices)
                     accumulationBound1 = y + len(coloredNodes)
                     accumulationBound2 = z + getSumOfWeights(coloredNodes,weights)
@@ -330,32 +333,17 @@ def getSumOfWeights(nodes, weights):
     return res
 
 
-def getIndexAsList(x,vertices):
+def getIndexAsList(x,nrOfVertices):
 
     number = x
     res = []
-    for i in range(len(vertices)-1, -1, -1):
+    for i in range(nrOfVertices-1, -1, -1):
         value = math.floor(number/(3**i))
         number -= (value * 3**i)
         res.append(value)
 
     return res
 
-
-
-verts = ['a','b','c','d']
-w2 = {vertices[i]: rnd.randint(0,N) for i in range(0,len(verts))}
-indicesKV = {'a':0 , 'b':1 , 'c':2}
-coloring = [1,2]
-nodes = [0,1,1]
-n = ['a','c']
-
-# count(vertices,edges,ab,['a','b'],k,N,weights)
-
-
-
-
-
-
-# count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
+#print(calculateIndices([0 for i in range(0,3)],[i for i in range(0,3)]))
+count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
 # count(vertices, edges, ab, ['a', 'b'], k, N, weights)
