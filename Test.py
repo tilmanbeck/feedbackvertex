@@ -128,7 +128,6 @@ def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
                 print("yes there is a solution")
                 print(result.shape)
 
-
 def inorder(node, indices, data, k, N, terminals):
     if(node.getLeft() != None):
         data = inorder(node.getLeft(),indices, data, k, N, terminals)
@@ -264,18 +263,26 @@ def inorder(node, indices, data, k, N, terminals):
     if(node.bagType == BagType.J):
         newData = np.zeros((3 ** len(vertices), k, (k-1)*N))
 
-        for x in range in indices:
+        for x in indices:
             for y in range(0, k):
                 for z in range(0, (k - 1) * N):
                     value = 0
-                    accumulationBound1 = 1
-                    accumulationBound2 = 2
+                    # we use the these bounds to limit the iterations of the loops
+                    # searching for the right i1 and i2 resp. w1 and w2
+                    # we know i1+i2 = y + #(nodes with coloring 1 or 2)
+                    # and w1+w2 = z + sum of the weights of the nodes with coloring 1 or 2
+                    # accumulationBound1 refers to the bound in the paper for the 'i' index
+                    # resp. accumulationBound2 to the bound in the paper for 'w' index
+                    indexAsNodeList = getIndexAsList(x)
+                    coloredNodes = getNodesByColoring(indexAsNodeList,[1,2],indices)
+                    accumulationBound1 = y + len(coloredNodes)
+                    accumulationBound2 = z + getSumOfWeights(coloredNodes,weights)
                     for i1 in range(0, accumulationBound1):
                         for w1 in range(0, accumulationBound2):
                             i2 = accumulationBound1 - i1
                             w2 = accumulationBound2 - w1
                             value += (data[x, i1, w1] * dataright[x, i2, w2])
-                newData[x,y,z] = value
+                    newData[x,y,z] = value
         return newData
 
     return data
@@ -315,10 +322,25 @@ def getNodesByColoring(nodes, coloring, indicesKV):
     tmp = [i for i in range(0,len(nodes)) if nodes[i] in coloring]
     return [key for key,val in indicesKV.items() if val in tmp]
 
+def getSumOfWeights(nodes, weights):
+    res = 0
+    for i in range(0,len(nodes)):
+        res += weights.get(nodes[i])
+    return res
+
+
+def getIndexAsList(x):
+    pass
+
+
+
+verts = ['a','b','c']
+w2 = {vertices[i]: rnd.randint(0,N) for i in range(0,len(verts))}
 indicesKV = {'a':0 , 'b':1 , 'c':2}
 coloring = [1,2]
 nodes = [0,1,1]
-print(getNodesByColoring(nodes,coloring,indicesKV))
+n = ['a','c']
+
 #count(vertices,edges,ab,['a','b'],k,N,weights)
 
 
@@ -326,5 +348,5 @@ print(getNodesByColoring(nodes,coloring,indicesKV))
 
 
 
-count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
+#count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
 # count(vertices, edges, ab, ['a', 'b'], k, N, weights)
