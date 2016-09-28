@@ -106,14 +106,14 @@ def writeToFile(filename,mode,array,fst,stepInfo):
         f.write("\n\n")
     f.write("-----------------------------------------------\n")
 
-    #for i in range(0,fst):
+    # for i in range(0,fst):
     #    for j in range(0,scn):
     #        for k in range(0,thi):
     #            f.write(str(array[i,j,k]))
 
 
 def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
-    #in-order traversal
+    # in-order traversal
     k = k + 1
     indices = {vertices[i]: i for i in range(0,len(vertices))}
     data = np.zeros((3 ** len(vertices),k,(k-1)*N))
@@ -133,7 +133,7 @@ def inorder(node, indices, data, k, N, terminals):
     if(node.getLeft() != None):
         data = inorder(node.getLeft(),indices, data, k, N, terminals)
     if(node.getRight() != None):
-        data = inorder(node.getRight(),indices, data, k, N, terminals)
+        dataright = inorder(node.getRight(),indices, data, k, N, terminals)
     if(node.bagType == BagType.L):
         return data
     if(node.bagType == BagType.R):
@@ -166,7 +166,6 @@ def inorder(node, indices, data, k, N, terminals):
         return newData
     if(node.bagType == BagType.IE):
         newData = np.zeros((3 ** len(vertices),k,(k-1)*N))
-        label = str(node.getLabel())
         firstVertex = node.getLabel().pop()
         scndVertex = node.getLabel().pop()
         # create list for all indices
@@ -174,8 +173,8 @@ def inorder(node, indices, data, k, N, terminals):
 
         indicesToBeRemoved = getIndicesForIntroduceEdge(indices, firstVertex, scndVertex)
 
-        #remove the indices where one of the two vertices is either 1 or 2 from the
-        #list of all indices
+        # remove the indices where one of the two vertices is either 1 or 2 from the
+        # list of all indices
         clearedIndices = [x for x in listOfAllIndices if x not in indicesToBeRemoved]
         for x in clearedIndices:
             for y in range(0,k):
@@ -185,7 +184,7 @@ def inorder(node, indices, data, k, N, terminals):
             for y in range(0,k):
                 for z in range(0,(k-1)*N):
                     newData[x,y,z] = 0
-        #writeToFile('data.txt','a',newData,3**3, "after IE " + label)
+        # writeToFile('data.txt','a',newData,3**3, "after IE " + label)
         return newData
     if(node.bagType == BagType.IV):
         newData = np.zeros((3 ** len(vertices),k,(k-1)*N))
@@ -199,7 +198,7 @@ def inorder(node, indices, data, k, N, terminals):
         rest.remove(indexInArray)
         # okay from here we iterate over colorings (x), i (y) and the weights (z)
         # we simply assume that v_1 is the first terminal in the terminals array
-        #if new vertex is colored 0
+        # if new vertex is colored 0
         bla[indexInArray] = 0
         newIndices = calculateIndices(bla,rest)
         for x in newIndices:
@@ -210,7 +209,7 @@ def inorder(node, indices, data, k, N, terminals):
                     else:
                         newData[x,y,z] = 0
 
-        #if new vertex is colored 1
+        # if new vertex is colored 1
         bla[indexInArray] = 1
         newIndices = calculateIndices(bla,rest)
         for x in newIndices:
@@ -221,7 +220,7 @@ def inorder(node, indices, data, k, N, terminals):
                     else:
                         newData[x, y, z] = 0
 
-        #if new vertex is colored 2
+        # if new vertex is colored 2
         bla[indexInArray] = 2
         newIndices = calculateIndices(bla,rest)
         for x in newIndices:
@@ -233,12 +232,11 @@ def inorder(node, indices, data, k, N, terminals):
                         else:
                             newData[x,y,z] = 0
 
-        #writeToFile('data.txt','a',newData,3**3, "after IV " +str(introducedVertex))
+        # writeToFile('data.txt','a',newData,3**3, "after IV " +str(introducedVertex))
         return newData
     if(node.bagType == BagType.F):
         newData = np.zeros((3 ** len(vertices), k, (k-1)*N))
         forgottenVertex = node.getLabel()
-        indexInArray = indices.get(forgottenVertex)
 
         missingNodes = list(indices.values())
         val = [0 for i in range(0, len(indices))]
@@ -261,14 +259,31 @@ def inorder(node, indices, data, k, N, terminals):
                     newData[listForForgottenOne[x], y, z] = value
                     newData[listForForgottenTwo[x], y, z] = value
 
-        #writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
+        # writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
         return newData
+    if(node.bagType == BagType.J):
+        newData = np.zeros((3 ** len(vertices), k, (k-1)*N))
+
+        for x in range in indices:
+            for y in range(0, k):
+                for z in range(0, (k - 1) * N):
+                    value = 0
+                    accumulationBound1 = 1
+                    accumulationBound2 = 2
+                    for i1 in range(0, accumulationBound1):
+                        for w1 in range(0, accumulationBound2):
+                            i2 = accumulationBound1 - i1
+                            w2 = accumulationBound2 - w1
+                            value += (data[x, i1, w1] * dataright[x, i2, w2])
+                newData[x,y,z] = value
+        return newData
+
     return data
 
 def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
-    val = [0 for i in range(0,len(indices))]
-    #what are we doing here? we need all indices except those where one of the edges is colored 1 and the other one 2
-    #and vice versa. so we take all indices and remove mentioned from all indices
+    val = [0 for i in range(0, len(indices))]
+    # what are we doing here? we need all indices except those where one of the edges is colored 1 and the other one 2
+    # and vice versa. so we take all indices and remove mentioned from all indices
 
     val[indices.get(firstVertex)] = 1
     val[indices.get(scndVertex)] = 2
@@ -278,7 +293,7 @@ def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
     missingNodes = []
     for key in keys:
         missingNodes.append(indices.get(key))
-    first = calculateIndices(val,missingNodes)
+    first = calculateIndices(val, missingNodes)
 
     val[indices.get(firstVertex)] = 2
     val[indices.get(scndVertex)] = 1
@@ -287,12 +302,11 @@ def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
     keys.remove(scndVertex)
     missingNodes = []
     for key in keys:
-        missingNodes.append(indices.get(key))
+        missingNodes.append(indices. get(key))
     scnd = calculateIndices(val, missingNodes)
 
     return first+scnd
 
 
 count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
-#count(vertices, edges, ab, ['a', 'b'], k, N, weights)
-
+# count(vertices, edges, ab, ['a', 'b'], k, N, weights)
