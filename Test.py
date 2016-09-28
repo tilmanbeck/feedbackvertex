@@ -11,6 +11,7 @@ from BagType import BagType
 from Graphviz import GraphVisualization
 import numpy as np
 import random as rnd
+import math
 
 #value zB [0,1,2,2,0]
 #missingNodes zB [0,4]
@@ -329,24 +330,32 @@ def getSumOfWeights(nodes, weights):
     return res
 
 
-def getIndexAsList(x):
-    pass
+def getIndexAsList(x,vertices):
+
+    number = x
+    res = []
+    for i in range(len(vertices)-1, -1, -1):
+        value = math.floor(number/(3**i))
+        number -= (value * 3**i)
+        res.append(value)
+
+    return res
 
 
 
-verts = ['a','b','c']
+verts = ['a','b','c','d']
 w2 = {vertices[i]: rnd.randint(0,N) for i in range(0,len(verts))}
 indicesKV = {'a':0 , 'b':1 , 'c':2}
 coloring = [1,2]
 nodes = [0,1,1]
 n = ['a','c']
 
-#count(vertices,edges,ab,['a','b'],k,N,weights)
+# count(vertices,edges,ab,['a','b'],k,N,weights)
 
 
 
 
 
 
-#count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
+# count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
 # count(vertices, edges, ab, ['a', 'b'], k, N, weights)
