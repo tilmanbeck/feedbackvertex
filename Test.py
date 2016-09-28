@@ -308,5 +308,23 @@ def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
     return first+scnd
 
 
+#indicesKV = key-value dict where the keys are
+# the nodes (e.g. 'a') and the value is the
+# index in the index-array according to order
+def getNodesByColoring(nodes, coloring, indicesKV):
+    tmp = [i for i in range(0,len(nodes)) if nodes[i] in coloring]
+    return [key for key,val in indicesKV.items() if val in tmp]
+
+indicesKV = {'a':0 , 'b':1 , 'c':2}
+coloring = [1,2]
+nodes = [0,1,1]
+print(getNodesByColoring(nodes,coloring,indicesKV))
+#count(vertices,edges,ab,['a','b'],k,N,weights)
+
+
+
+
+
+
 count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
 # count(vertices, edges, ab, ['a', 'b'], k, N, weights)
