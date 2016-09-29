@@ -61,3 +61,31 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#tex stuff
+# latex temp files
+*.aux
+*.toc
+*.out
+*.fls
+*.log
+*.bbl
+*.bcf
+*.bib.bak
+*.bib.blg
+*.blg
+*.glo
+*.hd
+*.idx
+*.ilg
+*.ind
+*.run.xml
+*.tmp
+*.synctex.gz
+*.dvi
+
+# latex output files
+feedbackvertex.pdf
+
+# Mac File
+.DS_STORE
