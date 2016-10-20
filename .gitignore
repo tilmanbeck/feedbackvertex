@@ -83,9 +83,9 @@ target/
 *.tmp
 *.synctex.gz
 *.dvi
-
-# latex output files
-feedbackvertex.pdf
+*.nav
+*.snm
+*.vrb
 
 # Mac File
 .DS_STORE
