@@ -78,10 +78,8 @@ def count(vertices, edges, niceTreeDecomp, terminals, k, N, weights):
 
 def inorder(node, indices, data, k, N, terminals):
     if(node.getLeft() != None):
-        print('enter left')
         data = inorder(node.getLeft(),indices, data, k, N, terminals)
     if(node.getRight() != None):
-        print('enter right')
         dataright = inorder(node.getRight(),indices, data, k, N, terminals)
     if(node.bagType == BagType.L):
         newData = np.zeros((1, k, (k-1) * N))
