@@ -59,6 +59,23 @@ def calculateIndicesRec(value, missingNodes, indices):
 # edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
 #          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
 #          {'c', 'd'}, {'d', 'e'}]
+ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
+efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
+abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
+ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
+bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
+bc = TreeDecomposition(bcg, None, ['b', 'c'])
+
+
+#order: join, internalstuff, leaf, root, edge bags
+#print('------')
+bc = root(bc)
+leaf(bc)
+join(bc)
+addInternalNodes(bc)
+edgeBags(bc,edges)
+#print_NiceTree_indented(bc)
+#print('------')
 #
 # weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
 #
@@ -104,6 +121,7 @@ edgeBags(ab,edges)
 # # v = GraphVisualization(ab)
 # # v.createGraph()
 
+
 def writeToFile(filename,mode,array,fst,stepInfo):
     f = open(filename, mode)
     f.write(stepInfo)
@@ -114,6 +132,12 @@ def writeToFile(filename,mode,array,fst,stepInfo):
         f.write(str(array[i]))
         f.write("\n\n")
     f.write("-----------------------------------------------\n")
+
+    # for i in range(0,fst):
+    #    for j in range(0,scn):
+    #        for k in range(0,thi):
+    #            f.write(str(array[i,j,k]))
+
 
 def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
     # in-order traversal
@@ -129,6 +153,18 @@ def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
     #    if((result[0,k-1,j] % 2) == 1):
     #            print("yes there is a solution")
 
+    result = inorder(niceTreeDecomp, indices, data,k,N,terminals)
+    # writeToFile('result.txt', 'w', result, 3**7, "result ")
+    print(result.shape)
+    sol = 0
+    print("is there a solution?")
+    for j in range(0,(k-1)*N):
+        if((result[0,k-1,j] % 2) == 1):
+                print("yes there is a solution")
+                sol += 1
+    if(sol == 0):
+        print("sadly not...")
+
 def inorder(node, indices, data, k, N, terminals):
     if(node.getLeft() != None):
         data = inorder(node.getLeft(),indices, data, k, N, terminals)
@@ -137,8 +173,9 @@ def inorder(node, indices, data, k, N, terminals):
     if(node.bagType == BagType.L):
         return data
     if(node.bagType == BagType.R):
+        #TODO merge the 3d matrix to a new 2d matrix and return
         newData = np.zeros((3 ** len(vertices), k, (k - 1) * N))
-        forgottenVertex = 'b'
+        forgottenVertex = node.getLabel()
 
         missingNodes = list(indices.values())
         val = [0 for i in range(0, len(indices))]
@@ -165,6 +202,7 @@ def inorder(node, indices, data, k, N, terminals):
         # writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
         return newData
     if(node.bagType == BagType.IE):
+        #TODO adjust to new data structure
         newData = np.zeros((3 ** len(vertices),k,(k-1)*N))
         firstVertex = node.getLabel().pop()
         scndVertex = node.getLabel().pop()
@@ -187,84 +225,144 @@ def inorder(node, indices, data, k, N, terminals):
         # writeToFile('data.txt','a',newData,3**3, "after IE " + label)
         return newData
     if(node.bagType == BagType.IV):
-        newData = np.zeros((3 ** len(vertices),k,(k-1)*N))
-        introducedVertex = node.getLabel()
-        indexInArray = indices.get(introducedVertex)
-        bla = list(indices.values())
-        for j in range(0,len(bla)):
-            bla[j] = 0
 
-        rest = list(indices.values())
-        rest.remove(indexInArray)
+        newData = np.zeros((3 ** len(node.getBag()), k, (k - 1) * N))
+        introducedVertex = node.getLabel()
+        childBag = node.getLeft().getBag()
+        positionOfIV = node.getBag().index(introducedVertex)
+        lengthOfChildColorings = 3 ** len(childBag)
+        data = np.random.randint(5, size=(3 ** len(childBag), k, (k - 1) * N))
+
         # okay from here we iterate over colorings (x), i (y) and the weights (z)
         # we simply assume that v_1 is the first terminal in the terminals array
         # if new vertex is colored 0
-        bla[indexInArray] = 0
-        newIndices = calculateIndices(bla,rest)
-        for x in newIndices:
-            for y in range(0,k):
-                for z in range(0,(k-1)*N):
-                    if not(terminals.__contains__(introducedVertex)):
-                        newData[x,y,z] = data[x,y,z]
+        for s in range(0, lengthOfChildColorings):
+            coloringFromIndex = getIndexAsList(s, len(childBag))
+            extendedColoring = coloringFromIndex[0:positionOfIV] + [0] + coloringFromIndex[positionOfIV:]
+            indices = sorted(calculateIndices(extendedColoring, [positionOfIV]))
+            for i in range(0, k):
+                for w in range(0, (k - 1) * N):
+                    if not (terminals.__contains__(introducedVertex)):
+                        newData[indices[0], i, w] = data[s, i, w]
+
+                    if (i - 1 >= 0 and i - 1 < k and (w - weights.get(introducedVertex) >= 0) and (
+                                    w - weights.get(introducedVertex) < (k - 1) * N)):
+                        newData[indices[1], i, w] = data[s, i - 1, w - weights.get(introducedVertex)]
                     else:
-                        newData[x,y,z] = 0
+                        newData[indices[1], i, w] = 0
 
-        # if new vertex is colored 1
-        bla[indexInArray] = 1
-        newIndices = calculateIndices(bla,rest)
-        for x in newIndices:
-            for y in range(0,k):
-                for z in range(0,(k-1)*N):
-                    if(y - 1  >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < (k-1)*N)):
-                        newData[x, y, z] = data[x, y-1, z-weights.get(introducedVertex)]
+                    if (terminals[0] != introducedVertex and i - 1 >= 0 and i - 1 < k and (
+                            w - weights.get(introducedVertex) >= 0)):
+                        newData[indices[2], i, w] = data[s, i - 1, w - weights.get(introducedVertex)]
                     else:
-                        newData[x, y, z] = 0
+                        newData[indices[2], i, w] = 0
 
-        # if new vertex is colored 2
-        bla[indexInArray] = 2
-        newIndices = calculateIndices(bla,rest)
-        for x in newIndices:
-            for y in range(0,k):
-                for z in range(0,(k-1)*N):
-                    if(terminals[0] != introducedVertex):
-                        if (y - 1 >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < (k-1)*N)):
-                            newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
-                        else:
-                            newData[x,y,z] = 0
-
-        # writeToFile('data.txt','a',newData,3**3, "after IV " +str(introducedVertex))
         return newData
+        # newData = np.zeros((3 ** len(vertices),k,(k-1)*N))
+        # introducedVertex = node.getLabel()
+        # indexInArray = indices.get(introducedVertex)
+        # bla = list(indices.values())
+        # for j in range(0,len(bla)):
+        #     bla[j] = 0
+        #
+        # rest = list(indices.values())
+        # rest.remove(indexInArray)
+        # okay from here we iterate over colorings (x), i (y) and the weights (z)
+        # we simply assume that v_1 is the first terminal in the terminals array
+        # if new vertex is colored 0
+        # bla[indexInArray] = 0
+        # newIndices = calculateIndices(bla,rest)
+        # for x in newIndices:
+        #     for y in range(0,k):
+        #         for z in range(0,(k-1)*N):
+        #             if not(terminals.__contains__(introducedVertex)):
+        #                 newData[x,y,z] = data[x,y,z]
+        #             else:
+        #                 newData[x,y,z] = 0
+        #
+        # # if new vertex is colored 1
+        # bla[indexInArray] = 1
+        # newIndices = calculateIndices(bla,rest)
+        # for x in newIndices:
+        #     for y in range(0,k):
+        #         for z in range(0,(k-1)*N):
+        #             if(y - 1  >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < (k-1)*N)):
+        #                 newData[x, y, z] = data[x, y-1, z-weights.get(introducedVertex)]
+        #             else:
+        #                 newData[x, y, z] = 0
+        #
+        # # if new vertex is colored 2
+        # bla[indexInArray] = 2
+        # newIndices = calculateIndices(bla,rest)
+        # for x in newIndices:
+        #     for y in range(0,k):
+        #         for z in range(0,(k-1)*N):
+        #             if(terminals[0] != introducedVertex):
+        #                 if (y - 1 >= 0 and y - 1 < k and (z - weights.get(introducedVertex) >= 0) and (z - weights.get(introducedVertex) < (k-1)*N)):
+        #                     newData[x,y,z] = data[x,y-1,z-weights.get(introducedVertex)]
+        #                 else:
+        #                     newData[x,y,z] = 0
+        #
+        # # writeToFile('data.txt','a',newData,3**3, "after IV " +str(introducedVertex))
+        # return newData
+
+    ##### XXXXXXXXXXXXXXXXXXXXXXXXXXX
     if(node.bagType == BagType.F):
-        newData = np.zeros((3 ** len(vertices), k, (k-1)*N))
-        forgottenVertex = node.getLabel()
 
-        missingNodes = list(indices.values())
-        val = [0 for i in range(0, len(indices))]
-        val[indices.get(forgottenVertex)] = 0
+        newData = np.zeros((3 ** len(node.getBag()), k, (k - 1) * N))
+        tmp = 3 ** len(node.getBag())
 
-        missingNodes.remove(indices.get(forgottenVertex))
-        listForForgottenZero = calculateIndices(val,missingNodes)
+        fgtVertex = node.getLabel()
+        childBag = node.getLeft().getBag()
+        oldPos = childBag.index(fgtVertex)
 
-        val[indices.get(forgottenVertex)] = 1
-        listForForgottenOne = calculateIndices(val, missingNodes)
-
-        val[indices.get(forgottenVertex)] = 2
-        listForForgottenTwo = calculateIndices(val, missingNodes)
-
-        for x in range(0,len(listForForgottenZero)):
-            for y in range(0,k):
-                for z in range(0, (k-1)*N):
-                    value = data[listForForgottenZero[x], y, z] + data[listForForgottenOne[x], y, z] + data[listForForgottenTwo[x], y, z]
-                    newData[listForForgottenZero[x], y, z] = value
-                    newData[listForForgottenOne[x], y, z] = value
-                    newData[listForForgottenTwo[x], y, z] = value
-
-        # writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
+        for s in range(0, tmp):
+            for i in range(0, k):
+                for w in range(0, (k - 1) * N):
+                    coloring = getIndexAsList(s, len(node.getBag()))
+                    coloring = coloring[0:oldPos] + [0] + coloring[oldPos:]
+                    indicesToSum = calculateIndices(coloring, [oldPos])
+                    value = data[indicesToSum[0], i, w] + data[indicesToSum[1], i, w] + data[indicesToSum[2], i, w]
+                    newData[s, i, w] = value
         return newData
+
+    ##### XXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
+    # if(node.bagType == BagType.F):
+    #     newData = np.zeros((3 ** len(vertices), k, (k-1)*N))
+    #     forgottenVertex = node.getLabel()
+    #
+    #     missingNodes = list(indices.values())
+    #     val = [0 for i in range(0, len(indices))]
+    #     val[indices.get(forgottenVertex)] = 0
+    #
+    #     missingNodes.remove(indices.get(forgottenVertex))
+    #     listForForgottenZero = calculateIndices(val,missingNodes)
+    #
+    #     val[indices.get(forgottenVertex)] = 1
+    #     listForForgottenOne = calculateIndices(val, missingNodes)
+    #
+    #     val[indices.get(forgottenVertex)] = 2
+    #     listForForgottenTwo = calculateIndices(val, missingNodes)
+    #
+    #     for x in range(0,len(listForForgottenZero)):
+    #         for y in range(0,k):
+    #             for z in range(0, (k-1)*N):
+    #                 value = data[listForForgottenZero[x], y, z] + data[listForForgottenOne[x], y, z] + data[listForForgottenTwo[x], y, z]
+    #                 newData[listForForgottenZero[x], y, z] = value
+    #                 newData[listForForgottenOne[x], y, z] = value
+    #                 newData[listForForgottenTwo[x], y, z] = value
+    #
+    #     # writeToFile('data.txt','a' ,newData,3**3, "after F " +str(forgottenVertex))
+    #     return newData
+    #
+
     if(node.bagType == BagType.J):
+        #TODO here we have to adjust the new data structure too
         newData = np.zeros((3 ** len(vertices), k, (k-1)*N))
         colorings = calculateIndices([0 for i in range(0,len(vertices))],[i for i in range(0,len(vertices))])
-
         for x in colorings:
             for y in range(0, k):
                 for z in range(0, (k - 1) * N):
@@ -275,8 +373,6 @@ def inorder(node, indices, data, k, N, terminals):
                     # and w1+w2 = z + sum of the weights of the nodes with coloring 1 or 2
                     # accumulationBound1 refers to the bound in the paper for the 'i' index
                     # resp. accumulationBound2 to the bound in the paper for 'w' index
-                    print("x:"+str(x))
-                    print("nr of vertices:"+str(len(vertices)))
                     indexAsNodeList = getIndexAsList(x,len(vertices))
                     coloredNodes = getNodesByColoring(indexAsNodeList,[1,2],indices)
                     accumulationBound1 = y + len(coloredNodes)
@@ -285,7 +381,10 @@ def inorder(node, indices, data, k, N, terminals):
                         for w1 in range(0, accumulationBound2):
                             i2 = accumulationBound1 - i1
                             w2 = accumulationBound2 - w1
-                            value += (data[x, i1, w1] * dataright[x, i2, w2])
+                            if(w1 >= ((k-1)*N) or w2 >= ((k-1)*N) or i1 >= k or i2 >= k):
+                                value += 0
+                            else:
+                                value += (data[x, i1, w1] * dataright[x, i2, w2])
                     newData[x,y,z] = value
         return newData
 
@@ -343,6 +442,8 @@ def getIndexAsList(x,nrOfVertices):
 
     return res
 
+# print(calculateIndices([0 for i in range(0,3)],[i for i in range(0,3)]))
+# count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
 def forget(vertices, data, forgetBag, bag, k, N):
     newData = np.zeros((3**len(bag),k,(k-1)*N))
 
