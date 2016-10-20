@@ -88,7 +88,7 @@ def inorder(node, indices, data, k, N, terminals):
     if(node.bagType == BagType.L):
         newData = np.zeros((1, k, (k-1) * N))
         newData[0,0,0] = 1    # leaf initialization
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType))
+        writeToFile('test.txt', 'w', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
     if(node.bagType == BagType.R):
 
@@ -96,7 +96,7 @@ def inorder(node, indices, data, k, N, terminals):
         for i in range(0, k):
             for w in range(0, (k -1) * N):
                 newData[0, i, w] = data[0, i, w] + data[1, i, w] + data[2,  i, w]
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType))
+        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
 
         #newData = np.zeros((3 ** len(vertices), k, (k - 1) * N))
@@ -142,7 +142,7 @@ def inorder(node, indices, data, k, N, terminals):
                 for i in range(0, k):
                     for w in range(0, (k - 1) * N):
                         newData[s, i, w] = data[s, i, w]
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType))
+        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
 
         # newData = np.zeros((3 ** len(vertices),k,(k-1)*N))
@@ -182,18 +182,13 @@ def inorder(node, indices, data, k, N, terminals):
             coloringFromIndex = getIndexAsList(s, len(childBag))
             # this is the special if the child bag is a leaf
             # and there is no coloring
-            if(len(coloringFromIndex) == 1):
+            if(node.getLeft().getBagType() == BagType.L):
                 extendedColoring = [positionOfIV]
             else:
                 extendedColoring = coloringFromIndex[0:positionOfIV] + [0] + coloringFromIndex[positionOfIV:]
 
-            # need to sort as calculateIndices doesn't do it #TODO maybe make it sorting?
-            print("ext Coloring: " + str(extendedColoring))
-            print('positio ' + str(positionOfIV))
+            # need to sort as calculateIndices doesn't do it
             indices = sorted(calculateIndices(extendedColoring, [positionOfIV]))
-            print('IV: ' + str(introducedVertex))
-            print('bag: ' + str(node.getBag()))
-            print('indices: ' + str(indices))
             for i in range(0, k):
                 for w in range(0, (k - 1) * N):
                     # write the three new matrices according to the rules from the paper
@@ -211,7 +206,7 @@ def inorder(node, indices, data, k, N, terminals):
                         newData[indices[2], i, w] = data[s, i - 1, w - weights.get(introducedVertex)]
                     else:
                         newData[indices[2], i, w] = 0
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType))
+        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
         # newData = np.zeros((3 ** len(vertices),k,(k-1)*N))
         # introducedVertex = node.getLabel()
@@ -286,7 +281,7 @@ def inorder(node, indices, data, k, N, terminals):
                     newData[s, i, w] = data[indicesToSum[0], i, w] +\
                                        data[indicesToSum[1], i, w] +\
                                        data[indicesToSum[2], i, w]
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType))
+        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
 
     ##### XXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -326,7 +321,7 @@ def inorder(node, indices, data, k, N, terminals):
         bagSize = len(node.getBag())
         matSize = 3 ** bagSize
         newData = np.zeros((matSize, k, (k-1)*N))
-        colorings = calculateIndices([0 for i in range(0,len(bagSize))], [i for i in range(0,len(bagSize))])
+        colorings = calculateIndices([0 for i in range(0,bagSize)], [i for i in range(0,bagSize)])
         for s in colorings:
             for i in range(0, k):
                 for w in range(0, (k - 1) * N):
@@ -350,7 +345,7 @@ def inorder(node, indices, data, k, N, terminals):
                             else:
                                 value += (data[s, i1, w1] * dataright[s, i2, w2])
                     newData[s, i, w] = value
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType))
+        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
 
     return data
@@ -414,76 +409,54 @@ def getIndexAsList(x,nrOfVertices):
 #############################################################
 ######################### BIG EXAMPLE #######################
 #############################################################
-# k = 5
-# N = 20
-# vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-# edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
-#          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
-#          {'c', 'd'}, {'d', 'e'}]
-# ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
-# efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
-# abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
-# ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
-# bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
-# bc = TreeDecomposition(bcg, None, ['b', 'c'])
-#
-#
-# #order: join, internalstuff, leaf, root, edge bags
-# #print('------')
-# bc = root(bc)
-# leaf(bc)
-# join(bc)
-# addInternalNodes(bc)
-# edgeBags(bc,edges)
-#print_NiceTree_indented(bc)
-#print('------')
-#
-# weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
-#
-# ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
-# efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
-# abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
-# ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
-# bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
-# bc = TreeDecomposition(bcg, None, ['b', 'c'])
-#
-# #order: join, internalstuff, leaf, root, edge bags
-# #print('------')
-# bc = root(bc)
-# leaf(bc)
-# join(bc)
-# addInternalNodes(bc)
-# edgeBags(bc,edges)
-# #print_NiceTree_indented(bc)
-# #print('------')
-# #
-# # #saveTreeDecomposition(bc,edges)
-# #gv = GraphVisualization(bc)
-# #gv.createGraph()
+k = 3
+N = 20
+vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
+         {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
+         {'c', 'd'}, {'d', 'e'}]
+weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
+
+ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
+efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
+abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
+ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
+bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
+bc = TreeDecomposition(bcg, None, ['b', 'c'])
+
+bc = root(bc)
+leaf(bc)
+join(bc)
+addInternalNodes(bc)
+edgeBags(bc, edges)
+
+gv = GraphVisualization(bc)
+gv.createGraph()
+
+count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
 
 #############################################################
 ######################### SMALL EXAMPLE #####################
 #############################################################
-vertices = ['a','b','c']
-edges = [{'a','b'}, {'b','c'}]
+# vertices = ['a','b','c']
+# edges = [{'a','c'}, {'b','c'}]
+#
+# k = 3
+# N = 5
+# #weights = {vertices[i]: rnd.randint(1,N) for i in range(0,len(vertices))}
+# weights = {'a': 1, 'c': 1, 'b': 1}
+# bc = TreeDecomposition(None, None, ['b', 'c'])
+# ab = TreeDecomposition(bc, None, ['a', 'c'])
+#
+# ab = root(ab)
+# leaf(ab)
+# join(ab)
+# addInternalNodes(ab)
+# edgeBags(ab,edges)
+# v = GraphVisualization(ab)
+# v.createGraph()
+#
+# count(vertices, edges, ab, ['a', 'b'], k, N, weights)
 
-k = 2
-N = 5
-#weights = {vertices[i]: rnd.randint(1,N) for i in range(0,len(vertices))}
-weights = {'a': 1, 'b': 1, 'c': 1}
-
-bc = TreeDecomposition(None,None, ['b', 'c'])
-ab = TreeDecomposition(bc,None,['a','b'])
-
-ab = root(ab)
-leaf(ab)
-join(ab)
-addInternalNodes(ab)
-edgeBags(ab,edges)
-v = GraphVisualization(ab)
-v.createGraph()
-
-#count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
-count(vertices, edges, ab, ['a', 'b'], k, N, weights)
 
 
