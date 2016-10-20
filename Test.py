@@ -49,50 +49,58 @@ def calculateIndicesRec(value, missingNodes, indices):
 
 # https://www.researchgate.net/figure/221426649_fig1_Fig-1-An-example-of-an-H-coloring-of-G-is-the-mapping-A-a-A-d-A-f-1
 # example graph G
-vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
-         {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
-         {'c', 'd'}, {'d', 'e'}]
 
-ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
-efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
-abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
-ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
-bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
-bc = TreeDecomposition(bcg, None, ['b', 'c'])
-
-#order: join, internalstuff, leaf, root, edge bags
-#print('------')
-bc = root(bc)
-leaf(bc)
-join(bc)
-addInternalNodes(bc)
-edgeBags(bc,edges)
-#print_NiceTree_indented(bc)
-#print('------')
+#############################################################
+######################### BIG EXAMPLE #######################
+#############################################################
+# k = 5
+# N = 20
+# vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+# edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
+#          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
+#          {'c', 'd'}, {'d', 'e'}]
 #
-# #saveTreeDecomposition(bc,edges)
-#gv = GraphVisualization(bc)
-#gv.createGraph()
-# print(containsEdge(['e', 'c', 'g'], ['g','c']))
+# weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
+#
+# ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
+# efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
+# abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
+# ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
+# bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
+# bc = TreeDecomposition(bcg, None, ['b', 'c'])
+#
+# #order: join, internalstuff, leaf, root, edge bags
+# #print('------')
+# bc = root(bc)
+# leaf(bc)
+# join(bc)
+# addInternalNodes(bc)
+# edgeBags(bc,edges)
+# #print_NiceTree_indented(bc)
+# #print('------')
+# #
+# # #saveTreeDecomposition(bc,edges)
+# #gv = GraphVisualization(bc)
+# #gv.createGraph()
 
-#vertices = ['a','b','c']
-#edges = [{'a','b'}, {'b','c'}]
+#############################################################
+######################### SMALL EXAMPLE #####################
+#############################################################
+vertices = ['a','b','c']
+edges = [{'a','b'}, {'b','c'}]
 
 k = 5
 N = 20
 weights = {vertices[i]: rnd.randint(0,N) for i in range(0,len(vertices))}
-# weights = {'a':1,'b':3,'c':2}
-# print(weights)
-#
-#bc = TreeDecomposition(None,None, ['b', 'c'])
-#ab = TreeDecomposition(bc,None,['a','b'])
 
-#ab = root(ab)
-#leaf(ab)
-#join(ab)
-#addInternalNodes(ab)
-#edgeBags(ab,edges)
+bc = TreeDecomposition(None,None, ['b', 'c'])
+ab = TreeDecomposition(bc,None,['a','b'])
+
+ab = root(ab)
+leaf(ab)
+join(ab)
+addInternalNodes(ab)
+edgeBags(ab,edges)
 # # v = GraphVisualization(ab)
 # # v.createGraph()
 
@@ -107,12 +115,6 @@ def writeToFile(filename,mode,array,fst,stepInfo):
         f.write("\n\n")
     f.write("-----------------------------------------------\n")
 
-    # for i in range(0,fst):
-    #    for j in range(0,scn):
-    #        for k in range(0,thi):
-    #            f.write(str(array[i,j,k]))
-
-
 def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
     # in-order traversal
     k = k + 1
@@ -121,13 +123,11 @@ def count(vertices, edges, niceTreeDecomp,terminals,k,N, weights):
     for i in range(0, len(vertices)**3):
         data[i,0,0] = 1    # leaf initialization
     # we search for a solution with k nodes but the arrays indices start at 0
-    result = inorder(niceTreeDecomp, indices, data,k,N,terminals)
-    writeToFile('result.txt', 'w', result, 3**7, "result ")
-    print(result.shape)
-    for j in range(0,(k-1)*N):
-        if((result[0,k-1,j] % 2) == 1):
-                print("yes there is a solution")
-                print(result.shape)
+    #result = inorder(niceTreeDecomp, indices, data,k,N,terminals)
+    #writeToFile('result.txt', 'w', result, 3**7, "result ")
+    #for j in range(0,(k-1)*N):
+    #    if((result[0,k-1,j] % 2) == 1):
+    #            print("yes there is a solution")
 
 def inorder(node, indices, data, k, N, terminals):
     if(node.getLeft() != None):
@@ -332,7 +332,6 @@ def getSumOfWeights(nodes, weights):
         res += weights.get(nodes[i])
     return res
 
-
 def getIndexAsList(x,nrOfVertices):
 
     number = x
@@ -343,6 +342,10 @@ def getIndexAsList(x,nrOfVertices):
         res.append(value)
 
     return res
+
+def forget(vertices, data, forgetBag, bag, k, N):
+    newData = np.zeros((3**len(bag),k,(k-1)*N))
+
 
 #print(calculateIndices([0 for i in range(0,3)],[i for i in range(0,3)]))
 count(vertices, edges, bc, ['c', 'b', 'e'], k, N, weights)
