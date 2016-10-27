@@ -178,6 +178,51 @@ consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $
 \end{frame}
 
 \subsection{Count}
+\begin{frame}
+\frametitle{Count (1)}
+\begin{itemize}
+\item aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$
+\item wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |{X \in \mathcal{R} |cc(G[X]) = 1}| = |\mathcal{S}|$
+\end{itemize}
+\begin{block}{Lemma 3.4}
+Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
+\end{block}
+\end{frame}
+%-------------------------
+\begin{frame}
+\frametitle{Einschub: (Nice) Tree Decomposition (1)}
+\begin{block}{Tree Decomposition}
+A tree decomposition of a graph $G$ is a tree $\mathbb{T}$ in which each vertex $x \in \mathbb{T}$ has an assigned set of vertices $B_x \subseteq V$ (called a bag) such that $\cup_{x \in \mathbb{T}} B_x = V$ with the following properties:
+\begin{itemize}
+\item for any $uv \in E$, there exists an $x \in \mathbb{T}$ such that $u,v \in B_x$
+\item if $v \in B_x$ and $v \in B_y$, then $v \in B_z$ for all $z$ on the path from $x$ to $y$ in $\mathbb{T}$
+\end{itemize}
+\end{block}
+
+\end{frame}
+%-------------------------
+\begin{frame}
+\frametitle{Einschub: (Nice) Tree Decomposition (2)}
+\begin{block}{Nice Tree Decomposition}
+\dots
+\begin{itemize}
+\item \textbf{Leaf bag}: a leaf $x$ of $\mathbb{T}$ with $B_x=\emptyset$
+\item \textbf{Introduce vertex bag}: an internal vertex $x$ of $\mathbb{T}$ with one child vertex $y$ for which $B_x = B_y \cup \{v\}$ for some $v \notin B_y$. This bag is said to introduce $v$
+\item \textbf{Introduce edge bag}: an internal vertex $x$ of $\mathbb{T}$ labeled with an edge $uv \in E$ with one child bag $y$ for which $u,v \in B_x = B_y$. This bag is said to introduce $uv$
+\item \textbf{Forget bag}: an internal vertex $x$ of $\mathbb{T}$ with one child bag $y$ for which $B_x=B_y \{v\}$ for some $v \in B_y$. This bag is said to forget $v$
+\item \textbf{Join bag}: an internal vertex $x$ with two children vertices $l$ and $r$ with $B_r=B_l$
+\end{itemize}
+\end{block}
+
+\end{frame}
+%-------------------------
+\begin{frame}
+\frametitle{Count (2)}
+\begin{itemize}
+\item Kardinalität von $\mathcal{C}_W$ modulo $2$ kann mit dynamischen Programm berechnet werden
+\item 
+\end{itemize}
+\end{frame}
 \subsection{(Nice) Tree Decomposition}
 \begin{frame}
 \end{frame}
