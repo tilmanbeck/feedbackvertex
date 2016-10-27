@@ -86,7 +86,7 @@
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
 
-\title[Cut \& Count]{Exemplary Implementation of the Cut \& Count technique for Steiner Tree} % The short title appears at the bottom of every slide, the full title is only on the title page
+\title[Cut \& Count]{Implementierung der Cut \& Count-Technik am Beispiel Steiner tree} % The short title appears at the bottom of every slide, the full title is only on the title page
 
 \author{
 Levin von Hollen, 
@@ -94,7 +94,7 @@ Tilman Beck
 }
 \institute[] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
 {
-\textit{ \{stuXXXXXX-, stu127568-\}@informatik.uni-kiel.de} \\
+\textit{ \{stu127560-, stu127568-\}@informatik.uni-kiel.de} \\
 \medskip
 Christian-Albrechts Universität Kiel  % Your institution for the title page
 }
@@ -107,7 +107,7 @@ Christian-Albrechts Universität Kiel  % Your institution for the title page
 \end{frame}
 
 \begin{frame}
-\frametitle{Overview} % Table of contents slide, comment this block out to remove it
+\frametitle{Überblick} % Table of contents slide, comment this block out to remove it
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
 
@@ -116,20 +116,74 @@ Christian-Albrechts Universität Kiel  % Your institution for the title page
 %----------------------------------------------------------------------------------------
 
 %------------------------------------------------
-\section{First Section} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+\section{Cut \& Count} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
-
-\subsection{Subsection Example} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+\subsection{Allgemeines}
+\begin{frame}
+\frametitle{Cut \& Count-Technik}
+\begin{itemize}
+\item Technik um connectivity-type Probleme mithilfe von Randomisierung zu lösen(Marek Cygan, Jesper Nederlof, Marcin Pilipczuk, Michał Pilipczuk, Johan van Rooij, Jakub Onufry Wojtaszczyk)
+\item angewendet auf viele verschiedene Probleme (z.B. Longest Path, Steiner Tree, Feedback Vertex Set uvm)
+\item Randomisierung durch Isolation-Lemma 
+\item als Ergebnis ein einseitiger Monte-Carlo-Algorithmus mit Laufzeit $c^{tw(G)} |V|^{\mathcal{O}(1)}$
+%\note{kurz erklären: connectivity-type Probleme, Isolation Lemma, Laufzeit, einseitig, montecarlo }
+\end{itemize}
+\end{frame}
 
 \begin{frame}
-\frametitle{Paragraphs of Text}
-Sed iaculis dapibus gravida. Morbi sed tortor erat, nec interdum arcu. Sed id lorem lectus. Quisque viverra augue id sem ornare non aliquam nibh tristique. Aenean in ligula nisl. Nulla sed tellus ipsum. Donec vestibulum ligula non lorem vulputate fermentum accumsan neque mollis.\\~\\
+\frametitle{Cut \& Count-Technik}
+\begin{block}{Theorem}
+There exists a randomized algorithm, which given a graph $G$ with $n$ vertices, a tree decomposition of
+$G$ of width $t$ and a number $k$ in $3^tn^{\mathcal{O}(1)}$ time either states that there exists a connected vertex cover of size at most $k$
+in $G$, or that it could not verify this hypothesis. If there indeed exists such a cover, the algorithm will return “unable
+to verify” with probability at most $1/2$.
+\end{block}
+\end{frame}
 
-Sed diam enim, sagittis nec condimentum sit amet, ullamcorper sit amet libero. Aliquam vel dui orci, a porta odio. Nullam id suscipit ipsum. Aenean lobortis commodo sem, ut commodo leo gravida vitae. Pellentesque vehicula ante iaculis arcu pretium rutrum eget sit amet purus. Integer ornare nulla quis neque ultrices lobortis. Vestibulum ultrices tincidunt libero, quis commodo erat ullamcorper id.
+\section{Cut \& Count mit Steiner Tree} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+\begin{frame}
+\frametitle{Steiner Tree}
+\begin{block}{Problem}
+\textbf{Input}: An undirected graph $G = (V, E)$, a set of terminals $T \subseteq V$ and an integer $k$. \\
+\textbf{Question}: Is there a set $X \subseteq V$ of cardinality $k$ such that $T \subseteq X$ and $G[X]$ is connected?
+\end{block}
+\end{frame}
+\subsection{Cut}
+\begin{frame}
+\frametitle{Cut (1)}
+\begin{itemize}
+\item definiere Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ 
+% alle Knoten erhalten ein zufälliges Gewicht -> später wichtig für Randomisierung, N = |V| für 1/2 Wahrscheinlichkeit
+\item sei $\mathcal{R}_W$ die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$
+\item sei  $\mathcal{S}_W=\{X \in \mathcal{S}_W | G[X]$ ist zusammenhängend$\}$ 
+\item $\cup_W \mathcal{S}_W$ ist die Menge der Lösungen
+\item gibt es ein $W$ für das die Menge nichtleer ist, so gibt der Algorithmus eine positive Antwort
+\end{itemize}
+\end{frame}
+%--------------------
+\begin{frame}
+\frametitle{Cut (2)}
+\begin{itemize}
+\item einen beliebigen Terminalknoten $v \in T$ als $v_1$ festlegen
+\item sei $\mathcal{C}_W$ die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$ 
+\newline
+\newline
+\begin{block}{Lemma 3.3}
+Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of
+consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
+\end{block}
+%am Tafelbild erklären was ein consistent cut ist
+
+\end{itemize}
+\end{frame}
+
+\subsection{Count}
+\subsection{(Nice) Tree Decomposition}
+\begin{frame}
 \end{frame}
 
 %------------------------------------------------
-
+\section{Implementierung}
 \begin{frame}
 \frametitle{Bullet Points}
 \begin{itemize}
@@ -178,8 +232,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ul
 \end{columns}
 \end{frame}
 
-%------------------------------------------------
-\section{Second Section}
 %------------------------------------------------
 
 \begin{frame}
