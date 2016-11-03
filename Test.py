@@ -276,54 +276,54 @@ def getIndexAsList(x,nrOfVertices):
 #############################################################
 ######################### BIG EXAMPLE #######################
 #############################################################
-k = 1
-vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-N = 2 * len(vertices)
-edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
-         {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
-         {'c', 'd'}, {'d', 'e'}]
-weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
-print(str(weights))
-
-ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
-efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
-abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
-ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
-bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
-bc = TreeDecomposition(bcg, None, ['b', 'c'])
-
-bc = root(bc)
-leaf(bc)
-join(bc)
-addInternalNodes(bc)
-edgeBags(bc, edges)
-
-gv = GraphVisualization(bc)
-gv.createGraph()
-
-count(vertices, edges, bc, ['d'], k, N, weights)
+# k = 1
+# vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+# N = 2 * len(vertices)
+# edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
+#          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
+#          {'c', 'd'}, {'d', 'e'}]
+# weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
+# print(str(weights))
+#
+# ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
+# efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
+# abg = TreeDecomposition(None, None, ['a', 'b', 'g'])
+# ecg = TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
+# bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
+# bc = TreeDecomposition(bcg, None, ['b', 'c'])
+#
+# bc = root(bc)
+# leaf(bc)
+# join(bc)
+# addInternalNodes(bc)
+# edgeBags(bc, edges)
+#
+# gv = GraphVisualization(bc)
+# gv.createGraph()
+#
+# count(vertices, edges, bc, ['d'], k, N, weights)
 
 #############################################################
 ######################### SMALL EXAMPLE #####################
 #############################################################
-# vertices = ['a','b','c']
-# edges = [{'a','b'}, {'b','c'}]
-#
-# k = 2
-# N = 5
-# weights = {vertices[i]: rnd.randint(1,N) for i in range(0,len(vertices))}
-# bc = TreeDecomposition(None, None, ['b', 'c'])
-# ab = TreeDecomposition(bc, None, ['a', 'b'])
-#
-# ab = root(ab)
-# leaf(ab)
-# join(ab)
-# addInternalNodes(ab)
-# edgeBags(ab,edges)
-# v = GraphVisualization(ab)
-# v.createGraph()
-#
-# count(vertices, edges, ab, ['a', 'c'], k, N, weights)
-#
+vertices = ['a','b','c']
+edges = [{'a','b'}, {'b','c'}]
+
+k = 2
+N = 5
+weights = {vertices[i]: rnd.randint(1,N) for i in range(0,len(vertices))}
+bc = TreeDecomposition(None, None, ['b', 'c'])
+ab = TreeDecomposition(bc, None, ['a', 'b'])
+
+ab = root(ab)
+leaf(ab)
+join(ab)
+addInternalNodes(ab)
+edgeBags(ab,edges)
+v = GraphVisualization(ab)
+v.createGraph()
+
+count(vertices, edges, ab, ['a', 'c'], k, N, weights)
+
 
 

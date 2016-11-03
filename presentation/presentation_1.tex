@@ -81,6 +81,7 @@
 \usepackage{textcomp}
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{animate}
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -123,7 +124,7 @@ Christian-Albrechts Universität Kiel  % Your institution for the title page
 \frametitle{Cut \& Count-Technik}
 \begin{itemize}
 \item Technik um connectivity-type Probleme mithilfe von Randomisierung zu lösen(Marek Cygan, Jesper Nederlof, Marcin Pilipczuk, Michał Pilipczuk, Johan van Rooij, Jakub Onufry Wojtaszczyk)
-\item angewendet auf viele verschiedene Probleme (z.B. Longest Path, Steiner Tree, Feedback Vertex Set uvm)
+\item angewendet auf viele verschiedene Probleme (z.B. Longest Path, Steiner Tree, Feedback Vertex Set, uvm.)
 \item Randomisierung durch Isolation-Lemma 
 \item als Ergebnis ein einseitiger Monte-Carlo-Algorithmus mit Laufzeit $c^{tw(G)} |V|^{\mathcal{O}(1)}$
 %\note{kurz erklären: connectivity-type Probleme, Isolation Lemma, Laufzeit, einseitig, montecarlo }
@@ -133,10 +134,14 @@ Christian-Albrechts Universität Kiel  % Your institution for the title page
 \begin{frame}
 \frametitle{Cut \& Count-Technik}
 \begin{block}{Theorem}
-There exists a randomized algorithm, which given a graph $G$ with $n$ vertices, a tree decomposition of
-$G$ of width $t$ and a number $k$ in $3^tn^{\mathcal{O}(1)}$ time either states that there exists a connected vertex cover of size at most $k$
-in $G$, or that it could not verify this hypothesis. If there indeed exists such a cover, the algorithm will return “unable
-to verify” with probability at most $1/2$.
+There exist Monte-Carlo algorithms that given a tree decomposition of the (underlying undirected
+graph of the) input graph of width $t$ solve the following problems:
+\begin{itemize}
+\item Steiner Tree in $3^t|V|^{\mathcal{O}(1)}$
+\item Feedback Vertex Set in $3^t|V|^{\mathcal{O}(1)}$
+\item \dots
+\end{itemize}
+The algorithms cannot give false positives and may give false negatives with probability at most $1/2$.
 \end{block}
 \end{frame}
 
@@ -155,14 +160,30 @@ to verify” with probability at most $1/2$.
 \item definiere Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ 
 % alle Knoten erhalten ein zufälliges Gewicht -> später wichtig für Randomisierung, N = |V| für 1/2 Wahrscheinlichkeit
 \item sei $\mathcal{R}_W$ die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$
-\item sei  $\mathcal{S}_W=\{X \in \mathcal{S}_W | G[X]$ ist zusammenhängend$\}$ 
+\item sei  $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[X]$ ist zusammenhängend$\}$ 
 \item $\cup_W \mathcal{S}_W$ ist die Menge der Lösungen
 \item gibt es ein $W$ für das die Menge nichtleer ist, so gibt der Algorithmus eine positive Antwort
 \end{itemize}
 \end{frame}
 %--------------------
 \begin{frame}
-\frametitle{Cut (2)}
+\frametitle{Cut (2) - wozu $\omega$ ?}
+\begin{itemize}
+\item Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ 
+\item der Algorithmus (ohne $\omega$) ist korrekt, sofern es \textbf{genau eine} oder \textbf{keine} Lösung gibt
+\item mithilfe des Isolation Lemma kann mit hoher Wahrscheinlichkeit eine große Lösungsmenge auf eine einzige reduziert werden
+\end{itemize}
+\begin{block}{Isolation Lemma}
+Let $\mathcal{F} \subseteq 2^U$ be a set family over a universe $U$ with $|\mathcal{F}| > 0$. For each $u \in U$ ,
+choose a weight $\omega(u) \in {1, 2, . . . , N }$ uniformly and independently at random. Then
+\begin{center}
+$prob[\omega$ isolates $\mathcal{F}]\geq 1 - \frac{|U|}{N}$
+\end{center}
+\end{block}
+\end{frame}
+%--------------------
+\begin{frame}
+\frametitle{Cut (3)}
 \begin{itemize}
 \item einen beliebigen Terminalknoten $v \in T$ als $v_1$ festlegen
 \item sei $\mathcal{C}_W$ die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$ 
@@ -182,7 +203,7 @@ consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $
 \frametitle{Count (1)}
 \begin{itemize}
 \item aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$
-\item wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |{X \in \mathcal{R} |cc(G[X]) = 1}| = |\mathcal{S}|$
+\item wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |\{X \in \mathcal{R} |cc(G[X]) = 1\}| = |\mathcal{S}|$
 \end{itemize}
 \begin{block}{Lemma 3.4}
 Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
@@ -190,7 +211,7 @@ Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then
 \end{frame}
 %-------------------------
 \begin{frame}
-\frametitle{Einschub: (Nice) Tree Decomposition (1)}
+\frametitle{Einschub: Tree Decomposition (1)}
 \begin{block}{Tree Decomposition}
 A tree decomposition of a graph $G$ is a tree $\mathbb{T}$ in which each vertex $x \in \mathbb{T}$ has an assigned set of vertices $B_x \subseteq V$ (called a bag) such that $\cup_{x \in \mathbb{T}} B_x = V$ with the following properties:
 \begin{itemize}
@@ -198,46 +219,85 @@ A tree decomposition of a graph $G$ is a tree $\mathbb{T}$ in which each vertex 
 \item if $v \in B_x$ and $v \in B_y$, then $v \in B_z$ for all $z$ on the path from $x$ to $y$ in $\mathbb{T}$
 \end{itemize}
 \end{block}
-
+Kann in polynomieller Zeit berechnet werden (Beweis: Ton Kloks. Treewidth, Computations and Approximations, volume 842 of Lecture Notes in Computer Science. Springer, 1994)
 \end{frame}
 %-------------------------
 \begin{frame}
-\frametitle{Einschub: (Nice) Tree Decomposition (2)}
-\begin{block}{Nice Tree Decomposition}
-\dots
-\begin{itemize}
-\item \textbf{Leaf bag}: a leaf $x$ of $\mathbb{T}$ with $B_x=\emptyset$
-\item \textbf{Introduce vertex bag}: an internal vertex $x$ of $\mathbb{T}$ with one child vertex $y$ for which $B_x = B_y \cup \{v\}$ for some $v \notin B_y$. This bag is said to introduce $v$
-\item \textbf{Introduce edge bag}: an internal vertex $x$ of $\mathbb{T}$ labeled with an edge $uv \in E$ with one child bag $y$ for which $u,v \in B_x = B_y$. This bag is said to introduce $uv$
-\item \textbf{Forget bag}: an internal vertex $x$ of $\mathbb{T}$ with one child bag $y$ for which $B_x=B_y \{v\}$ for some $v \in B_y$. This bag is said to forget $v$
-\item \textbf{Join bag}: an internal vertex $x$ with two children vertices $l$ and $r$ with $B_r=B_l$
-\end{itemize}
-\end{block}
+\frametitle{Einschub: Tree Decomposition (2)}
+\begin{center}
+\includegraphics[scale=0.15]{./imgs/tree_decomposition1.png}
+\end{center}
+\end{frame}
+%-------------------------
+\begin{frame}
+\frametitle{Einschub: Nice Tree Decomposition (NTD)}
 
+\begin{center}
+\includegraphics[scale=0.17]{./imgs/tree_decomposition2.jpg}
+\end{center}
+\note{jeder Knoten der NTD enthält einen Bag mit den Knoten aus dem Ursprungsgraphen und ein Label (leaf, root, introduce vertex, forget vertex, etc)}
+
+%\item \textbf{Leaf bag}: a leaf $x$ of $\mathbb{T}$ with $B_x=\emptyset$
+%\item \textbf{Introduce vertex bag}: an internal vertex $x$ of $\mathbb{T}$ with one child vertex $y$ for which $B_x = B_y %\cup \{v\}$ for some $v \notin B_y$. This bag is said to introduce $v$
+%\item \textbf{Introduce edge bag}: an internal vertex $x$ of $\mathbb{T}$ labeled with an edge $uv \in E$ with one child %bag $y$ for which $u,v \in B_x = B_y$. This bag is said to introduce $uv$
+%\item \textbf{Forget bag}: an internal vertex $x$ of $\mathbb{T}$ with one child bag $y$ for which $B_x=B_y \{v\}$ for %some $v \in B_y$. This bag is said to forget $v$
+%\item \textbf{Join bag}: an internal vertex $x$ with two children vertices $l$ and $r$ with $B_r=B_l$
 \end{frame}
 %-------------------------
 \begin{frame}
 \frametitle{Count (2)}
 \begin{itemize}
-\item Kardinalität von $\mathcal{C}_W$ modulo $2$ kann mit dynamischen Programm berechnet werden
-\item 
+\item $|\mathcal{C}_W|$ modulo $2$ kann mit dynamischen Programm berechnet werden
+\item für jeden Bag $x \in \mathbb{T}$, integers $0 \leq i \leq k,0 \leq w \leq kN$ und Färbung $s \in \{0,1_1,1_2 \}^{B_x}$ definiere:
+\begin{itemize}
+\item $\mathcal{R}_x(i,w)=\{X \subseteq V_x | (T \cap V_x) \subseteq X$ $\wedge$ $|X| = i$ $\wedge$ $\omega (X) = w \}$
+\item $\mathcal{C} (i,w) =\{ (X,(X_1,X_2)) | X \in \mathcal{R}_x(i,w)$ $\wedge$ $(X,(X_1,X_2))$ is a consistently cut subgraph of $G_x$ $\wedge$ $(v_1 \in V_x \Rightarrow v_1 \in X_1 \} $
+\item $\mathcal{A}_x(i,w,s)=| \{ (X,(X_1,X_2)) \in \mathcal{C}_x(i,w) | (s(v) = 1_j \Rightarrow v \in X_j)$ $\wedge$ $(s(v)=0 \Rightarrow v \notin X \} |$
+\note{$\mathcal{R}_(i,w)$ enthält alle Mengen $X \subseteq V_x$, welche potenziell zu einer Lösung aus $\mathcal{R}$ erweitert werden können (mit Restriktion i und w), entsprechend enthält $\mathcal{C}_x(i,w)$ alle consistently cut Subgraphen}
+
+\end{itemize}
 \end{itemize}
 \end{frame}
-\subsection{(Nice) Tree Decomposition}
+%-------------------------
 \begin{frame}
+\frametitle{Count (3)}
+Färbung $s \in \{0,1_1,1_2 \}^{B_x}$
+\begin{itemize}
+\item $s[v] = 0 \Rightarrow v \notin X$
+\item $s[v] = 1_1 \Rightarrow v \in X_1$ 
+\item $s[v] = 1_2 \Rightarrow v \in X_2$ 
+\item $\mathcal{A}_x(i,w,s)$ zählt die Elemente $\mathcal{C}_x(i,w)$, die entsprechend gefärbt sind
+\item $\sum\limits_{s \in  \{ 0,1_1,1_2 \}^{B_x} } A_x(i,w,s) = |C_x(i,w)|$
+\item für die Lösung nur $A_r(k,W,\emptyset) = |C_r(k,W)| = |C_W|$ interessant (für alle W)
+\item ausgehend von Wurzel-Knoten rekursiver Abstieg zu den Blatt-Knoten der NTD
+\end{itemize}
+\end{frame}
+%-------------------------
+\begin{frame}
+\frametitle{Count (3)}
+\begin{theorem}[Lemma 3.5]
+Given $G=(V,E), T \subseteq V,$ an integer $k, \omega:V\rightarrow \{1,\dots,N \}$ and a nice tree decomposition $\mathbb{T}$, there exists an algorithm that can determine $|\mathcal{C}_W|$ modulo 2 for every $0 \leq W \leq kN$ in $3^tN^2|V|^{\mathcal{O}(1)}$ (t is the treewidth of the NTD)
+\end{theorem}
 \end{frame}
 
 %------------------------------------------------
 \section{Implementierung}
 \begin{frame}
-\frametitle{Bullet Points}
-\begin{itemize}
-\item Lorem ipsum dolor sit amet, consectetur adipiscing elit
-\item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
-\item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
-\item Nam cursus est eget velit posuere pellentesque
-\item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
-\end{itemize}
+\frametitle{Implementierung}
+\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+\column{.45\textwidth} % Left column and width
+\textbf{Heading}
+\begin{enumerate}
+\item Statement
+\item Explanation
+\item Example
+\end{enumerate}
+
+\column{.5\textwidth} % Right column and width
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
+
+\end{columns}
 \end{frame}
 
 %------------------------------------------------
@@ -354,7 +414,7 @@ This statement requires citation \cite{p1}.
 %------------------------------------------------
 
 \begin{frame}
-\Huge{\centerline{The End}}
+\Huge{\centerline{Fragen?}}
 \end{frame}
 
 %----------------------------------------------------------------------------------------
