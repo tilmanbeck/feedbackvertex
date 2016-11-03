@@ -287,15 +287,14 @@ Given $G=(V,E), T \subseteq V,$ an integer $k, \omega:V\rightarrow \{1,\dots,N \
 \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
 
 \column{.45\textwidth} % Left column and width
-\textbf{Heading}
-\begin{enumerate}
-\item Statement
-\item Explanation
-\item Example
-\end{enumerate}
+\begin{itemize}
+\item Inorder-Traversierung der NTD
+\item Berechnung einer Datenmatrix basierend auf dynamischen Programm und Kind-Knoten
+\item Wurzel- und alle Blattknoten enthalten 2D Datenmatrix
+\end{itemize}
 
 \column{.5\textwidth} % Right column and width
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
+\includegraphics[scale=0.25]{./imgs/implementation.png}
 
 \end{columns}
 \end{frame}
@@ -303,17 +302,20 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ul
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Blocks of Highlighted Text}
-\begin{block}{Block 1}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-\end{block}
-
-\begin{block}{Block 2}
-Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum quis magna at risus dictum tempor eu vitae velit.
-\end{block}
-
-\begin{block}{Block 3}
-Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed blandit justo nisi ac lacus.
+\frametitle{dynamisches Programm}
+\begin{block}{Berechnungen}
+sei v der \glqq \textit{introduced vertex}\grqq in einem Introduced Vertex, sei y bzw. z der linke bzw. rechte Kind-Knoten von Bag x in der NTD, falls vorhanden
+\begin{itemize}
+\item \textbf{Leaf bag}:
+\begin{itemize}
+\item $A_x=(0,0,\emptyset) = 1$
+\end{itemize}
+\item \textbf{Introduce vertex v}:
+\begin{itemize}
+\item $A_x=(i,w,s[v\rightarrow 0]) = 1[v \notin T]A_y(i,w,s)$
+\item test
+\end{itemize}
+\end{itemize}
 \end{block}
 \end{frame}
 
