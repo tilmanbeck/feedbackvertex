@@ -304,7 +304,6 @@ Given $G=(V,E), T \subseteq V,$ an integer $k, \omega:V\rightarrow \{1,\dots,N \
 \begin{frame}
 \frametitle{dynamisches Programm}
 \begin{block}{Berechnungen}
-sei v der \glqq \textit{introduced vertex}\grqq in einem Introduced Vertex, sei y bzw. z der linke bzw. rechte Kind-Knoten von Bag x in der NTD, falls vorhanden
 \begin{itemize}
 \item \textbf{Leaf bag}:
 \begin{itemize}
@@ -312,8 +311,21 @@ sei v der \glqq \textit{introduced vertex}\grqq in einem Introduced Vertex, sei 
 \end{itemize}
 \item \textbf{Introduce vertex v}:
 \begin{itemize}
-\item $A_x=(i,w,s[v\rightarrow 0]) = 1[v \notin T]A_y(i,w,s)$
-\item test
+\item $A_x=(i,w,s[v\rightarrow 0]) = [v \notin T]A_y(i,w,s)$
+\item $A_x=(i,w,s[v\rightarrow 1_1]) = A_y(i-1,w-w(v),s)$
+\item $A_x=(i,w,s[v\rightarrow 1_2]) =[v \neq v_1] A_y(i-1,w-w(v),s)$
+\end{itemize}
+\item \textbf{Introduce edge uv}
+\begin{itemize}
+\item $A_x(i,w,s) = [s(u) = 0 \vee s(v) = 0 \vee s(u) = s(v)]A_y(i,w,s)$
+\end{itemize}
+\item \textbf{Forget vertex v}
+\begin{itemize}
+\item $A_x(i,w,s) = \sum\limits_{\alpha \in {0,1_1,1_2}} A_x(i,w,s[v \rightarrow \alpha]) $
+\end{itemize}
+\item \textbf{Join bag}
+\begin{itemize}
+\item $A_x(i,w,s) = \sum\limits_{i_1+i_2=i+|s^{-1}({1_1,1_2})|} \sum\limits_{w_1+w_2=w+w(s^{-1}({1_1,1_2}))} A_y(i_1,w_1,s)A_z(i_2,w_2,s) $
 \end{itemize}
 \end{itemize}
 \end{block}
