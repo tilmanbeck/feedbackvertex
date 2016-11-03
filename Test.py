@@ -12,6 +12,7 @@ from Graphviz import GraphVisualization
 import numpy as np
 import random as rnd
 import math
+import time
 
 #value zB [0,1,2,2,0]
 #missingNodes zB [0,4]
@@ -59,22 +60,26 @@ def writeToFile(filename,mode,array,fst,stepInfo):
         f.write("-----------------------------------------------\n")
 
 def count(vertices, edges, niceTreeDecomp, terminals, k, N, weights):
+    #startTime = time.time()
     # in-order traversal
     empty = np.zeros((1,1))
-    writeToFile('test.txt', 'w', empty, empty.shape[0], "")
+    #writeToFile('test.txt', 'w', empty, empty.shape[0], "")
     k = k + 1
     indices = {vertices[i]: i for i in range(0,len(vertices))}
-    print(str(weights))
+    #print(str(weights))
     result = inorder(niceTreeDecomp, indices, None, k, N, terminals)
     # we search for a solution with k nodes but the arrays indices start at 0
     sol = 0
-    print("is there a solution?")
+    #print("is there a solution?")
     for j in range(0,(k-1)*N):
         if((result[0,k-1,j] % 2) == 1):
-                print("yes there is a solution")
+                #print("yes there is a solution")
                 sol += 1
     if(sol == 0):
-        print("sadly not...")
+        sol = 0
+        #print("sadly not...")
+    #endTime = time.time()
+    #print("Executiontime: " + str(endTime-startTime)+"s")
 
 def inorder(node, indices, data, k, N, terminals):
     if(node.getLeft() != None):
@@ -84,7 +89,7 @@ def inorder(node, indices, data, k, N, terminals):
     if(node.bagType == BagType.L):
         newData = np.zeros((1, k, (k-1) * N))
         newData[0,0,0] = 1    # leaf initialization
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
+        #writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
     elif(node.bagType == BagType.R):
 
@@ -92,7 +97,7 @@ def inorder(node, indices, data, k, N, terminals):
         for i in range(0, k):
             for w in range(0, (k -1) * N):
                 newData[0, i, w] = data[0, i, w] + data[1, i, w] + data[2,  i, w]
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
+        #writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
 
     elif(node.bagType == BagType.IE):
@@ -111,7 +116,7 @@ def inorder(node, indices, data, k, N, terminals):
                 for i in range(0, k):
                     for w in range(0, (k - 1) * N):
                         newData[s, i, w] = data[s, i, w]
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
+        #writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
 
     elif(node.bagType == BagType.IV):
@@ -155,7 +160,7 @@ def inorder(node, indices, data, k, N, terminals):
                         newData[indices[2], i, w] = data[s, i - 1, w - weights.get(introducedVertex)]
                     else:
                         newData[indices[2], i, w] = 0
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
+        #writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
 
     elif(node.bagType == BagType.F):
@@ -182,7 +187,7 @@ def inorder(node, indices, data, k, N, terminals):
                     newData[s, i, w] = data[indicesToSum[0], i, w] +\
                                        data[indicesToSum[1], i, w] +\
                                        data[indicesToSum[2], i, w]
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
+        #writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
 
     elif(node.bagType == BagType.J):
@@ -213,7 +218,7 @@ def inorder(node, indices, data, k, N, terminals):
                             else:
                                 value += (data[s, i1, w1] * dataright[s, i2, w2])
                     newData[s, i, w] = value
-        writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
+        #writeToFile('test.txt', 'a', newData, newData.shape[0], str(node.bagType) + str(node.getBag()))
         return newData
     return data
 
@@ -276,14 +281,13 @@ def getIndexAsList(x,nrOfVertices):
 #############################################################
 ######################### BIG EXAMPLE #######################
 #############################################################
-# k = 1
+# k = 3
 # vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 # N = 2 * len(vertices)
 # edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
 #          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
 #          {'c', 'd'}, {'d', 'e'}]
 # weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
-# print(str(weights))
 #
 # ecd = TreeDecomposition(None, None, ['e', 'c', 'd'])
 # efg = TreeDecomposition(None, None, ['e', 'f', 'g'])
@@ -297,33 +301,147 @@ def getIndexAsList(x,nrOfVertices):
 # join(bc)
 # addInternalNodes(bc)
 # edgeBags(bc, edges)
-#
+
 # gv = GraphVisualization(bc)
 # gv.createGraph()
-#
-# count(vertices, edges, bc, ['d'], k, N, weights)
+
+# count(vertices, edges, bc, ['d','c','e'], k, N, weights)
+
 
 #############################################################
 ######################### SMALL EXAMPLE #####################
 #############################################################
-vertices = ['a','b','c']
-edges = [{'a','b'}, {'b','c'}]
+# vertices = ['a','b','c']
+# edges = [{'a','b'}, {'b','c'}]
+#
+# k = 2
+# N = 5
+# weights = {vertices[i]: rnd.randint(1,N) for i in range(0,len(vertices))}
+# bc = TreeDecomposition(None, None, ['b', 'c'])
+# ab = TreeDecomposition(bc, None, ['a', 'b'])
+#
+# ab = root(ab)
+# leaf(ab)
+# join(ab)
+# addInternalNodes(ab)
+# edgeBags(ab,edges)
+# v = GraphVisualization(ab)
+# v.createGraph()
+#
+# count(vertices, edges, ab, ['a', 'c'], k, N, weights)
+#
 
-k = 2
-N = 5
-weights = {vertices[i]: rnd.randint(1,N) for i in range(0,len(vertices))}
-bc = TreeDecomposition(None, None, ['b', 'c'])
-ab = TreeDecomposition(bc, None, ['a', 'b'])
 
-ab = root(ab)
-leaf(ab)
-join(ab)
-addInternalNodes(ab)
-edgeBags(ab,edges)
-v = GraphVisualization(ab)
-v.createGraph()
+#############################################################
+######################### LARGE EXAMPLE #####################
+#############################################################
+# http://treedecompositions.com/#/graph/Js%60RA%3Flh%3Fu%3F
 
-count(vertices, edges, ab, ['a', 'c'], k, N, weights)
+vertices = ['a','b','c','d','e','f','g','h','i','j','k']
+
+edges = [{'a','b'},{'a','c'},{'a','d'},{'a','e'},{'a','j'},{'b','f'},
+         {'b','g'},{'b','h'},{'c','i'},{'c','g'},{'c','h'},{'d','f'},
+         {'d','k'},{'e','i'},{'e','k'},{'f','i'},{'f','j'},{'g','k'},
+         {'h','i'},{'h','k'}]
+
+k = 4
+N = 2 * len(vertices)
+
+
+weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
+
+a1      = TreeDecomposition(None, None, ['a'])
+b2      = TreeDecomposition(None, None, ['b'])
+
+aj1     = TreeDecomposition(a1, None, ['a','j'])
+bk2     = TreeDecomposition(b2, None, ['b','k'])
+a3      = TreeDecomposition(None, None, ['a'])
+
+afj1    = TreeDecomposition(aj1, None, ['a','f','j'])
+bik2    = TreeDecomposition(bk2, None, ['b','i','k'])
+ak3     = TreeDecomposition(a3, None, ['a','k'])
+a4      = TreeDecomposition(None, None, ['a'])
+
+acfj1   = TreeDecomposition(afj1, None, ['a','c','f','j'])
+bhik2   = TreeDecomposition(bik2, None, ['b','h','i','k'])
+afk3    = TreeDecomposition(ak3, None, ['a','f','k'])
+ak4     = TreeDecomposition(a4, None, ['a','k'])
+
+acf1    = TreeDecomposition(acfj1, None, ['a','c','f'])
+bik21   = TreeDecomposition(bhik2, None, ['b','i','k'])
+adfk3   = TreeDecomposition(afk3, None, ['a','d','f','k'])
+aik4    = TreeDecomposition(ak4, None, ['a','i','k'])
+
+acfk1   = TreeDecomposition(acf1, None, ['a','c','f','k'])
+bfik2   = TreeDecomposition(bik21, None, ['b','f','i','k'])
+afk31   = TreeDecomposition(adfk3, None, ['a','f','k'])
+aeik4   = TreeDecomposition(aik4, None, ['a','e','i','k'])
+
+acfik1  = TreeDecomposition(acfk1, None, ['a','c','f','i','k'])
+bcfik2  = TreeDecomposition(bfik2, None, ['b','c','f','i','k'])
+afik3   = TreeDecomposition(afk31, None, ['a','f','i','k'])
+aik41   = TreeDecomposition(aeik4, None, ['a','i','k'])
+
+abcfik1 = TreeDecomposition(acfik1, None, ['a','b','c','f','i','k'])
+abcfik2 = TreeDecomposition(bcfik2, None, ['a','b','c','f','i','k'])
+acfik3  = TreeDecomposition(afik3, None, ['a','c','f','i','k'])
+afik4   = TreeDecomposition(aik41, None, ['a','f','i','k'])
+
+abcfik11 = TreeDecomposition(abcfik1, abcfik2, ['a','b','c','f','i','k'])
+abcfik21 = TreeDecomposition(acfik3, None, ['a','b','c','f','i','k'])
+acfik31  = TreeDecomposition(afik4, None, ['a','c','f','i','k'])
+
+abcfik12 = TreeDecomposition(abcfik11, abcfik21, ['a','b','c','f','i','k'])
+abcfik22 = TreeDecomposition(acfik31, None, ['a','b','c','f','i','k'])
+
+abcfik13 = TreeDecomposition(abcfik12, abcfik22, ['a','b','c','f','i','k'])
+
+abcfk1   = TreeDecomposition(abcfik13, None, ['a','b','c','f','k'])
+
+abcfgk1  = TreeDecomposition(abcfk1, None, ['a','b','c','f','g','k'])
+
+abcgk1   = TreeDecomposition(abcfgk1, None, ['a','b','c','g','k'])
+
+bcgk1    = TreeDecomposition(abcgk1, None, ['b','c','g','k'])
+
+bcg1     = TreeDecomposition(bcgk1, None, ['b','c','g'])
+
+bc1      = TreeDecomposition(bcg1, None, ['b','c'])
+
+b1       = TreeDecomposition(bc1, None, ['b'])
+
+b1 = root(b1)
+leaf(b1)
+join(b1)
+addInternalNodes(b1)
+edgeBags(b1, edges)
+
+gv = GraphVisualization(b1)
+gv.createGraph()
+
+runs = 1
+t = [0]*runs
+for i in range(0,runs):
+
+    s = time.time()
+    count(vertices, edges, b1, ['a','d','f','k'], k, N, weights)
+    e = time.time()
+    t[i] = (e-s)
+
+avg = 0
+for i in range(0,runs):
+    avg = avg + t[i]
+
+avg = avg/runs
+
+print("Execution Time: "+ str(avg)+"s")
+
+
+
+
+
+
+
 
 
 
