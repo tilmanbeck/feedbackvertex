@@ -265,7 +265,7 @@ Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then
 \item für jeden Bag $x \in \mathbb{T}$, integers $0 \leq i \leq k,0 \leq w \leq kN$ und Färbung $s \in \{0,1_1,1_2 \}^{B_x}$ definiere:
 \begin{itemize}
 \item $\mathcal{R}_x(i,w)=\{X \subseteq V_x | (T \cap V_x) \subseteq X$ $\wedge$ $|X| = i$ $\wedge$ $\omega (X) = w \}$
-\item $\mathcal{C} (i,w) =\{ (X,(X_1,X_2)) | X \in \mathcal{R}_x(i,w)$ $\wedge$ $(X,(X_1,X_2))$ is a consistently cut subgraph of $G_x$ $\wedge$ $(v_1 \in V_x \Rightarrow v_1 \in X_1 \} $
+\item $\mathcal{C}_x (i,w) =\{ (X,(X_1,X_2)) | X \in \mathcal{R}_x(i,w)$ $\wedge$ $(X,(X_1,X_2))$ is a consistently cut subgraph of $G_x$ $\wedge$ $(v_1 \in V_x \Rightarrow v_1 \in X_1 \} $
 \item $\mathcal{A}_x(i,w,s)=| \{ (X,(X_1,X_2)) \in \mathcal{C}_x(i,w) | (s(v) = 1_j \Rightarrow v \in X_j)$ $\wedge$ $(s(v)=0 \Rightarrow v \notin X \} |$
 \note{$\mathcal{R}_(i,w)$ enthält alle Mengen $X \subseteq V_x$, welche potenziell zu einer Lösung aus $\mathcal{R}$ erweitert werden können (mit Restriktion i und w), entsprechend enthält $\mathcal{C}_x(i,w)$ alle consistently cut Subgraphen}
 
@@ -334,6 +334,11 @@ There exists a Monte-Carlo algorithm that given a tree decomposition of width $t
 \item Entwicklung einer Umformung von TD $\rightarrow$ NTD
 \item anpassen der Färbungs-Dimension mittels ternärer Kodierung
 \item Tests mit verschiedenen Input-Größen
+\item Vorteil:
+\begin{itemize}
+\item  $\mathcal{O}(1)$ Zugriffszeit für alle $i<k$
+\item Wahrscheinlichkeit über N steuerbar, aber Datenmatrix wächst schnell !
+\end{itemize}
 \end{itemize}
 
 \column{.5\textwidth} % Right column and width
@@ -341,7 +346,7 @@ There exists a Monte-Carlo algorithm that given a tree decomposition of width $t
 \begin{table}
 \begin{tabular}{l | l}
 \toprule
-\textbf{Input} & \textbf{ $\varnothing$ T}\\
+\textbf{Input} & \textbf{ $\varnothing$ T in $s$}\\
 \midrule
 (k=2, N= 6, |V|=3) & $ \sim 0.002$ \\
 (k=3, N=14, |V|=7) & $ \sim 0.83$ \\
