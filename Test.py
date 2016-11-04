@@ -311,20 +311,20 @@ def getIndexAsList(x,nrOfVertices):
 #############################################################
 ######################### SMALL EXAMPLE #####################
 #############################################################
-# vertices = ['a','b','c']
-# edges = [{'a','b'}, {'b','c'}]
-#
-# k = 2
-# N = 5
-# weights = {vertices[i]: rnd.randint(1,N) for i in range(0,len(vertices))}
-# bc = TreeDecomposition(None, None, ['b', 'c'])
-# ab = TreeDecomposition(bc, None, ['a', 'b'])
-#
-# ab = root(ab)
-# leaf(ab)
-# join(ab)
-# addInternalNodes(ab)
-# edgeBags(ab,edges)
+vertices = ['a','b','c']
+edges = [{'a','b'}, {'b','c'}]
+
+k = 2
+N = 5
+weights = {vertices[i]: rnd.randint(1,N) for i in range(0,len(vertices))}
+bc = TreeDecomposition(None, None, ['b', 'c'])
+ab = TreeDecomposition(bc, None, ['a', 'b'])
+
+ab = root(ab)
+leaf(ab)
+join(ab)
+addInternalNodes(ab)
+edgeBags(ab,edges)
 # v = GraphVisualization(ab)
 # v.createGraph()
 #
@@ -335,96 +335,76 @@ def getIndexAsList(x,nrOfVertices):
 #############################################################
 ######################### LARGE EXAMPLE #####################
 #############################################################
-# http://treedecompositions.com/#/graph/Js%60RA%3Flh%3Fu%3F
+#UNSER GEHIRNSCHMALZ
+#
+# vertices = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
+#
+# edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
+#          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
+#          {'c', 'd'}, {'d', 'e'}, {'h', 'g'}, {'h', 'f'},
+#          {'h', 'i'}, {'i', 'f'}, {'i', 'j'}, {'j', 'f'},
+#          {'k', 'l'}, {'k', 'o'}, {'k', 'm'}, {'o', 'l'},
+#          {'m', 'n'}, {'m', 'p'}, {'n', 'p'}, {'e', 'k'},
+#          {'d', 'k'}]
+# k = 4
+# N = 2 * len(vertices)
+#
+#
+# weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
+#
+#
+# mnp = TreeDecomposition(None, None, ['m', 'n', 'p'])
+#
+# fij = TreeDecomposition(None, None, ['f', 'i', 'j'])
+# klo = TreeDecomposition(None, None, ['k', 'l', 'o'])
+# kmn = TreeDecomposition(mnp, None, ['k', 'm', 'n'])
+#
+# hfi = TreeDecomposition(fij, None, ['h', 'f', 'i'])
+# ekl = TreeDecomposition(klo, None, ['e', 'k', 'l'])
+# dmk = TreeDecomposition(kmn, None, ['d', 'm', 'k'])
+#
+# ghf = TreeDecomposition(hfi, None, ['g', 'h', 'f'])
+# edk = TreeDecomposition(ekl, dmk, ['e', 'd', 'k'])
+#
+# ecd = TreeDecomposition(edk, None, ['e', 'c', 'd'])
+# gfe = TreeDecomposition(ghf, None, ['g', 'f', 'e'])
+#
+# cge = TreeDecomposition(gfe, ecd, ['c', 'g', 'e'])
+# bga = TreeDecomposition(None, None, ['b', 'g', 'a'])
+#
+# bcg = TreeDecomposition(bga, cge, ['b', 'c', 'g'])
+#
+# bc = TreeDecomposition(bcg, None, ['b', 'c'])
+#
+# bc = root(bc)
+# leaf(bc)
+# join(bc)
+# addInternalNodes(bc)
+# edgeBags(bc, edges)
 
-vertices = ['a','b','c','d','e','f','g','h','i','j','k']
+# gv = GraphVisualization(bc)
+# gv.createGraph()
 
-edges = [{'a','b'},{'a','c'},{'a','d'},{'a','e'},{'a','j'},{'b','f'},
-         {'b','g'},{'b','h'},{'c','i'},{'c','g'},{'c','h'},{'d','f'},
-         {'d','k'},{'e','i'},{'e','k'},{'f','i'},{'f','j'},{'g','k'},
-         {'h','i'},{'h','k'}]
-
-k = 4
-N = 2 * len(vertices)
-
-
-weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
-
-a1      = TreeDecomposition(None, None, ['a'])
-b2      = TreeDecomposition(None, None, ['b'])
-
-aj1     = TreeDecomposition(a1, None, ['a','j'])
-bk2     = TreeDecomposition(b2, None, ['b','k'])
-a3      = TreeDecomposition(None, None, ['a'])
-
-afj1    = TreeDecomposition(aj1, None, ['a','f','j'])
-bik2    = TreeDecomposition(bk2, None, ['b','i','k'])
-ak3     = TreeDecomposition(a3, None, ['a','k'])
-a4      = TreeDecomposition(None, None, ['a'])
-
-acfj1   = TreeDecomposition(afj1, None, ['a','c','f','j'])
-bhik2   = TreeDecomposition(bik2, None, ['b','h','i','k'])
-afk3    = TreeDecomposition(ak3, None, ['a','f','k'])
-ak4     = TreeDecomposition(a4, None, ['a','k'])
-
-acf1    = TreeDecomposition(acfj1, None, ['a','c','f'])
-bik21   = TreeDecomposition(bhik2, None, ['b','i','k'])
-adfk3   = TreeDecomposition(afk3, None, ['a','d','f','k'])
-aik4    = TreeDecomposition(ak4, None, ['a','i','k'])
-
-acfk1   = TreeDecomposition(acf1, None, ['a','c','f','k'])
-bfik2   = TreeDecomposition(bik21, None, ['b','f','i','k'])
-afk31   = TreeDecomposition(adfk3, None, ['a','f','k'])
-aeik4   = TreeDecomposition(aik4, None, ['a','e','i','k'])
-
-acfik1  = TreeDecomposition(acfk1, None, ['a','c','f','i','k'])
-bcfik2  = TreeDecomposition(bfik2, None, ['b','c','f','i','k'])
-afik3   = TreeDecomposition(afk31, None, ['a','f','i','k'])
-aik41   = TreeDecomposition(aeik4, None, ['a','i','k'])
-
-abcfik1 = TreeDecomposition(acfik1, None, ['a','b','c','f','i','k'])
-abcfik2 = TreeDecomposition(bcfik2, None, ['a','b','c','f','i','k'])
-acfik3  = TreeDecomposition(afik3, None, ['a','c','f','i','k'])
-afik4   = TreeDecomposition(aik41, None, ['a','f','i','k'])
-
-abcfik11 = TreeDecomposition(abcfik1, abcfik2, ['a','b','c','f','i','k'])
-abcfik21 = TreeDecomposition(acfik3, None, ['a','b','c','f','i','k'])
-acfik31  = TreeDecomposition(afik4, None, ['a','c','f','i','k'])
-
-abcfik12 = TreeDecomposition(abcfik11, abcfik21, ['a','b','c','f','i','k'])
-abcfik22 = TreeDecomposition(acfik31, None, ['a','b','c','f','i','k'])
-
-abcfik13 = TreeDecomposition(abcfik12, abcfik22, ['a','b','c','f','i','k'])
-
-abcfk1   = TreeDecomposition(abcfik13, None, ['a','b','c','f','k'])
-
-abcfgk1  = TreeDecomposition(abcfk1, None, ['a','b','c','f','g','k'])
-
-abcgk1   = TreeDecomposition(abcfgk1, None, ['a','b','c','g','k'])
-
-bcgk1    = TreeDecomposition(abcgk1, None, ['b','c','g','k'])
-
-bcg1     = TreeDecomposition(bcgk1, None, ['b','c','g'])
-
-bc1      = TreeDecomposition(bcg1, None, ['b','c'])
-
-b1       = TreeDecomposition(bc1, None, ['b'])
-
-b1 = root(b1)
-leaf(b1)
-join(b1)
-addInternalNodes(b1)
-edgeBags(b1, edges)
-
-gv = GraphVisualization(b1)
-gv.createGraph()
-
-runs = 1
+runs = 25
 t = [0]*runs
 for i in range(0,runs):
+    vertices = ['a', 'b', 'c']
+    edges = [{'a', 'b'}, {'b', 'c'}]
+
+    k = 2
+    N = 6
+    weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
+    bc = TreeDecomposition(None, None, ['b', 'c'])
+    ab = TreeDecomposition(bc, None, ['a', 'b'])
+
+    ab = root(ab)
+    leaf(ab)
+    join(ab)
+    addInternalNodes(ab)
+    edgeBags(ab, edges)
 
     s = time.time()
-    count(vertices, edges, b1, ['a','d','f','k'], k, N, weights)
+    count(vertices, edges, ab, ['b','c'], k, N, weights)
     e = time.time()
     t[i] = (e-s)
 
