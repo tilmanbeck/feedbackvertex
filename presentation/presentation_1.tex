@@ -112,13 +112,16 @@ Christian-Albrechts Universität Kiel  % Your institution for the title page
 \tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
 \end{frame}
 
-%----------------------------------------------------------------------------------------
-%	PRESENTATION SLIDES
-%----------------------------------------------------------------------------------------
+%------------------------------------------------
+\section{Cut \& Count-Technik} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+%------------------------------------------------
 
-%------------------------------------------------
-\section{Cut \& Count} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
-%------------------------------------------------
+\begin{frame}
+\Huge{\centerline{Cut \& Count-Technik}}
+\end{frame}
+
+%-------------------------
+
 \subsection{Allgemeines}
 \begin{frame}
 \frametitle{Cut \& Count-Technik}
@@ -145,71 +148,8 @@ The algorithms cannot give false positives and may give false negatives with pro
 \end{block}
 \end{frame}
 
-\section{Cut \& Count mit Steiner Tree} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
-\begin{frame}
-\frametitle{Steiner Tree}
-\begin{block}{Problem}
-\textbf{Input}: An undirected graph $G = (V, E)$, a set of terminals $T \subseteq V$ and an integer $k$. \\
-\textbf{Question}: Is there a set $X \subseteq V$ of cardinality $k$ such that $T \subseteq X$ and $G[X]$ is connected?
-\end{block}
-\end{frame}
-\subsection{Cut}
-\begin{frame}
-\frametitle{Cut (1)}
-\begin{itemize}
-\item definiere Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ 
-% alle Knoten erhalten ein zufälliges Gewicht -> später wichtig für Randomisierung, N = |V| für 1/2 Wahrscheinlichkeit
-\item sei $\mathcal{R}_W$ die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$
-\item sei  $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[X]$ ist zusammenhängend$\}$ 
-\item $\cup_W \mathcal{S}_W$ ist die Menge der Lösungen
-\item gibt es ein $W$ für das die Menge nichtleer ist, so gibt der Algorithmus eine positive Antwort
-\end{itemize}
-\end{frame}
-%--------------------
-\begin{frame}
-\frametitle{Cut (2) - wozu $\omega$ ?}
-\begin{itemize}
-\item Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ 
-\item der Algorithmus (ohne $\omega$) ist korrekt, sofern es \textbf{genau eine} oder \textbf{keine} Lösung gibt
-\item mithilfe des Isolation Lemma kann mit hoher Wahrscheinlichkeit eine große Lösungsmenge auf eine einzige reduziert werden
-\end{itemize}
-\begin{block}{Isolation Lemma}
-Let $\mathcal{F} \subseteq 2^U$ be a set family over a universe $U$ with $|\mathcal{F}| > 0$. For each $u \in U$ ,
-choose a weight $\omega(u) \in {1, 2, . . . , N }$ uniformly and independently at random. Then
-\begin{center}
-$prob[\omega$ isolates $\mathcal{F}]\geq 1 - \frac{|U|}{N}$
-\end{center}
-\end{block}
-\end{frame}
-%--------------------
-\begin{frame}
-\frametitle{Cut (3)}
-\begin{itemize}
-\item einen beliebigen Terminalknoten $v \in T$ als $v_1$ festlegen
-\item sei $\mathcal{C}_W$ die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$ 
-\newline
-\newline
-\begin{block}{Lemma 3.3}
-Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of
-consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
-\end{block}
-%am Tafelbild erklären was ein consistent cut ist
-
-\end{itemize}
-\end{frame}
-
-\subsection{Count}
-\begin{frame}
-\frametitle{Count (1)}
-\begin{itemize}
-\item aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$
-\item wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |\{X \in \mathcal{R} |cc(G[X]) = 1\}| = |\mathcal{S}|$
-\end{itemize}
-\begin{block}{Lemma 3.4}
-Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
-\end{block}
-\end{frame}
 %-------------------------
+\subsection{(Nice) Tree Decomposition}
 \begin{frame}
 \frametitle{Einschub: Tree Decomposition (1)}
 \begin{block}{Tree Decomposition}
@@ -243,6 +183,80 @@ Kann in polynomieller Zeit berechnet werden (Beweis: Ton Kloks. Treewidth, Compu
 %\item \textbf{Forget bag}: an internal vertex $x$ of $\mathbb{T}$ with one child bag $y$ for which $B_x=B_y \{v\}$ for %some $v \in B_y$. This bag is said to forget $v$
 %\item \textbf{Join bag}: an internal vertex $x$ with two children vertices $l$ and $r$ with $B_r=B_l$
 \end{frame}
+
+%-------------------------
+
+\begin{frame}
+\Huge{\centerline{Cut \& Count mit Steiner Tree}}
+\end{frame}
+%-------------------------
+
+\section{Cut \& Count mit Steiner Tree} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+\begin{frame}
+\frametitle{Steiner Tree}
+\begin{block}{Problem}
+\textbf{Input}: An undirected graph $G = (V, E)$, a set of terminals $T \subseteq V$ and an integer $k$. \\
+\textbf{Question}: Is there a set $X \subseteq V$ of cardinality $k$ such that $T \subseteq X$ and $G[X]$ is connected?
+\end{block}
+\end{frame}
+\subsection{Cut}
+\begin{frame}
+\frametitle{Cut (1)}
+\begin{itemize}
+\item definiere zufällige Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ 
+% alle Knoten erhalten ein zufälliges Gewicht -> später wichtig für Randomisierung, N = |V| für 1/2 Wahrscheinlichkeit
+\item sei $\mathcal{R}_W$ die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$
+\item sei  $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[X]$ ist zusammenhängend$\}$ 
+\item $\cup_W \mathcal{S}_W$ ist die Menge der Lösungen
+\item gibt es ein $W$ für das die Menge nichtleer ist, so gibt der Algorithmus eine positive Antwort
+\end{itemize}
+\end{frame}
+%--------------------
+\begin{frame}
+\frametitle{Cut (2)}
+\begin{itemize}
+\item einen beliebigen Terminalknoten $v \in T$ als $v_1$ festlegen
+\item sei $\mathcal{C}_W$ die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$ 
+\newline
+\newline
+\begin{block}{Lemma 3.3}
+Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of
+consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
+\end{block}
+%am Tafelbild erklären was ein consistent cut ist
+\end{itemize}
+\end{frame}
+%--------------------
+\begin{frame}
+\frametitle{Cut (3) - wozu $\omega$ ?}
+\begin{block}{Isolation Lemma: Definition 2.4}
+A function $\omega : U \rightarrow \mathbb{Z}$ isolates a set family $\mathcal{F} \subseteq 2^U$ if there is a unique $S' \in \mathcal{F}$ with $\omega (S')=min_{S \in \mathcal{S}} \omega(S)$
+\end{block}
+\begin{block}{Isolation Lemma: Lemma 2.5}
+Let $\mathcal{F} \subseteq 2^U$ be a set family over a universe $U$ with $|\mathcal{F}| > 0$. For each $u \in U$ ,
+choose a weight $\omega(u) \in {1, 2, . . . , N }$ uniformly and independently at random. Then
+\begin{center}
+$prob[\omega$ isolates $\mathcal{F}]\geq 1 - \frac{|U|}{N}$
+\end{center}
+\end{block}
+\begin{itemize}
+\item der Algorithmus (ohne $\omega$) ist korrekt, sofern es \textbf{genau eine} oder \textbf{keine} Lösung gibt
+\item mithilfe des Isolation Lemma kann mit hoher Wahrscheinlichkeit eine große Lösungsmenge auf eine einzige reduziert werden
+\end{itemize}
+
+\end{frame}
+%--------------------
+\subsection{Count}
+\begin{frame}
+\frametitle{Count (1)}
+\begin{itemize}
+\item aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$
+\item wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |\{X \in \mathcal{R} |cc(G[X]) = 1\}| = |\mathcal{S}|$
+\end{itemize}
+\begin{block}{Lemma 3.4}
+Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
+\end{block}
+\end{frame}
 %-------------------------
 \begin{frame}
 \frametitle{Count (2)}
@@ -274,16 +288,26 @@ Färbung $s \in \{0,1_1,1_2 \}^{B_x}$
 \end{frame}
 %-------------------------
 \begin{frame}
-\frametitle{Count (3)}
-\begin{theorem}[Lemma 3.5]
-Given $G=(V,E), T \subseteq V,$ an integer $k, \omega:V\rightarrow \{1,\dots,N \}$ and a nice tree decomposition $\mathbb{T}$, there exists an algorithm that can determine $|\mathcal{C}_W|$ modulo 2 for every $0 \leq W \leq kN$ in $3^tN^2|V|^{\mathcal{O}(1)}$ (t is the treewidth of the NTD)
-\end{theorem}
+\frametitle{Zusammenfassung}
+\begin{block}{Theorem 3.6}
+There exists a Monte-Carlo algorithm that given a tree decomposition of width $t$ solves STEINER TREE in $3^t|V|^{\mathcal{O}(1)}$ time. The algorithm cannot give false positives and may give false negatives with probability at most 1/2.
+\end{block}
+\begin{itemize}
+\item $3^t$ kommt von 3 Färbungen im dynamischen Programm
+\item $|V|^{\mathcal{O}(1)}$ kommt aus k und N als Input
+\item Wahrscheinlichkeit $1/2$ durch Gewichtsfunktion $\omega:V\rightarrow {1,\dots,N}$ und Isolation Lemma
+\end{itemize}
 \end{frame}
 
+%-------------------------
+
+\begin{frame}
+\Huge{\centerline{Implementierung}}
+\end{frame}
 %------------------------------------------------
 \section{Implementierung}
 \begin{frame}
-\frametitle{Implementierung}
+\frametitle{Implementierung (1)}
 \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
 
 \column{.45\textwidth} % Left column and width
@@ -302,7 +326,7 @@ Given $G=(V,E), T \subseteq V,$ an integer $k, \omega:V\rightarrow \{1,\dots,N \
 %------------------------------------------------
 
 \begin{frame}
-\frametitle{Implementierung}
+\frametitle{Implementierung (2)}
 \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
 
 \column{.45\textwidth} % Left column and width
@@ -315,18 +339,38 @@ Given $G=(V,E), T \subseteq V,$ an integer $k, \omega:V\rightarrow \{1,\dots,N \
 \column{.5\textwidth} % Right column and width
 
 \begin{table}
-\begin{tabular}{c | c}
+\begin{tabular}{l | l}
 \toprule
-\textbf{Input} & \textbf{T}\\
+\textbf{Input} & \textbf{ $\varnothing$ T}\\
 \midrule
-(k=2,N=6,|V|=3) & 0.XXX \\
-(k=2,N=6,|V|=3) & 0.XXX \\
-(k=2,N=6,|V|=3) & 0.XXX \\
+(k=2, N= 6, |V|=3) & $ \sim 0.002$ \\
+(k=3, N=14, |V|=7) & $ \sim 0.83$ \\
+(k=4, N=32, |V|=16) & $ \sim 14.23$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 \end{columns}
 \end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\Huge{\centerline{Fragen?}}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{References}
+\footnotesize{
+\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
+\bibitem[Smith, 2011]{p1} Marek Cygan and Jesper Nederlof and Marcin Pilipczuk and Michal Pilipczuk and Johan M. M. van Rooij and  Jakub Onufry Wojtaszczyk (2011)
+\newblock Solving connectivity problems parameterized by treewidth in single exponential time
+\newblock \emph{CoRR} abs/1103.0534.
+\end{thebibliography}
+}
+\end{frame}
+
 %------------------------------------------------
 
 \begin{frame}
@@ -359,34 +403,5 @@ Given $G=(V,E), T \subseteq V,$ an integer $k, \omega:V\rightarrow \{1,\dots,N \
 \end{block}
 \end{frame}
 
-%------------------------------------------------
-
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Citation}
-An example of the \verb|\cite| command to cite within the presentation:\\~
-
-This statement requires citation \cite{p1}.
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{References}
-\footnotesize{
-\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
-\bibitem[Smith, 2012]{p1} John Smith (2012)
-\newblock Title of the publication
-\newblock \emph{Journal Name} 12(3), 45 -- 678.
-\end{thebibliography}
-}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\Huge{\centerline{Fragen?}}
-\end{frame}
-
-%----------------------------------------------------------------------------------------
 
 \end{document} 
