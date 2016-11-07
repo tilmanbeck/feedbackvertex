@@ -126,9 +126,13 @@ Christian-Albrechts Universität Kiel  % Your institution for the title page
 \begin{frame}
 \frametitle{Cut \& Count-Technik}
 \begin{itemize}
+\pause
 \item Technik um connectivity-type Probleme mithilfe von Randomisierung zu lösen(Marek Cygan, Jesper Nederlof, Marcin Pilipczuk, Michał Pilipczuk, Johan van Rooij, Jakub Onufry Wojtaszczyk)
+\pause
 \item angewendet auf viele verschiedene Probleme (z.B. Longest Path, Steiner Tree, Feedback Vertex Set, uvm.)
+\pause
 \item Randomisierung durch Isolation-Lemma 
+\pause
 \item als Ergebnis ein einseitiger Monte-Carlo-Algorithmus mit Laufzeit $c^{tw(G)} |V|^{\mathcal{O}(1)}$
 %\note{kurz erklären: connectivity-type Probleme, Isolation Lemma, Laufzeit, einseitig, montecarlo }
 \end{itemize}
@@ -203,11 +207,16 @@ Kann in polynomieller Zeit berechnet werden (Beweis: Ton Kloks. Treewidth, Compu
 \begin{frame}
 \frametitle{Cut (1)}
 \begin{itemize}
+\pause
 \item definiere zufällige Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ 
 % alle Knoten erhalten ein zufälliges Gewicht -> später wichtig für Randomisierung, N = |V| für 1/2 Wahrscheinlichkeit
+\pause
 \item sei $\mathcal{R}_W$ die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$
+\pause
 \item sei  $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[X]$ ist zusammenhängend$\}$ 
+\pause
 \item $\cup_W \mathcal{S}_W$ ist die Menge der Lösungen
+\pause
 \item gibt es ein $W$ für das die Menge nichtleer ist, so gibt der Algorithmus eine positive Antwort
 \end{itemize}
 \end{frame}
@@ -215,10 +224,13 @@ Kann in polynomieller Zeit berechnet werden (Beweis: Ton Kloks. Treewidth, Compu
 \begin{frame}
 \frametitle{Cut (2)}
 \begin{itemize}
+\pause
 \item einen beliebigen Terminalknoten $v \in T$ als $v_1$ festlegen
+\pause
 \item sei $\mathcal{C}_W$ die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$ 
 \newline
 \newline
+\pause
 \begin{block}{Lemma 3.3}
 Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of
 consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
@@ -229,9 +241,11 @@ consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $
 %--------------------
 \begin{frame}
 \frametitle{Cut (3) - wozu $\omega$ ?}
+\pause
 \begin{block}{Isolation Lemma: Definition 2.4}
 A function $\omega : U \rightarrow \mathbb{Z}$ isolates a set family $\mathcal{F} \subseteq 2^U$ if there is a unique $S' \in \mathcal{F}$ with $\omega (S')=min_{S \in \mathcal{S}} \omega(S)$
 \end{block}
+\pause
 \begin{block}{Isolation Lemma: Lemma 2.5}
 Let $\mathcal{F} \subseteq 2^U$ be a set family over a universe $U$ with $|\mathcal{F}| > 0$. For each $u \in U$ ,
 choose a weight $\omega(u) \in {1, 2, . . . , N }$ uniformly and independently at random. Then
@@ -240,7 +254,9 @@ $prob[\omega$ isolates $\mathcal{F}]\geq 1 - \frac{|U|}{N}$
 \end{center}
 \end{block}
 \begin{itemize}
+\pause
 \item der Algorithmus (ohne $\omega$) ist korrekt, sofern es \textbf{genau eine} oder \textbf{keine} Lösung gibt
+\pause
 \item mithilfe des Isolation Lemma kann mit hoher Wahrscheinlichkeit eine große Lösungsmenge auf eine einzige reduziert werden
 \end{itemize}
 
@@ -250,9 +266,12 @@ $prob[\omega$ isolates $\mathcal{F}]\geq 1 - \frac{|U|}{N}$
 \begin{frame}
 \frametitle{Count (1)}
 \begin{itemize}
+\pause
 \item aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$
+\pause
 \item wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |\{X \in \mathcal{R} |cc(G[X]) = 1\}| = |\mathcal{S}|$
 \end{itemize}
+\pause
 \begin{block}{Lemma 3.4}
 Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
 \end{block}
@@ -261,28 +280,41 @@ Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then
 \begin{frame}
 \frametitle{Count (2)}
 \begin{itemize}
-\item $|\mathcal{C}_W|$ modulo $2$ kann mit dynamischen Programm berechnet werden
+\pause
+\item $|\mathcal{C}_W|$ modulo $2$ kann mit dynamischen Programm auf der NTD $\mathbb{T}$ berechnet werden
+\pause
 \item für jeden Bag $x \in \mathbb{T}$, integers $0 \leq i \leq k,0 \leq w \leq kN$ und Färbung $s \in \{0,1_1,1_2 \}^{B_x}$ definiere:
 \begin{itemize}
+\pause
 \item $\mathcal{R}_x(i,w)=\{X \subseteq V_x | (T \cap V_x) \subseteq X$ $\wedge$ $|X| = i$ $\wedge$ $\omega (X) = w \}$
+\pause
 \item $\mathcal{C}_x (i,w) =\{ (X,(X_1,X_2)) | X \in \mathcal{R}_x(i,w)$ $\wedge$ $(X,(X_1,X_2))$ is a consistently cut subgraph of $G_x$ $\wedge$ $(v_1 \in V_x \Rightarrow v_1 \in X_1 \} $
+\pause
 \item $\mathcal{A}_x(i,w,s)=| \{ (X,(X_1,X_2)) \in \mathcal{C}_x(i,w) | (s(v) = 1_j \Rightarrow v \in X_j)$ $\wedge$ $(s(v)=0 \Rightarrow v \notin X \} |$
 \note{$\mathcal{R}_(i,w)$ enthält alle Mengen $X \subseteq V_x$, welche potenziell zu einer Lösung aus $\mathcal{R}$ erweitert werden können (mit Restriktion i und w), entsprechend enthält $\mathcal{C}_x(i,w)$ alle consistently cut Subgraphen}
 
+\end{itemize}
+\pause
+\item Färbung $s \in \{0,1_1,1_2 \}^{B_x}$  der Knoten aus $B_x$ bzgl. der Menge $C_x$
+\begin{itemize}
+\item $s[v] = 0 \Rightarrow v \notin X$
+\item $s[v] = 1_1 \Rightarrow v \in X_1$ 
+\item $s[v] = 1_2 \Rightarrow v \in X_2$ 
 \end{itemize}
 \end{itemize}
 \end{frame}
 %-------------------------
 \begin{frame}
 \frametitle{Count (3)}
-Färbung $s \in \{0,1_1,1_2 \}^{B_x}$
+
 \begin{itemize}
-\item $s[v] = 0 \Rightarrow v \notin X$
-\item $s[v] = 1_1 \Rightarrow v \in X_1$ 
-\item $s[v] = 1_2 \Rightarrow v \in X_2$ 
-\item $\mathcal{A}_x(i,w,s)$ zählt die Elemente $\mathcal{C}_x(i,w)$, die entsprechend gefärbt sind
+\pause
+\item $\mathcal{A}_x(i,w,s)$ zählt verschiedenen Färbungen $\mathcal{C}_x(i,w)$, die entsprechend gefärbt sind
+\pause
 \item $\sum\limits_{s \in  \{ 0,1_1,1_2 \}^{B_x} } A_x(i,w,s) = |C_x(i,w)|$
+\pause
 \item für die Lösung nur $A_r(k,W,\emptyset) = |C_r(k,W)| = |C_W|$ interessant (für alle W)
+\pause
 \item ausgehend von Wurzel-Knoten rekursiver Abstieg zu den Blatt-Knoten der NTD
 \end{itemize}
 \end{frame}
@@ -293,8 +325,11 @@ Färbung $s \in \{0,1_1,1_2 \}^{B_x}$
 There exists a Monte-Carlo algorithm that given a tree decomposition of width $t$ solves STEINER TREE in $3^t|V|^{\mathcal{O}(1)}$ time. The algorithm cannot give false positives and may give false negatives with probability at most 1/2.
 \end{block}
 \begin{itemize}
+\pause
 \item $3^t$ kommt von 3 Färbungen im dynamischen Programm
+\pause
 \item $|V|^{\mathcal{O}(1)}$ kommt aus k und N als Input
+\pause
 \item Wahrscheinlichkeit $1/2$ durch Gewichtsfunktion $\omega:V\rightarrow {1,\dots,N}$ und Isolation Lemma
 \end{itemize}
 \end{frame}
@@ -312,14 +347,21 @@ There exists a Monte-Carlo algorithm that given a tree decomposition of width $t
 
 \column{.45\textwidth} % Left column and width
 \begin{itemize}
+\onslide<2->{
 \item Inorder-Traversierung der NTD
+}
+\onslide<3->{
 \item Berechnung einer Datenmatrix basierend auf dynamischen Programm und Kind-Knoten
+}
+\onslide<4->{
 \item Wurzel- und alle Blattknoten enthalten 2D Datenmatrix
+}
 \end{itemize}
 
+\onslide<1->{
 \column{.5\textwidth} % Right column and width
 \includegraphics[scale=0.25]{./imgs/implementation.png}
-
+}
 \end{columns}
 \end{frame}
 
@@ -331,16 +373,25 @@ There exists a Monte-Carlo algorithm that given a tree decomposition of width $t
 
 \column{.45\textwidth} % Left column and width
 \begin{itemize}
+\onslide<1->{
 \item Entwicklung einer Umformung von TD $\rightarrow$ NTD
+}
+\onslide<2->{
 \item anpassen der Färbungs-Dimension mittels ternärer Kodierung
+}
+\onslide<3->{
 \item Tests mit verschiedenen Input-Größen
+}
+\onslide<4->{
 \item Vorteil:
 \begin{itemize}
 \item  $\mathcal{O}(1)$ Zugriffszeit für alle $i<k$
 \item Wahrscheinlichkeit über N steuerbar, aber Datenmatrix wächst schnell !
 \end{itemize}
+}
 \end{itemize}
 
+\onslide<3->{
 \column{.5\textwidth} % Right column and width
 
 \begin{table}
@@ -353,7 +404,7 @@ There exists a Monte-Carlo algorithm that given a tree decomposition of width $t
 (k=4, N=32, |V|=16) & $ \sim 14.23$ \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table}}
 \end{columns}
 \end{frame}
 
