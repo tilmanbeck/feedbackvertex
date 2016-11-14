@@ -1,0 +1,28 @@
+%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample chapter
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
+%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
+\chapter{Einleitung}
+\label{c:intro} % Always give a unique label
+% use \chaptermark{}
+% to alter or adjust the chapter heading in the running head
+
+\section{Notation}
+\label{sec:intro_not}
+Für den Rest der Arbeit wird folgende Notation eingeführt. Die Bezeichnung $G=(V,E)$ beschreibt einen ungerichteten Graphen. Entsprechend beschreiben $V(G)$ und $E(G)$ die Menge der Knoten bzw. Kanten des Graphen $G$. Die Bezeichung $G[X]$ einer Knotenmenge $X \subseteq V(G)$ steht für den Subgraphen, der von $X$ erzeugt wird. Für eine Menge an Kanten $X \subseteq E$ beschreibt $V(X)$ die Menge der Endknoten der Kanten aus $X$ und $G[X]$ den Subgraphen $(V,X)$. Die Knotenmenge für eine Menge von Kanten $X$ im Graphen $G[X]$ ist diesselbe wie im Graphen $G$.
+
+Mit einem \glqq Schnitt\grqq einer Menge $X \subseteq V$ ist das Paar $(X_1,X_2)$ mit den Eigenschaften $X_1 \cap X_2 = \emptyset,X_1 \cup X_2 = X$. $X_1$ und $X_2$ werden als linke und rechte \glqq Seiten\grqq des Schnittes bezeichnet.
+
+Die Zahl $cc(G)$ eines Graphen $G$ beschreibt die Anzahl der zusammenhängenden Komponenten (\glqq \textbf{c}onnected \textbf{c}omponent\grqq).
+
+Für zwei Bags $x,y$ eines Wurzelbaums gilt, dass $y$ ein Nachkomme von $x$ ist, falls es möglich ist ausgehend von $y$ einen Weg zu $x$ zu finden, der im Baum nur nach oben geht verläuft. Insbesondere ist $x$ sein eigener Nachkomme.
+
+Für zwei Integer $a,b$ sagt die Gleichung $a \equiv b$ aus, dass $a$ genau dann gerade ist, wenn auch $b$ gerade ist.
+Zudem wird Iverson's Klammernotation verwendet. Falls $p$ ein Prädikat ist, dann sei $[p]$ 1 (0) falls $p$ wahr (unwahr) ist.
+Falls $\omega:U\rightarrow {1,\dots,N}$, so bezeichnet $\omega(S)=\sum_{e\in S} \omega(e)$ für $S \subseteq U$.
+
+Für eine Funktion $s$ mit $s[v \rightarrow \alpha]$ schreiben wir die Funktion $s \ {(v,s(v))}\cup{(v,\alpha)}$. Diese Definition funktioniert unabhängig davon, ob $s(v)$ bereits definiert wurde oder nicht.

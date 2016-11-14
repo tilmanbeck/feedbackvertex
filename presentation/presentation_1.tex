@@ -241,6 +241,10 @@ consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $
 %--------------------
 \begin{frame}
 \frametitle{Cut (3) - wozu $\omega$ ?}
+\begin{itemize}
+\pause
+\item der Algorithmus (ohne $\omega$) ist korrekt, sofern es \textbf{genau eine} oder \textbf{keine} Lösung gibt
+\end{itemize}
 \pause
 \begin{block}{Isolation Lemma: Definition 2.4}
 A function $\omega : U \rightarrow \mathbb{Z}$ isolates a set family $\mathcal{F} \subseteq 2^U$ if there is a unique $S' \in \mathcal{F}$ with $\omega (S')=min_{S \in \mathcal{S}} \omega(S)$
@@ -254,8 +258,6 @@ $prob[\omega$ isolates $\mathcal{F}]\geq 1 - \frac{|U|}{N}$
 \end{center}
 \end{block}
 \begin{itemize}
-\pause
-\item der Algorithmus (ohne $\omega$) ist korrekt, sofern es \textbf{genau eine} oder \textbf{keine} Lösung gibt
 \pause
 \item mithilfe des Isolation Lemma kann mit hoher Wahrscheinlichkeit eine große Lösungsmenge auf eine einzige reduziert werden
 \end{itemize}
@@ -313,7 +315,7 @@ Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then
 \pause
 \item $\sum\limits_{s \in  \{ 0,1_1,1_2 \}^{B_x} } A_x(i,w,s) = |C_x(i,w)|$
 \pause
-\item für die Lösung nur $A_r(k,W,\emptyset) = |C_r(k,W)| = |C_W|$ interessant (für alle W)
+\item für die Lösung nur $A_r(k,W,\emptyset) = |C_r(k,W)| = |C_W|$ interessant (für alle $0 \leq W \leq kN$)
 \pause
 \item ausgehend von Wurzel-Knoten rekursiver Abstieg zu den Blatt-Knoten der NTD
 \end{itemize}
