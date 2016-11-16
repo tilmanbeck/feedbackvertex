@@ -14,7 +14,8 @@
 
 \section{Einführendes}
 \label{sec:1}
-Use the template \emph{chapter.tex} together with the Springer document class SVMono (monograph-type books) or SVMult (edited books) to style the various elements of your chapter content in the Springer layout.
+Die Cut \& Count-Technik wird benutzt um connectivity-type Probleme mithilfe von Randomisierung zu lösen. Dabei handelt es sich um Graphen-Probleme, bei denen zusammenhängende Submengen der Knoten gefunden werden müssen die problemspezifische  Eigenschaften erfüllen müssen. Beispiele hierfür sind Longest Path, Steiner Tree, Feedback Vertex Set, uvm.
+Die Cut \& Count-Technik verlangt zur Lösung der Probleme eine Randomisierung der Lösungsmenge, da sie nur korrekt Funktioniert, wenn es eine oder keine Lösung gibt. Dies Bedeutet, dass alle Lösungskandidaten eine zufällig und unabhängig gewählte Eigenschaft bekommen, welche zusätzlich Anforderungen erfüllen muss, um als gültige Lösungsmenge zu gelten. Diese Isolation der Lösungsmenge wird durch das Isolations-Lemma beschrieben.
 
 \section{Monte-Carlo-Algorithmus}
 \label{sec:2}
@@ -23,7 +24,19 @@ Use the template \emph{chapter.tex} together with the Springer document class SV
 % and \cite{<label>} for bibliographic references
 % use \sectionmark{}
 % to alter or adjust the section heading in the running head
+
+Verwendet man die Cut \& Count-Technik um ein Algorithmus zur Lösung der connectivity-type Probleme zu entwerfen, enthält man einen Monte-Carlo-Algorithmus. Dies bedeutet, dass der hervorgegangene Algorithmus niemals ein false-positiv \footnote{Der Algorithmus gibt eine positive Antwort auf das Problem, obwohl keine Lösung existiert} ausgeben kann aber zu einer gewissen Wahrscheinlichkeit ein false-negativ \footnote{Der Algorithmus gibt eine negative Antwort auf das Problem, obwohl eine Lösung existiert.}. Die Wahrscheinlichkeit eines false-negativ wird durch das Isolations-Lemma bestimmt. Da eine Ausgabe eine false-negativ einer bestimmten Wahrscheinlichkeit unterliegt ist es ratsam Monte-Carlo-Algorithmen mehrmals hintereinander auszuführen. Es begünstigt die Wahrscheinlichkeit eine Lösungsmenge zu finden.
+
+Der hervorgegangene Monte-Carlo-Algorithmus kann bei gegebener Tree-Decomposition mit Braumbreite $t$ eines ungerichteten Graphens Lösungen bestimmen bei folgenden Probleme und Laufzeiten:
+\begin{itemize}
+\item Steiner Tree in $3^t |V|^{O(1)}$
+\item FeedBack Vertex Set in $3^t|V|^{O(1)}$
+\item ...
+\end{itemize}
+
 \section{Isolation Lemma}
+Wie zuvor erwähnt ist die Cut \& Count-Technik nur dann korrekt, wenn eine oder keine Lösung existiert. Da es bei vielen der connectivity-type Probleme sehr  wahrscheinlich ist, dass mehrere Lösungen existieren, muss die Lösungsmenge reduziert werden. 
+
 \label{sec:test}
 
 \section{Cut \& Count-Technik}
