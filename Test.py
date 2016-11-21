@@ -28,8 +28,8 @@ import DynamicProgramm as dp
 # bc = td.root(bc)
 # td.leaf(bc)
 # td.join(bc)
-# td.addInternalNodes(bc)
-# td.edgeBags(bc, edges)
+# td.add_internal_nodes(bc)
+# td.edge_bags(bc, edges)
 
 # gv = GraphVisualization(bc)
 # gv.createGraph()
@@ -50,8 +50,8 @@ import DynamicProgramm as dp
 # bc = td.td.root(bc)
 # td.td.leaf(bc)
 # td.join(bc)
-# td.addInternalNodes(bc)
-# td.edgeBags(bc, edges)
+# td.add_internal_nodes(bc)
+# td.edge_bags(bc, edges)
 #
 # gv = GraphVisualization(bc)
 # gv.createGraph()
@@ -71,8 +71,8 @@ import DynamicProgramm as dp
 # ab = td.root(ab)
 # td.leaf(ab)
 # td.join(ab)
-# td.addInternalNodes(ab)
-# td.edgeBags(ab,edges)
+# td.add_internal_nodes(ab)
+# td.edge_bags(ab,edges)
 # # v = GraphVisualization(ab)
 # # v.createGraph()
 # #
@@ -127,15 +127,15 @@ import DynamicProgramm as dp
 # bc = td.root(bc)
 # td.leaf(bc)
 # td.join(bc)
-# td.addInternalNodes(bc)
-# td.edgeBags(bc, edges)
+# td.add_internal_nodes(bc)
+# td.edge_bags(bc, edges)
 
 # gv = GraphVisualization(bc)
 # gv.createGraph()
 
 runs = 25
-t = [0]*runs
-for i in range(0,runs):
+t = [0] * runs
+for i in range(0, runs):
     vertices = ['a', 'b', 'c']
     edges = [{'a', 'b'}, {'b', 'c'}]
 
@@ -148,8 +148,8 @@ for i in range(0,runs):
     ab = td.root(ab)
     td.leaf(ab)
     td.join(ab)
-    td.addInternalNodes(ab)
-    td.edgeBags(ab, edges)
+    td.add_internal_nodes(ab)
+    td.edge_bags(ab, edges)
 
     s = time.time()
     dp.count(vertices, edges, ab, ['b','c'], k, N, weights)
@@ -157,19 +157,9 @@ for i in range(0,runs):
     t[i] = (e-s)
 
 avg = 0
-for i in range(0,runs):
-    avg = avg + t[i]
+for i in range(0, runs):
+    avg += t[i]
 
-avg = avg/runs
+avg /= runs
 
-print("Execution Time: "+ str(avg)+"s")
-
-
-
-
-
-
-
-
-
-
+print("Execution Time: " + str(avg)+"s")

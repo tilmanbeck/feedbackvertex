@@ -26,50 +26,50 @@ def count(vertices, edges, niceTreeDecomp, terminals, k, N, weights):
 
 
 def inorder(node, indices, data, k, N, terminals, weights):
-    if node.getLeft() is not None:
-        data = inorder(node.getLeft(), indices, data, k, N, terminals, weights)
-    if node.getRight() is not None:
-        data_right = inorder(node.getRight(), indices, data, k, N, terminals, weights)
-    if node.bagType == BagType.L:
+    if node.get_left() is not None:
+        data = inorder(node.get_left(), indices, data, k, N, terminals, weights)
+    if node.get_right() is not None:
+        data_right = inorder(node.get_right(), indices, data, k, N, terminals, weights)
+    if node.bag_type == BagType.L:
         new_data = np.zeros((1, k, (k-1) * N))
         new_data[0,0,0] = 1    # leaf initialization
-        #ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bagType) + str(node.getBag()))
+        #ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
-    elif node.bagType == BagType.R:
+    elif node.bag_type == BagType.R:
 
         new_data = np.zeros((1, k, (k - 1) * N))
         for i in range(0, k):
             for w in range(0, (k -1) * N):
                 new_data[0, i, w] = data[0, i, w] + data[1, i, w] + data[2,  i, w]
-        #ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bagType) + str(node.getBag()))
+        #ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
 
-    elif node.bagType == BagType.IE:
+    elif node.bag_type == BagType.IE:
 
-        mat_size = 3 ** len(node.getBag())
+        mat_size = 3 ** len(node.get_bag())
         new_data = np.zeros((mat_size, k, (k-1)*N))
-        first_vertex = node.getLabel().pop()
-        scnd_vertex = node.getLabel().pop()
-        pos_first_vertex = node.getBag().index(first_vertex)
-        pos_scnd_vertex = node.getBag().index(scnd_vertex)
+        first_vertex = node.get_label().pop()
+        scnd_vertex = node.get_label().pop()
+        pos_first_vertex = node.get_bag().index(first_vertex)
+        pos_scnd_vertex = node.get_bag().index(scnd_vertex)
         for s in range(0, mat_size):
-            coloring_from_index = ut.getIndexAsList(s, len(node.getBag()))
+            coloring_from_index = ut.getIndexAsList(s, len(node.get_bag()))
             first_col = coloring_from_index[pos_first_vertex]
             scnd_col = coloring_from_index[pos_scnd_vertex]
             if first_col == 0 or scnd_col == 0 or first_col == scnd_col:
                 for i in range(0, k):
                     for w in range(0, (k - 1) * N):
                         new_data[s, i, w] = data[s, i, w]
-        #ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bagType) + str(node.getBag()))
+        #ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
 
-    elif(node.bagType == BagType.IV):
+    elif node.bag_type == BagType.IV:
 
         #create new data matrix (one dimension bigger than child)
-        new_data = np.zeros((3 ** len(node.getBag()), k, (k - 1) * N))
-        introduced_vertex = node.getLabel()
-        child_bag = node.getLeft().getBag()
-        pos_iv = node.getBag().index(introduced_vertex)
+        new_data = np.zeros((3 ** len(node.get_bag()), k, (k - 1) * N))
+        introduced_vertex = node.get_label()
+        child_bag = node.get_left().get_bag()
+        pos_iv = node.get_bag().index(introduced_vertex)
         # we have to iterate over all colorings from child bag
         length_child_colors = 3 ** len(child_bag)
 
@@ -80,7 +80,7 @@ def inorder(node, indices, data, k, N, terminals, weights):
             coloring_from_index = ut.getIndexAsList(s, len(child_bag))
             # this is the special if the child bag is a leaf
             # and there is no coloring
-            if node.getLeft().getBagType() == BagType.L:
+            if node.get_left().get_bag_type() == BagType.L:
                 ext_coloring = [pos_iv]
             else:
                 ext_coloring = coloring_from_index[0:pos_iv] + [0] + coloring_from_index[pos_iv:]
@@ -104,25 +104,25 @@ def inorder(node, indices, data, k, N, terminals, weights):
                         new_data[indices[2], i, w] = data[s, i - 1, w - weights.get(introduced_vertex)]
                     else:
                         new_data[indices[2], i, w] = 0
-        #ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bagType) + str(node.getBag()))
+        #ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
 
-    elif node.bagType == BagType.F:
+    elif node.bag_type == BagType.F:
 
         # create new matrix with size of bag (one dimension less than child)
-        tmp = 3 ** len(node.getBag())
+        tmp = 3 ** len(node.get_bag())
         new_data = np.zeros((tmp, k, (k - 1) * N))
 
         # which position did forgotten vertex take in child bag
-        fgt_vertex = node.getLabel()
-        child_bag = node.getLeft().getBag()
+        fgt_vertex = node.get_label()
+        child_bag = node.get_left().get_bag()
         old_pos = child_bag.index(fgt_vertex)
 
         for s in range(0, tmp):
             for i in range(0, k):
                 for w in range(0, (k - 1) * N):
                     # get the int value of current coloring as list of ternary values
-                    coloring = ut.getIndexAsList(s, len(node.getBag()))
+                    coloring = ut.getIndexAsList(s, len(node.get_bag()))
                     # add new position for forgotten bag (init as zero because calculateIndices requests that)
                     coloring = coloring[0:old_pos] + [0] + coloring[old_pos:]
                     # calculate the three indices to access in child data matrix
@@ -130,11 +130,11 @@ def inorder(node, indices, data, k, N, terminals, weights):
                     # add the three matrices and write back to new matrix
                     new_data[s, i, w] = data[indices_to_sum[0], i, w] + data[indices_to_sum[1], i, w] +\
                                        data[indices_to_sum[2], i, w]
-        ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bagType) + str(node.getBag()))
+        ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
 
-    elif node.bagType == BagType.J:
-        bag_size = len(node.getBag())
+    elif node.bag_type == BagType.J:
+        bag_size = len(node.get_bag())
         mat_size = 3 ** bag_size
         new_data = np.zeros((mat_size, k, (k-1)*N))
         colorings = ut.calculateIndices([0 for i in range(0, bag_size)], [i for i in range(0, bag_size)])
@@ -149,7 +149,7 @@ def inorder(node, indices, data, k, N, terminals, weights):
                     # acc_bound_1 refers to the bound in the paper for the 'i' index
                     # resp. acc_bound_2 to the bound in the paper for 'w' index
                     index_node_as_list = ut.getIndexAsList(s, bag_size)
-                    colored_nodes = ut.getNodesByColoring(index_node_as_list, [1,2], indices)
+                    colored_nodes = ut.getNodesByColoring(index_node_as_list, [1, 2], indices)
                     acc_bound_1 = i + len(colored_nodes)
                     acc_bound_2 = w + ut.getSumOfWeights(colored_nodes, weights)
                     for i1 in range(0, acc_bound_1):
@@ -161,6 +161,6 @@ def inorder(node, indices, data, k, N, terminals, weights):
                             else:
                                 value += (data[s, i1, w1] * data_right[s, i2, w2])
                     new_data[s, i, w] = value
-        ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bagType) + str(node.getBag()))
+        ut.writeToFile(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
     return data
