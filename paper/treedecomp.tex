@@ -25,16 +25,21 @@ Das Konzept der Tree Decomposition wurde 1976 von Rudolf Halin\cite{Halin1976} e
 
 Die Baumweite ist eine Zahl und beschreibt die \glqq Baum-Ähnlichkeit\grqq eines Graphen. Die Baumweite $tw(\mathbb{T})$ einer Tree Decomposition $\mathbb{T}$ ist die Größe des größten Bags minus eins. Die Baumweite eines Graphen $G$ ist die minimale Baumweite aller möglichen Tree Decompositions von $G$.
 
-Ein Beispiel für eine Tree Decomposition ist in Abbildung \ref{fig:td} gegeben.
+Ein Beispiel für eine Tree Decomposition ist in Abbildung \ref{fig:td_2} gegeben. Der Ursprungsgraph ist in Abbildung \ref{fig:td_1}.
 
 \begin{figure}
-\label{fig:td}
-
+\label{fig:td_1}
   \centering
-    \includegraphics[width=0.5\textwidth]{pic.png}
-  	\caption{A picture of a gull.}
+    \includegraphics[width=1.0\textwidth]{./imgs/TD_1.png}
+  	\caption{Ursprungsgraph für eine Tree Decomposition}
 \end{figure}
 
+\begin{figure}
+\label{fig:td_2}
+  \centering
+    \includegraphics[width=1.0\textwidth]{./imgs/TD_2.png}
+  	\caption{Eine Tree Decomposition für den in Abbildung \ref{fig:td_1} gegebenen Ursprungsgraphen}
+\end{figure}
 
 \section{Nice Tree Decomposition}
 \label{sec:ntd_ntd}
@@ -50,15 +55,6 @@ Eine standardmäßige Nice Tree Decomposition ist eine \textit{Tree Decompositio
 }
 \end{definition}
 
-Ein Beispiel für eine standardmäßige Nice Tree Decomposition ist in Abbildung \ref{fig:ntd} gegeben.
-
-\begin{figure}
-\label{fig:ntd}
-
-  \centering
-    \includegraphics[width=0.5\textwidth]{pic.png}
-  	\caption{A picture of a gull.}
-\end{figure}
 \section{Weitere Modifikationen}
 \label{sec:ntd_req}
 Für den von \cite{cygan_solving_2011} beschriebenen Algorithmus wird die standardmäßige Nice Tree Decomposition zusätzlich noch auf folgende Weise modifiziert:
@@ -73,6 +69,16 @@ Für den von \cite{cygan_solving_2011} beschriebenen Algorithmus wird die standa
 \end{itemize}
 Zusätzlich wird gefordert, dass jede Kante aus $E$ genau einmal eingeführt wird.
 }
+
+Ein Beispiel für eine Nice Tree Decomposition ist in Abbildung \ref{fig:td_3}.
+\begin{figure}
+\label{fig:td_3}
+
+  \centering
+    \includegraphics[width=1.0\textwidth]{./imgs/TD_3.png}
+  	\caption{Eine Nice Tree Decomposition für den Ursprungsgraphen in Abbildung \ref{fig:td_1}}
+\end{figure}
+
 Sei eine Tree Decomposition gegeben, kann eine standardmäßige Nice Tree Decomposition von gleicher Breite in polynomieller Zeit gefunden werden \cite{kloks1994}. In der selber Laufzeit kann der Algorithmus für eine standardmäßige Nice Tree Decomposition modifizert werden, so dass das Ergebnis zusätzlich die o.g. Kriterien erfüllt.
 \end{definition}
 

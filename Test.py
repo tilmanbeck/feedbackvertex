@@ -317,7 +317,7 @@ weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
 abg = TreeDecomposition(None, None, ['a', 'b', 'd'])
 ecg = TreeDecomposition(None, None, ['e', 'c', 'd'])
 bcg = TreeDecomposition(abg, ecg, ['b', 'c', 'd'])
-bc = TreeDecomposition(bcg, None, ['b', 'c'])   
+bc = TreeDecomposition(bcg, None, ['b', 'c'])
 bc = root(bc)
 leaf(bc)
 join(bc)
