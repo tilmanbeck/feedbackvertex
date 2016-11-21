@@ -34,6 +34,9 @@ consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $
 \section{Count}
 \label{sec:st_count}
 Aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$. Wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |\{X \in \mathcal{R} |cc(G[X]) = 1\}| = |\mathcal{S}|$. In Worte gefasst bedeutet dies, dass die Anzahl der konsistenten Cuts eines Graphen modulo zwei gleich die Anzahl der Lösungen ist. Im Lemma 3.4 trifft das Paper dazu eine Aussage: Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
+
+\section{Dynamisches Programm}
+%FUCK
 $|\mathcal{C}_W|$ modulo $2$ kann mit dynamischen Programm auf der NTD $\mathbb{T}$ berechnet werden.
 für jeden Bag $x \in \mathbb{T}$, integers $0 \leq i \leq k,0 \leq w \leq kN$ und Färbung $s \in \{0,1_1,1_2 \}^{B_x}$ definiere:
 \begin{itemize}
@@ -50,10 +53,35 @@ Färbung $s \in \{0,1_1,1_2 \}^{B_x}$  der Knoten aus $B_x$ bzgl. der Menge $C_x
 \end{itemize}
 
 $A_x(i,w,s)$ zählt alle möglichkeiten die Knoten gemäß der Definition zu färben.
-Ob der Algorithmus eine Lösung gefunden hat kann im Wurzel-Knoten eingesehen werden. 
+Ob der Algorithmus eine Lösung gefunden hat kann im Wurzel-Knoten eingesehen werden.
+%FUCK
 
-\section{Dynamisches Programm}
+Im dynamischen Programm werden die folgenden Berechnungsregeln für jede $A_x(i,w,s)$ Matrix eines Bags angewandt. Zur Vereinfachung der Notation beschreibt im folgenden $v$ den neu eingeführten Knoten, $y$, $z$ das 
 \label{sec:dynP}
+\begin{itemize}
+\item \textbf{Leaf bag}:
+\begin{itemize}
+\item $A_x=(0,0,\emptyset) = 1$\\Leaf bags enhalten keine Knoten, daher werden sie mit einem Initialwert gefüllt.
+\end{itemize}
+\item \textbf{Introduce vertex v}:
+\begin{itemize}
+\item $A_x=(i,w,s[v\rightarrow 0]) = [v \notin T]A_y(i,w,s)$\\Ist der Knoten mit $0$ gefärbt, darf er kein Terminal sein. Dies würde bedeuten er wäre nicht im konstistenen Cut enthalten und somit ungültig. Ist er kein Terminal so wird der Wert aus dem Kindsbag übernommen.
+\item $A_x=(i,w,s[v\rightarrow 1_1]) = A_y(i-1,w-w(v),s)$\\
+\item $A_x=(i,w,s[v\rightarrow 1_2]) =[v \neq v_1] A_y(i-1,w-w(v),s)$
+\end{itemize}
+\item \textbf{Introduce edge uv}
+\begin{itemize}
+\item $A_x(i,w,s) = [s(u) = 0 \vee s(v) = 0 \vee s(u) = s(v)]A_y(i,w,s)$
+\end{itemize}
+\item \textbf{Forget vertex v}
+\begin{itemize}
+\item $A_x(i,w,s) = \sum\limits_{\alpha \in {0,1_1,1_2}} A_x(i,w,s[v \rightarrow \alpha]) $
+\end{itemize}
+\item \textbf{Join bag}
+\begin{itemize}
+\item $A_x(i,w,s) = \sum\limits_{i_1+i_2=i+|s^{-1}({1_1,1_2})|} \sum\limits_{w_1+w_2=w+w(s^{-1}({1_1,1_2}))} A_y(i_1,w_1,s)A_z(i_2,w_2,s) $
+\end{itemize}
+\end{itemize}
 
 
 \section{Monte-Carlo Algorithmus und Laufzeit}
