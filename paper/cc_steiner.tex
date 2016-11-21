@@ -7,22 +7,54 @@
 %%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
 \chapter{Cut \& Count für Steiner Tree}
-\label{c:cc_steiner} % Always give a unique label
-% use \chaptermark{}
-% to alter or adjust the chapter heading in the running head
-
+\label{c:cc_steiner}
 
 \section{Steiner Tree}
 \label{sec:steiner}
+\begin{definition}
+Steiner Tree\\
+\textbf{Input}: An undirected graph $G = (V, E)$, a set of terminals $T \subseteq V$ and an integer $k$. \\
+\textbf{Question}: Is there a set $X \subseteq V$ of cardinality $k$ such that $T \subseteq X$ and $G[X]$ is connected?
+\end{definition}
+
+Bei dem Steiner-Tree Problem handelt es sich um ein connectivity-Typ Problem. In einen gegebenen Graphen sind einige Knoten als Terminale makiert. Nun wird nach einem Subgraphen innerhalb des Ursprungsgraphen gesucht, der alle Terminale enthält und aus k vielen Knoten insgesamt besteht. Desweiteren müssen alle Knoten innerhalb des Subgraphen über Kanten untereinander erreichbar sein.
 
 \section{Cut}
 \label{sec:st_cut}
+Zu beginn des Cut-Part wird eine zufällige Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ definiert. Diese wird für die Isolation der Lösungsmenge verwendet.
+Desweiteren wird im Cut-Part die Menge $\mathcal{R}_W$ definiert. Sie ist die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$. Somit stellt die Menge $\mathcal{R}_W$ die Menge aller Lösungskandidaten dar.
+Eine weitere zu definierende Menge ist $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[X]$ ist zusammenhängend$\}$. $\mathcal{S}_W$. Somit bildet die Menge $\mathcal{S}_W$ Lösungen für ein gegebenes bestimmtes Gewicht $W$.
+$\cup_W \mathcal{S}_W$ bildet so die Lösungsmenge. Gibt es nun ein Gewicht $W$ für das die Menge nicht leer ist, so gibt der Algorithmus eine positive Antwort.
+Von der Menge der Terminalknoten wird ein Terminal als $v_1$-Terminal festgelegt. Dieses dient dazu, dass bei der Bildung von konsistenten Cuts keine Cuts doppelt gezählt werden.
+Die konsistenten Cuts werden in der Menge  $\mathcal{C}_W$ beschrieben. Diese Bilden die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$. Die Anzahl der konstistenten Cuts sind im Lemma 3.3 des Papers beschrieben:\\
+\\
+Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of
+consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
 
 \section{Count}
 \label{sec:st_count}
+Aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$. Wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |\{X \in \mathcal{R} |cc(G[X]) = 1\}| = |\mathcal{S}|$. In Worte gefasst bedeutet dies, dass die Anzahl der konsistenten Cuts eines Graphen modulo zwei gleich die Anzahl der Lösungen ist. Im Lemma 3.4 trifft das Paper dazu eine Aussage: Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
+$|\mathcal{C}_W|$ modulo $2$ kann mit dynamischen Programm auf der NTD $\mathbb{T}$ berechnet werden.
+für jeden Bag $x \in \mathbb{T}$, integers $0 \leq i \leq k,0 \leq w \leq kN$ und Färbung $s \in \{0,1_1,1_2 \}^{B_x}$ definiere:
+\begin{itemize}
+\item $\mathcal{R}_x(i,w)=\{X \subseteq V_x | (T \cap V_x) \subseteq X$ $\wedge$ $|X| = i$ $\wedge$ $\omega (X) = w \}$
+\item $\mathcal{C}_x (i,w) =\{ (X,(X_1,X_2)) | X \in \mathcal{R}_x(i,w)$ $\wedge$ $(X,(X_1,X_2))$ is a consistently cut subgraph of $G_x$ $\wedge$ $(v_1 \in V_x \Rightarrow v_1 \in X_1 \} $
+\item $\mathcal{A}_x(i,w,s)=| \{ (X,(X_1,X_2)) \in \mathcal{C}_x(i,w) | (s(v) = 1_j \Rightarrow v \in X_j)$ $\wedge$ $(s(v)=0 \Rightarrow v \notin X \} |$
+\end{itemize}
+Die Färbungen der Knoten gibt an ob sie zu einem konsistenten Cut gehören und wenn ja zu welcher der beiden Teilmengen des konsistenten Cuts sie gehören.
+Färbung $s \in \{0,1_1,1_2 \}^{B_x}$  der Knoten aus $B_x$ bzgl. der Menge $C_x$
+\begin{itemize}
+\item $s[v] = 0 \Rightarrow v \notin X$
+\item $s[v] = 1_1 \Rightarrow v \in X_1$ 
+\item $s[v] = 1_2 \Rightarrow v \in X_2$ 
+\end{itemize}
+
+$A_x(i,w,s)$ zählt alle möglichkeiten die Knoten gemäß der Definition zu färben.
+Ob der Algorithmus eine Lösung gefunden hat kann im Wurzel-Knoten eingesehen werden. 
 
 \section{Dynamisches Programm}
 \label{sec:dynP}
+
 
 \section{Monte-Carlo Algorithmus und Laufzeit}
 \label{sec:mc_alg}
