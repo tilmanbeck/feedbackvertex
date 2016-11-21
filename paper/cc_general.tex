@@ -19,11 +19,6 @@ Die Cut \& Count-Technik verlangt zur Lösung der Probleme eine Randomisierung d
 
 \section{Monte-Carlo-Algorithmus}
 \label{sec:2}
-% Always give a unique label
-% and use \ref{<label>} for cross-references
-% and \cite{<label>} for bibliographic references
-% use \sectionmark{}
-% to alter or adjust the section heading in the running head
 
 Verwendet man die Cut \& Count-Technik um ein Algorithmus zur Lösung der connectivity-type Probleme zu entwerfen, enthält man einen Monte-Carlo-Algorithmus. Dies bedeutet, dass der hervorgegangene Algorithmus niemals ein false-positiv \footnote{Der Algorithmus gibt eine positive Antwort auf das Problem, obwohl keine Lösung existiert} ausgeben kann aber zu einer gewissen Wahrscheinlichkeit ein false-negativ \footnote{Der Algorithmus gibt eine negative Antwort auf das Problem, obwohl eine Lösung existiert.}. Die Wahrscheinlichkeit eines false-negativ wird durch das Isolations-Lemma bestimmt. Da eine Ausgabe eine false-negativ einer bestimmten Wahrscheinlichkeit unterliegt ist es ratsam Monte-Carlo-Algorithmen mehrmals hintereinander auszuführen. Es begünstigt die Wahrscheinlichkeit eine Lösungsmenge zu finden.
 
@@ -35,12 +30,27 @@ Der hervorgegangene Monte-Carlo-Algorithmus kann bei gegebener Tree-Decompositio
 \end{itemize}
 
 \section{Isolation Lemma}
-Wie zuvor erwähnt ist die Cut \& Count-Technik nur dann korrekt, wenn eine oder keine Lösung existiert. Da es bei vielen der connectivity-type Probleme sehr  wahrscheinlich ist, dass mehrere Lösungen existieren, muss die Lösungsmenge reduziert werden. 
-
 \label{sec:test}
+
+Wie zuvor erwähnt ist die Cut \& Count-Technik nur dann korrekt, wenn eine oder keine Lösung existiert. Da es bei vielen der connectivity-type Probleme sehr  wahrscheinlich ist, dass mehrere Lösungen existieren, muss die Lösungsmenge reduziert werden. Dafür wird auf das Isolations-Lemma zurück gegriffen. Es ist wie folgt definiert:
+
+A function $\omega : U \rightarrow \mathbb{Z}$ isolates a set family $\mathcal{F} \subseteq 2^U$ if there is a unique $S' \in \mathcal{F}$ with $\omega (S')=min_{S \in \mathcal{S}} \omega(S)$\\
+
+Im Paper wird es im Lemma 2.5 verwendet, um etwas über die Wahrscheinlichkeit der Isolation auszusagen:\\
+\\Let $\mathcal{F} \subseteq 2^U$ be a set family over a universe $U$ with $|\mathcal{F}| > 0$. For each $u \in U$ ,
+choose a weight $\omega(u) \in {1, 2, . . . , N }$ uniformly and independently at random. Then
+\begin{center}
+$prob[\omega$ isolates $\mathcal{F}]\geq 1 - \frac{|U|}{N}$
+\end{center}
 
 \section{Cut \& Count-Technik}
 \label{sec:3}
+Im Allgemeinen besteht die Cut \& Count-Technik, wie der Name schon vermuten lässt, aus zwei Teilen. Dem Cut-Part und dem Count-Part.
+Im Cut-Part werden Mengen erzeugt und im Count-Part werden die möglichen Lösungen innerhalb dieser erzeugten Mengen gezählt.
 
-\section{Section Heading}
-\label{sec:4}
+\subsection{Cut-Part}
+
+\subsection{Count-Part}
+\label{ssec:4}
+Zuerst wird die für das Isolationslemma benötigte Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ definiert. 
+
