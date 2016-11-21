@@ -11,6 +11,9 @@
 % use \chaptermark{}
 % to alter or adjust the chapter heading in the running head
 
+\section{Einleitung}
+\label{sec:intro_overv}
+
 \section{Notation}
 \label{sec:intro_not}
 Für den Rest der Arbeit bedienen wir uns der Notation aus der Arbeit \cite{cygan_solving_2011}. Die Bezeichnung $G=(V,E)$ beschreibt einen ungerichteten Graphen. Entsprechend beschreiben $V(G)$ und $E(G)$ die Menge der Knoten bzw. Kanten des Graphen $G$. Die Bezeichung $G[X]$ einer Knotenmenge $X \subseteq V(G)$ steht für den Subgraphen, der von $X$ erzeugt wird. Für eine Menge an Kanten $X \subseteq E$ beschreibt $V(X)$ die Menge der Endknoten der Kanten aus $X$ und $G[X]$ den Subgraphen $(V,X)$. Die Knotenmenge für eine Menge von Kanten $X$ im Graphen $G[X]$ ist diesselbe wie im Graphen $G$.
@@ -19,7 +22,7 @@ Mit einem \glqq Schnitt\grqq einer Menge $X \subseteq V$ ist das Paar $(X_1,X_2)
 
 Die Zahl $cc(G)$ eines Graphen $G$ beschreibt die Anzahl der zusammenhängenden Komponenten (\glqq \textbf{c}onnected \textbf{c}omponent\grqq).
 
-Für zwei Bags $x,y$ eines Wurzelbaums gilt, dass $y$ ein Nachkomme von $x$ ist, falls es möglich ist ausgehend von $y$ einen Weg zu $x$ zu finden, der im Baum nur nach oben geht verläuft. Insbesondere ist $x$ sein eigener Nachkomme.
+Für zwei Bags $x,y$ eines Wurzelbaums gilt, dass $y$ ein Nachkomme von $x$ ist, falls es möglich ist ausgehend von $y$ einen Weg zu $x$ zu finden, der im Baum nur in Richtung des Wurzelknotens verläuft. Insbesondere ist $x$ sein eigener Nachkomme.
 
 Für zwei Integer $a,b$ sagt die Gleichung $a \equiv b$ aus, dass $a$ genau dann gerade ist, wenn auch $b$ gerade ist.
 Zudem wird Iverson's Klammernotation verwendet. Falls $p$ ein Prädikat ist, dann sei $[p]$ 1 (0) falls $p$ wahr (unwahr) ist.
