@@ -5,6 +5,7 @@ import numpy as np
 
 outputFile = './output/test.txt'
 
+
 def count(vertices, edges, niceTreeDecomp, terminals, k, N, weights):
     #startTime = time.time()
     # in-order traversal
