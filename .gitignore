@@ -86,6 +86,7 @@ target/
 *.nav
 *.snm
 *.vrb
+paper/book.pdf
 
 # Mac File
 .DS_STORE
