@@ -21,22 +21,31 @@ Bei dem Steiner-Tree Problem handelt es sich um ein connectivity-Typ Problem. In
 
 \section{Cut}
 \label{sec:st_cut}
-Zu beginn des Cut-Part wird eine zufällige Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ definiert. Diese wird für die Isolation der Lösungsmenge verwendet.
-Desweiteren wird im Cut-Part die Menge $\mathcal{R}_W$ definiert. Sie ist die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$. Somit stellt die Menge $\mathcal{R}_W$ die Menge aller Lösungskandidaten dar.
-Eine weitere zu definierende Menge ist $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[X]$ ist zusammenhängend$\}$. $\mathcal{S}_W$. Somit bildet die Menge $\mathcal{S}_W$ Lösungen für ein gegebenes bestimmtes Gewicht $W$.
-$\cup_W \mathcal{S}_W$ bildet so die Lösungsmenge. Gibt es nun ein Gewicht $W$ für das die Menge nicht leer ist, so gibt der Algorithmus eine positive Antwort.
-Von der Menge der Terminalknoten wird ein Terminal als $v_1$-Terminal festgelegt. Dieses dient dazu, dass bei der Bildung von konsistenten Cuts keine Cuts doppelt gezählt werden.
-Die konsistenten Cuts werden in der Menge  $\mathcal{C}_W$ beschrieben. Diese Bilden die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$. Die Anzahl der konstistenten Cuts sind im Lemma 3.3 des Papers beschrieben:\\
-\\
-Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of
-consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
+Zu beginn des Cut-Part wird eine zufällige Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ definiert. Diese wird für die Isolation der Lösungsmenge verwendet.\\
+Desweiteren wird im Cut-Part die Menge $\mathcal{R}_W$ definiert. Sie ist die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$. Somit stellt die Menge $\mathcal{R}_W$ die Menge aller Lösungskandidaten dar.\\
+Eine weitere zu definierende Menge ist $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[X]$ ist zusammenhängend$\}$. Somit bildet die Menge $\mathcal{S}_W$ Lösungen für ein gegebenes bestimmtes Gewicht $W$.\\
+$\cup_W \mathcal{S}_W$ bildet so die Lösungsmenge. Gibt es nun ein Gewicht $W$ für das die Menge nicht leer ist, so gibt der Algorithmus eine positive Antwort.\\
+Von der Menge der Terminalknoten wird ein Terminal als $v_1$-Terminal festgelegt. Dieses dient dazu, dass bei der Bildung von konsistenten Cuts keine Cuts doppelt gezählt werden.\\
+Die konsistenten Cuts werden in der Menge  $\mathcal{C}_W$ beschrieben. Diese Bilden die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$.
+\begin{figure}
+\label{fig:st_cut}
+  \centering
+    \includegraphics[width=1.0\textwidth]{./imgs/terminal_v1.png}
+  	\caption{Konsistente Cuts ohne Beschränkung $v_1 \in X_1$. Man sieht, dass die konsistenten Cuts 1 und 2 identisch sind.}
+\end{figure}
+
+Die Anzahl der konstistenten Cuts sind im Lemma 3.3 des Papers beschrieben:\\
+Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
+
+Beweis: Per Definition ist bekannt, dass für jeden konsistenten Cut $(X,(X_1,X_2))$ und Connected Component $C$ aus $G[X]$ $C$ entweder in $X_1$ oder in $X_2$ enthalten sein muss. Für die Connected Component, die $v_1$ enthält ist die Wahl der Submenge fix. Für alle anderen Connected Components kann die Zugehörigkeit von Submengen frei gewählt werden. Daher erhalten wir $2^{cc(G[X])-1}$ verschiedene konsistente Cuts.
 
 \section{Count}
 \label{sec:st_count}
 Aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$. Wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |\{X \in \mathcal{R} |cc(G[X]) = 1\}| = |\mathcal{S}|$. In Worte gefasst bedeutet dies, dass die Anzahl der konsistenten Cuts eines Graphen modulo zwei gleich die Anzahl der Lösungen ist. Im Lemma 3.4 trifft das Paper dazu eine Aussage: Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
 
 \section{Dynamisches Programm}
-%FUCK
+\label{sec:dynP}
+
 $|\mathcal{C}_W|$ modulo $2$ kann mit dynamischen Programm auf der NTD $\mathbb{T}$ berechnet werden.
 für jeden Bag $x \in \mathbb{T}$, integers $0 \leq i \leq k,0 \leq w \leq kN$ und Färbung $s \in \{0,1_1,1_2 \}^{B_x}$ definiere:
 \begin{itemize}
@@ -51,13 +60,9 @@ Färbung $s \in \{0,1_1,1_2 \}^{B_x}$  der Knoten aus $B_x$ bzgl. der Menge $C_x
 \item $s[v] = 1_1 \Rightarrow v \in X_1$ 
 \item $s[v] = 1_2 \Rightarrow v \in X_2$ 
 \end{itemize}
-
 $A_x(i,w,s)$ zählt alle möglichkeiten die Knoten gemäß der Definition zu färben.
-Ob der Algorithmus eine Lösung gefunden hat kann im Wurzel-Knoten eingesehen werden.
-%FUCK
-
-Im dynamischen Programm werden die folgenden Berechnungsregeln für jede $A_x(i,w,s)$ Matrix eines Bags angewandt. Zur Vereinfachung der Notation beschreibt im folgenden $v$ den neu eingeführten Knoten, $y$, $z$ das 
-\label{sec:dynP}
+Ob der Algorithmus eine Lösung gefunden hat kann im Wurzel-Knoten eingesehen werden.\\
+Im dynamischen Programm werden die folgenden Berechnungsregeln für jede $A_x(i,w,s)$ Matrix eines Bags angewandt. Zur Vereinfachung der Notation beschreibt im folgenden $v$ den neu eingeführten Vertex. $y$ und $z$ stehen für das linke bzw. das rechte Kind:
 \begin{itemize}
 \item \textbf{Leaf bag}:
 \begin{itemize}
@@ -65,24 +70,24 @@ Im dynamischen Programm werden die folgenden Berechnungsregeln für jede $A_x(i,
 \end{itemize}
 \item \textbf{Introduce vertex v}:
 \begin{itemize}
-\item $A_x=(i,w,s[v\rightarrow 0]) = [v \notin T]A_y(i,w,s)$\\Ist der Knoten mit $0$ gefärbt, darf er kein Terminal sein. Dies würde bedeuten er wäre nicht im konstistenen Cut enthalten und somit ungültig. Ist er kein Terminal so wird der Wert aus dem Kindsbag übernommen.
-\item $A_x=(i,w,s[v\rightarrow 1_1]) = A_y(i-1,w-w(v),s)$\\
-\item $A_x=(i,w,s[v\rightarrow 1_2]) =[v \neq v_1] A_y(i-1,w-w(v),s)$
+\item $A_x=(i,w,s[v\rightarrow 0]) = [v \notin T]A_y(i,w,s)$\\ Ist der eingeführte Vertex kein Terminal, so wird der Wert aus dem Bag des Kindes übernommen.
+\item $A_x=(i,w,s[v\rightarrow 1_1]) = A_y(i-1,w-w(v),s)$\\ Reduziere beim Zugriff auf den Bag des Kindes i um 1 und ziehen das Gewicht des eingeführten Knoten ab. Übernehme den Wert.
+\item $A_x=(i,w,s[v\rightarrow 1_2]) =[v \neq v_1] A_y(i-1,w-w(v),s)$\\ Ist der eingeführte Vertex nicht das speziell gewählte Terminal so verfahre wie bei $1_1$.
 \end{itemize}
 \item \textbf{Introduce edge uv}
 \begin{itemize}
-\item $A_x(i,w,s) = [s(u) = 0 \vee s(v) = 0 \vee s(u) = s(v)]A_y(i,w,s)$
+\item $A_x(i,w,s) = [s(u) = 0 \vee s(v) = 0 \vee s(u) = s(v)]A_y(i,w,s)$\\ Ist einer der Verticies $0$ gefärbt oder sind beide gleich gefärbt, so wird der Wert aus dem Bag des Kindes übernommen.
 \end{itemize}
 \item \textbf{Forget vertex v}
 \begin{itemize}
-\item $A_x(i,w,s) = \sum\limits_{\alpha \in {0,1_1,1_2}} A_x(i,w,s[v \rightarrow \alpha]) $
+\item $A_x(i,w,s) = \sum\limits_{\alpha \in {0,1_1,1_2}} A_x(i,w,s[v \rightarrow \alpha]) $\\ Es wird die Summe gebildet über alle Färbungen des vergessenen Vertex im Bag des Kindes.
 \end{itemize}
 \item \textbf{Join bag}
 \begin{itemize}
-\item $A_x(i,w,s) = \sum\limits_{i_1+i_2=i+|s^{-1}({1_1,1_2})|} \sum\limits_{w_1+w_2=w+w(s^{-1}({1_1,1_2}))} A_y(i_1,w_1,s)A_z(i_2,w_2,s) $
+\item $A_x(i,w,s) = \sum\limits_{i_1+i_2=i+|s^{-1}({1_1,1_2})|} \sum\limits_{w_1+w_2=w+w(s^{-1}({1_1,1_2}))} A_y(i_1,w_1,s)A_z(i_2,w_2,s) $\\In der inneren Summe wird über die Gewichte innerhalb beider Bags der Kinder iteriert. Ist deren Summe gleich der Summe von $w$ und der Summe der Gewichte von Knoten mit der Färbung $1_1$ und $1_2$, so werden sie akkumuliert.
+\\In der äußeren Summe wird über den Parameter $i$ der Bags der Kinder iteriert. Ist die Summe gleich der Summe von $i$ und der Anzahl der Knoten die $1_1$ und $1_2$ gefärbt sind, so werden sie akkumuliert.
 \end{itemize}
 \end{itemize}
-
 
 \section{Monte-Carlo Algorithmus und Laufzeit}
 \label{sec:mc_alg}
