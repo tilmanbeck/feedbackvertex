@@ -1,95 +1,100 @@
 import math as m
 
+
 #value zB [0,1,2,2,0]
-#missingNodes zB [0,4]
+#missing_nodes zB [0,4]
 #indices []
-#indices of the missingNodes in value have to be zero!d
-def calculateIndices(value, missingNodes):
-    indices = calculateIndicesRec(value, missingNodes, [])
+#indices of the missing_nodes in value have to be zero!d
+def calculate_indices(value, missing_nodes):
+    indices = calculate_indices_rec(value, missing_nodes, [])
     return list(set(indices))
 
-def calculateIndicesRec(value, missingNodes, indices):
-    if not missingNodes:
+
+def calculate_indices_rec(value, missing_nodes, indices):
+    if not missing_nodes:
         return indices
     else:
         # Honorshema
-        startPoint = 0
+        start_point = 0
         for i in range(0,len(value)):
-            startPoint = startPoint +  3**i * value[i]
+            start_point += 3**i * value[i]
 
-        i1 = startPoint + 3**missingNodes[0] * 0
-        i2 = startPoint + 3**missingNodes[0] * 1
-        i3 = startPoint + 3**missingNodes[0] * 2
+        i1 = start_point + 3**missing_nodes[0] * 0
+        i2 = start_point + 3**missing_nodes[0] * 1
+        i3 = start_point + 3**missing_nodes[0] * 2
 
-        indices = indices + [i1,i2,i3]
+        indices = indices + [i1, i2, i3]
 
         value1 = list(value)
-        value1[missingNodes[0]] = 0
+        value1[missing_nodes[0]] = 0
         value2 = list(value)
-        value2[missingNodes[0]] = 1
+        value2[missing_nodes[0]] = 1
         value3 = list(value)
-        value3[missingNodes[0]] = 2
+        value3[missing_nodes[0]] = 2
 
 
-        return indices + calculateIndicesRec(value1,missingNodes[1:], indices) +  calculateIndicesRec(value2,missingNodes[1:], indices) + calculateIndicesRec(value3,missingNodes[1:],indices)
+        return indices + calculate_indices_rec(value1, missing_nodes[1:], indices) + calculate_indices_rec(value2, missing_nodes[1:], indices) + calculate_indices_rec(value3, missing_nodes[1:], indices)
 
 
-def getIndicesForIntroduceEdge(indices, firstVertex, scndVertex):
+def get_indices_for_introduce_edge(indices, first_vertex, scnd_vertex):
     val = [0 for i in range(0, len(indices))]
     # what are we doing here? we need all indices except those where one of the edges is colored 1 and the other one 2
     # and vice versa. so we take all indices and remove mentioned from all indices
 
-    val[indices.get(firstVertex)] = 1
-    val[indices.get(scndVertex)] = 2
+    val[indices.get(first_vertex)] = 1
+    val[indices.get(scnd_vertex)] = 2
     keys = list(indices.keys())
-    keys.remove(firstVertex)
-    keys.remove(scndVertex)
-    missingNodes = []
+    keys.remove(first_vertex)
+    keys.remove(scnd_vertex)
+    missing_nodes = []
     for key in keys:
-        missingNodes.append(indices.get(key))
-    first = calculateIndices(val, missingNodes)
+        missing_nodes.append(indices.get(key))
+    first = calculate_indices(val, missing_nodes)
 
-    val[indices.get(firstVertex)] = 2
-    val[indices.get(scndVertex)] = 1
+    val[indices.get(first_vertex)] = 2
+    val[indices.get(scnd_vertex)] = 1
     keys = list(indices.keys())
-    keys.remove(firstVertex)
-    keys.remove(scndVertex)
-    missingNodes = []
+    keys.remove(first_vertex)
+    keys.remove(scnd_vertex)
+    missing_nodes = []
     for key in keys:
-        missingNodes.append(indices. get(key))
-    scnd = calculateIndices(val, missingNodes)
+        missing_nodes.append(indices. get(key))
+    scnd = calculate_indices(val, missing_nodes)
 
     return first+scnd
 
 
-#indicesKV = key-value dict where the keys are
+#indices_kv = key-value dict where the keys are
 # the nodes (e.g. 'a') and the value is the
 # index in the index-array according to order
-def getNodesByColoring(nodes, coloring, indicesKV):
-    tmp = [i for i in range(0,len(nodes)) if nodes[i] in coloring]
-    return [key for key,val in indicesKV.items() if val in tmp]
+def get_nodes_by_coloring(nodes, coloring, indices_kv):
+    tmp = [i for i in range(0, len(nodes)) if nodes[i] in coloring]
+    return [key for key, val in indices_kv.items() if val in tmp]
 
-def getSumOfWeights(nodes, weights):
+
+def get_sum_of_weights(nodes, weights):
     res = 0
     for i in range(0,len(nodes)):
         res += weights.get(nodes[i])
     return res
 
-def getIndexAsList(x,nrOfVertices):
-    if nrOfVertices == 0:
+
+def get_index_as_list(x, nr_of_vertices):
+    if nr_of_vertices == 0:
         return [0]
     number = x
     res = []
-    for i in range(nrOfVertices-1, -1, -1):
+    for i in range(nr_of_vertices-1, -1, -1):
         value = m.floor(number/(3**i))
         number -= (value * 3**i)
         res.append(value)
 
     return res
 
-def writeToFile(filename,mode,array,fst,stepInfo):
+
+def write_to_file(filename, mode, array, fst, step_info):
     with open(filename, mode) as f:
-        f.write(stepInfo)
+        f.write(step_info)
         f.write("\n")
         for i in range(0, fst):
             f.write(str(i))
