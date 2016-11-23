@@ -3,14 +3,15 @@
 
 \section{Nice Tree Decomposition}
 \label{sec:impl_ntd}
-Es wurde ein Algorithmus entwickelt, der als Eingabe eine standardmäßige Nice Tree Decomposition $\mathbb{T}$ eines Graphen $G$ erhält und eine Nice Tree Decomposition (siehe Kapitel \ref{sec:impl_ntd}) ausgibt. 
+Es wurde ein Algorithmus entwickelt, der als Eingabe eine standardmäßige Nice Tree Decomposition $\mathbb{T}$ eines Graphen $G$ erhält und eine Nice Tree Decomposition (siehe Kapitel \ref{sec:ntd_ntd}) ausgibt. 
 Da der Fokus dieser Arbeit auf der Implementierung des dynamischen Programms des Cut \& Count-Algorithmus liegt, wurde der Algorithmus nicht hinsichtlich der in \cite{kloks1994} beschriebenen polynomiellen Laufzeit optimiert. 
 
 Der Algorithmus iteriert mehrmals in symmetrischer Reihenfolge (ausgehend von der Wurzel linksseitig absteigend) über $\mathbb{T}$ und fügt dabei die fehlenden Knoten ein. 
 Hierbei sollte erwähnt werden, dass in unserer Implementierung mit Ausnahme des \glqq Join\grqq -Bags neue Knoten stets linksseitig an den Elternknoten angehängt werden. 
 Dies ist für die rekursive Iteration in Sektion \ref{sec:impl_dynP} wichtig.
 
-Zu Beginn werden am bisherigen Wurzelknoten so lange \glqq Forget\grqq -Knoten angehängt bis noch ein Knoten des Ursprungsgraphen im Bag verbleibt. Anschließend wird ein letzter Knoten mit leerem Bag als neuer Wurzelknoten hinzugefügt. 
+Zu Beginn werden am bisherigen Wurzelknoten so lange \glqq Forget\grqq -Knoten angehängt bis noch ein Knoten des Ursprungsgraphen im Bag verbleibt. 
+Anschließend wird ein letzter Knoten mit leerem Bag als neuer Wurzelknoten hinzugefügt. 
 Ähnlich wird hinsichtlich der Blattknoten verfahren. 
 Entsprechend der Differenz eines leeren Bags und der Bags der bisherigen Blattknoten werden am Ende jedes Pfades neue \glqq Introduce-Vertex\grqq -Knoten und ein Knoten mit leerem Bag als neuer Blattknoten angehängt. 
 Für bestehende \glqq Join\grqq -Knoten werden die Bags der beiden Kindknoten verglichen. 
@@ -49,8 +50,7 @@ Diese kann für die Abfrage der Lösungen $A_r(k,W,\emptyset)$ genutzt werden.
 Der Programmablauf ist in der Auflistung \ref{code:pseudo} dargestellt.
 
 \begin{svgraybox}
-\label{code:pseudo}
-\begin{lstlisting}[language=python, caption=Pseudocode für das dynamische Programm]
+\begin{lstlisting}[language=python,label={code:pseudo}, caption=Pseudocode für das dynamische Programm]
 v1 = terminals[0]
 def countC(node, indices, child_data, k, N, terminals, weights):
     if node.linker_Knoten is not None:
@@ -134,9 +134,15 @@ def countC(node, indices, child_data, k, N, terminals, weights):
 \end{lstlisting}
 \end{svgraybox}
 
-\subsection{Implementierung der CountC-Prozedur}
-\label{ssec:countc}
-
+\subsection{Berechnung der Färbungen}
+\label{ssec:colors}
+Für die Kodierung der Färbungsdimension muss eine geeignete Zuordnung von Färbungen zu Indices der Datenmatrix eingeführt werden. Dafür benutzen wir eine ternäre Kodierung mit folgender Zuordnung:
+\begin{center}
+$0 \rightarrow s=0$\\
+$1 \rightarrow s=1_1$\\
+$2 \rightarrow s=1_2$\\
+\end{center}
+Für die Bagtypen \glqq Forget\grqq und \glqq Introduce Vertex\grqq werden Funktionen benötigt, welche fo
 \section{Evaluierung}
 \label{sec:eval}
 
