@@ -20,33 +20,33 @@ class GraphVisualization:
     def __init__(self, treeDecomposition):
         self.tree = treeDecomposition
 
-    def getLabel(self, ntree):
-        return str(ntree.getBagType().value) + " | " + str(ntree.getBag()) + " | label: " + str(ntree.getLabel())
+    def get_label(self, ntree):
+        return str(ntree.get_bag_type().value) + " | " + str(ntree.get_bag()) + " | label: " + str(ntree.get_label())
 
     def addNodesAndEdges(self, ntree, g):
         assert isinstance(g, gv.Graph)
         nodeSymbol = self.getNextSymbol()
-        g.node(nodeSymbol,self.getLabel(ntree))
-        leftChild = ntree.getLeft()
+        g.node(nodeSymbol,self.get_label(ntree))
+        leftChild = ntree.get_left()
         leftSymbol = self.getNextSymbol()
-        g.node(leftSymbol, self.getLabel(leftChild))
+        g.node(leftSymbol, self.get_label(leftChild))
         g.edge(nodeSymbol,leftSymbol)
         self.addChildren(leftChild, g, leftSymbol)
 
     def addChildren(self, ntree, g, oldSymbol):
         assert isinstance(g, gv.Graph)
-        leftChild = ntree.getLeft()
-        rightChild = ntree.getRight()
+        leftChild = ntree.get_left()
+        rightChild = ntree.get_right()
         left = False
         right = False
         if(leftChild != None):
             leftSymbol = self.getNextSymbol()
-            g.node(leftSymbol, self.getLabel(leftChild))
+            g.node(leftSymbol, self.get_label(leftChild))
             g.edge(oldSymbol,leftSymbol)
             left = True
         if(rightChild != None):
             rightSymbol = self.getNextSymbol()
-            g.node(rightSymbol,self.getLabel(rightChild))
+            g.node(rightSymbol,self.get_label(rightChild))
             g.edge(oldSymbol, rightSymbol)
             right = True
         if left: self.addChildren(leftChild, g,leftSymbol)

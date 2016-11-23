@@ -85,81 +85,81 @@ import DynamicProgramm as dp
 #############################################################
 #UNSER GEHIRNSCHMALZ
 #
-# vertices = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
-#
-# edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
-#          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
-#          {'c', 'd'}, {'d', 'e'}, {'h', 'g'}, {'h', 'f'},
-#          {'h', 'i'}, {'i', 'f'}, {'i', 'j'}, {'j', 'f'},
-#          {'k', 'l'}, {'k', 'o'}, {'k', 'm'}, {'o', 'l'},
-#          {'m', 'n'}, {'m', 'p'}, {'n', 'p'}, {'e', 'k'},
-#          {'d', 'k'}]
-# k = 4
-# N = 2 * len(vertices)
-#
-#
-# weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
-#
-#
-# mnp = td.TreeDecomposition(None, None, ['m', 'n', 'p'])
-#
-# fij = td.TreeDecomposition(None, None, ['f', 'i', 'j'])
-# klo = td.TreeDecomposition(None, None, ['k', 'l', 'o'])
-# kmn = td.TreeDecomposition(mnp, None, ['k', 'm', 'n'])
-#
-# hfi = td.TreeDecomposition(fij, None, ['h', 'f', 'i'])
-# ekl = td.TreeDecomposition(klo, None, ['e', 'k', 'l'])
-# dmk = td.TreeDecomposition(kmn, None, ['d', 'm', 'k'])
-#
-# ghf = td.TreeDecomposition(hfi, None, ['g', 'h', 'f'])
-# edk = td.TreeDecomposition(ekl, dmk, ['e', 'd', 'k'])
-#
-# ecd = td.TreeDecomposition(edk, None, ['e', 'c', 'd'])
-# gfe = td.TreeDecomposition(ghf, None, ['g', 'f', 'e'])
-#
-# cge = td.TreeDecomposition(gfe, ecd, ['c', 'g', 'e'])
-# bga = td.TreeDecomposition(None, None, ['b', 'g', 'a'])
-#
-# bcg = td.TreeDecomposition(bga, cge, ['b', 'c', 'g'])
-#
-# bc = td.TreeDecomposition(bcg, None, ['b', 'c'])
-#
-# bc = td.root(bc)
-# td.leaf(bc)
-# td.join(bc)
-# td.add_internal_nodes(bc)
-# td.edge_bags(bc, edges)
+vertices = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
 
-# gv = GraphVisualization(bc)
-# gv.createGraph()
+edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
+         {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
+         {'c', 'd'}, {'d', 'e'}, {'h', 'g'}, {'h', 'f'},
+         {'h', 'i'}, {'i', 'f'}, {'i', 'j'}, {'j', 'f'},
+         {'k', 'l'}, {'k', 'o'}, {'k', 'm'}, {'o', 'l'},
+         {'m', 'n'}, {'m', 'p'}, {'n', 'p'}, {'e', 'k'},
+         {'d', 'k'}]
+k = 4
+N = 2 * len(vertices)
 
-runs = 25
-t = [0] * runs
-for i in range(0, runs):
-    vertices = ['a', 'b', 'c']
-    edges = [{'a', 'b'}, {'b', 'c'}]
 
-    k = 2
-    N = 6
-    weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
-    bc = td.TreeDecomposition(None, None, ['b', 'c'])
-    ab = td.TreeDecomposition(bc, None, ['a', 'b'])
+weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
 
-    ab = td.root(ab)
-    td.leaf(ab)
-    td.join(ab)
-    td.add_internal_nodes(ab)
-    td.edge_bags(ab, edges)
 
-    s = time.time()
-    dp.count(vertices, ab, ['b','c'], k, N, weights)
-    e = time.time()
-    t[i] = (e-s)
+mnp = td.TreeDecomposition(None, None, ['m', 'n', 'p'])
 
-avg = 0
-for i in range(0, runs):
-    avg += t[i]
+fij = td.TreeDecomposition(None, None, ['f', 'i', 'j'])
+klo = td.TreeDecomposition(None, None, ['k', 'l', 'o'])
+kmn = td.TreeDecomposition(mnp, None, ['k', 'm', 'n'])
 
-avg /= runs
+hfi = td.TreeDecomposition(fij, None, ['h', 'f', 'i'])
+ekl = td.TreeDecomposition(klo, None, ['e', 'k', 'l'])
+dmk = td.TreeDecomposition(kmn, None, ['d', 'm', 'k'])
 
-print("Execution Time: " + str(avg)+"s")
+ghf = td.TreeDecomposition(hfi, None, ['g', 'h', 'f'])
+edk = td.TreeDecomposition(ekl, dmk, ['e', 'd', 'k'])
+
+ecd = td.TreeDecomposition(edk, None, ['e', 'c', 'd'])
+gfe = td.TreeDecomposition(ghf, None, ['g', 'f', 'e'])
+
+cge = td.TreeDecomposition(gfe, ecd, ['c', 'g', 'e'])
+bga = td.TreeDecomposition(None, None, ['b', 'g', 'a'])
+
+bcg = td.TreeDecomposition(bga, cge, ['b', 'c', 'g'])
+
+bc = td.TreeDecomposition(bcg, None, ['b', 'c'])
+
+bc = td.root(bc)
+td.leaf(bc)
+td.join(bc)
+td.add_internal_nodes(bc)
+td.edge_bags(bc, edges)
+
+gv = GraphVisualization(bc)
+gv.createGraph()
+
+# runs = 25
+# t = [0] * runs
+# for i in range(0, runs):
+#     vertices = ['a', 'b', 'c']
+#     edges = [{'a', 'b'}, {'b', 'c'}]
+#
+#     k = 2
+#     N = 6
+#     weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
+#     bc = td.TreeDecomposition(None, None, ['b', 'c'])
+#     ab = td.TreeDecomposition(bc, None, ['a', 'b'])
+#
+#     ab = td.root(ab)
+#     td.leaf(ab)
+#     td.join(ab)
+#     td.add_internal_nodes(ab)
+#     td.edge_bags(ab, edges)
+#
+#     s = time.time()
+#     dp.count(vertices, ab, ['b','c'], k, N, weights)
+#     e = time.time()
+#     t[i] = (e-s)
+#
+# avg = 0
+# for i in range(0, runs):
+#     avg += t[i]
+#
+# avg /= runs
+#
+# print("Execution Time: " + str(avg)+"s")
