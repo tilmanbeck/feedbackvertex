@@ -91,5 +91,25 @@ Im dynamischen Programm werden die folgenden Berechnungsregeln für jede $A_x(i,
 Da alle Berechnungen der Bags jeweils nur von den Werten des Kindes abhängig sind, kann das Ergebnis des Algorithmus im Wurzelknoten ausgelesen werden. Die Matrix des Wurzelknotens $A_r(k,W,\emptyset)$ enthält an den Stellen k und W eine 1, zu denen es eine Lösung der Größe k mit Gesamtgewicht W existiert. Kleinere Kardinalitäten können hierbei auch direkt überprüft werden.
 
 \section{Monte-Carlo Algorithmus und Laufzeit}
+Im Theorem 3.6 des Papers wird zusammenfassend erwähnt:
+"There exists a Monte-Carlo algorithm that given a tree decomposition of width $t$ solves STEINER TREE in $3^t|V|^{\mathcal{O}(1)}$ time. The algorithm cannot give false positives and may give false negatives with probability at most 1/2."
+Die Laufzeit setzt sich wie folgt zusammen:
+\begin{itemize}
+\item $3^t$:\\ Da alle Knoten drei verschiedene Färbungen annehmen können und über all diese iteriert werden muss, erhalten wir $3^t$ verschiedene Färbungen. Hierbei ist die \textit{treewidth} der Falschenhals. Das Dynamische Programm berechnet nur die Färbungen für alle im Bag enthaltenen Verticies.
+\item $|V|^{\mathcal{O}(1)}$:\\ Kommt durch die beiden Input-Parameter k und N.
+\item Die Wahrscheinlichkeit von 1/2 für falsch-negativ entsteht durch die Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ und durch das Isolations-Lemma. 
+\end{itemize}
+
+Die Laufzeit des dynamischen Programms wurde anhand von Beispielen getestet. Zu sehen sind die Input-Parameter k und N sowie die Anzahl der Knoten des Graphen sowie die in der Nice-Tree-Decomposition erhaltene \textit{treewidth}.
+\begin{table}
+\centering
+\begin{tabular}{l | l} 
+\textbf{Input} & \textbf{ $\varnothing$ T in $s$}\\
+\hline
+(k=2, N= 6, |V|=3, tw(G)=2) & $ \sim 0.002$ \\
+(k=3, N=14, |V|=7, tw(G)=3) & $ \sim 0.83$ \\
+(k=4, N=32, |V|=16, tw(G)=5) & $ \sim 14.23$ \\
+\end{tabular}
+\end{table}
 
 \label{sec:mc_alg}
