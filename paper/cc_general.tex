@@ -13,12 +13,12 @@
 
 
 \section{Einführendes}
-\label{sec:1}
+\label{sec:cc_intro}
 Die Cut \& Count-Technik wird benutzt um connectivity-type Probleme mithilfe von Randomisierung zu lösen. Dabei handelt es sich um Graphen-Probleme, bei denen zusammenhängende Submengen der Knoten gefunden werden müssen, die problemspezifische  Eigenschaften erfüllen müssen. Beispiele hierfür sind Longest Path, Steiner Tree, Feedback Vertex Set, uvm.
 Bei Verwendung der Cut \& Count-Technik wird jedem Element des Problems eine zufällig und unabhängig gewählte Eigenschaft zugeteilt. Dies folg daher, dass die Technik nur korrekt funktioniert, wenn es eine oder keine Lösung gibt. Beim Lösen des Problems muss diese neue Eigenschaft zusätzlich eine Anforderung erfüllen, damit die Lösungsmenge gültig ist. Diese Isolation der Lösungsmenge wird durch das Isolations-Lemma beschrieben.
 
 \section{Monte-Carlo-Algorithmus}
-\label{sec:2}
+\label{sec:cc_monte}
 
 Verwendet man die Cut \& Count-Technik um ein Algorithmus zur Lösung der connectivity-type Probleme zu entwerfen, enthält man einen Monte-Carlo-Algorithmus. Dies bedeutet, dass der hervorgegangene Algorithmus niemals ein false-positiv \footnote{Der Algorithmus gibt eine positive Antwort auf das Problem, obwohl keine Lösung existiert} ausgeben kann aber zu einer gewissen Wahrscheinlichkeit ein false-negativ \footnote{Der Algorithmus gibt eine negative Antwort auf das Problem, obwohl eine Lösung existiert.}. Die Wahrscheinlichkeit eines false-negativ wird durch das Isolations-Lemma bestimmt. Da eine Ausgabe eine false-negativ einer bestimmten Wahrscheinlichkeit unterliegt ist es ratsam Monte-Carlo-Algorithmen mehrmals hintereinander auszuführen. Es begünstigt die Wahrscheinlichkeit eine Lösungsmenge zu finden.
 
@@ -30,7 +30,7 @@ Der hervorgegangene Monte-Carlo-Algorithmus kann bei gegebener Tree-Decompositio
 \end{itemize}
 
 \section{Isolation Lemma}
-\label{sec:test}
+\label{sec:cc_iso}
 
 Wie zuvor erwähnt ist die Cut \& Count-Technik nur dann korrekt, wenn eine oder keine Lösung existiert. Da es bei vielen der connectivity-type Probleme sehr  wahrscheinlich ist, dass mehrere Lösungen existieren, muss die Lösungsmenge reduziert werden. Dafür wird auf das Isolations-Lemma zurück gegriffen. Es ist wie folgt definiert:
 

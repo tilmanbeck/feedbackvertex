@@ -74,7 +74,7 @@ def inorder(node, indices, data, k, N, terminals, weights):
         # we have to iterate over all colorings from child bag
         length_child_colors = 3 ** len(child_bag)
 
-        # okay from here we iterate over colorings (x), i (y) and the weights (z)
+        # okay from here we iterate over colorings (s), size k (i) and the weights w
         # we simply assume that v_1 is the first terminal in the terminals array
         # if new vertex is colored 0
         for s in range(0, length_child_colors):
