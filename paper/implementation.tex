@@ -47,7 +47,7 @@ Die rekursive Berechnung in symmetrischer Reihenfolge gewährleistet, dass beide
 Der letzte Berechnungsschritt für den Wurzelknoten entspricht der Berechnung eines \glqq Forget\grqq -Knoten und führt die letzten drei Färbungen zusammen, so dass der Wurzelknoten (mit leerem Bag) eine $k \times kN$-Datenmatrix enthält. 
 Diese kann für die Abfrage der Lösungen $A_r(k,W,\emptyset)$ genutzt werden.
 
-Der Programmablauf ist in der Auflistung \ref{code:pseudo} dargestellt.
+Der Programmablauf ist im Pseudocode \ref{code:pseudo} dargestellt.
 
 \begin{svgraybox}
 \begin{lstlisting}[language=python,label={code:pseudo}, caption=Pseudocode für das dynamische Programm]
@@ -142,7 +142,17 @@ $0 \rightarrow s=0$\\
 $1 \rightarrow s=1_1$\\
 $2 \rightarrow s=1_2$\\
 \end{center}
-Für die Bagtypen \glqq Forget\grqq und \glqq Introduce Vertex\grqq werden Funktionen benötigt, welche fo
+Für die Bagtypen \glqq Forget\grqq ~und \glqq Introduce Vertex\grqq ~werden Funktionen benötigt, welche für die Reduzierung bzw. Erweiterung der Färbungsdimension die richtige Zuordnung zwischen Färbung und Kodierung gewährleisten.
+Dazu wurde die Funktion \textit{test} implementiert. 
+Diese bekommt als Parameter die Färbung als geordnete Liste (zB. \texttt{[0,2,1]} für 7 als Index), wobei jede Zahl dieser Liste für einen entsprechend der o.g. Zuordnung gefärbten Knoten steht. 
+Zusätzlich wird eine Liste von Indices übergeben, welche die \glqq freien\grqq ~Stellen der Färbungsliste markieren. 
+Die \glqq freien\grqq ~Stellen sind die Knoten, für die alle Färbungsmöglichkeiten mit den anderen Stellen der Liste kombiniert werden. 
+Die Funktion berechnet die entsprechenden Möglichkeiten mittels Horner-Schema und gibt sie als null-basierte Dezimalzahlen zurück. 
+Diese dienen im dynamischen Programm als Zugriffsindices für die Färbungsdimension der Datenmatrizen. 
+Als Beispiel wird der Funktion \texttt{([0,2], [0])} als Parameter übergeben. 
+Dies bedeutet, dass alle Färbungsmöglichkeiten der ersten Stelle (null-basiert) mit der zweiten Stelle (welche die Färbung $2 \rightarrow 1_2$ hat) kombiniert werden. 
+Als Ergebnis gibt die Funktion in diesem Fall die Liste \texttt{[2,5,8]} als Ergebnis aus, wobei \texttt{[2,5,8]} für die Färbungen \texttt{[0,2],[1,2],[2,2]} stehen.
+
 \section{Evaluierung}
 \label{sec:eval}
 

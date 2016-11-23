@@ -6,6 +6,7 @@ import math as m
 # indices []
 # indices of the missing_nodes in value have to be zero!d
 def calculate_indices(value, missing_nodes):
+    print(missing_nodes)
     indices = calculate_indices_rec(value, missing_nodes, [])
     return list(set(indices))
 

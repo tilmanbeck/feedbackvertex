@@ -34,7 +34,7 @@ import DynamicProgramm as dp
 # gv = GraphVisualization(bc)
 # gv.createGraph()
 
-# dp.count(vertices, edges, bc, ['d','c','e'], k, N, weights)
+# dp.count(vertices, bc, ['d','c','e'], k, N, weights)
 
 # k = 3
 # vertices = ['a', 'b', 'c', 'd', 'e']
@@ -76,7 +76,7 @@ import DynamicProgramm as dp
 # # v = GraphVisualization(ab)
 # # v.createGraph()
 # #
-# # dp.count(vertices, edges, ab, ['a', 'c'], k, N, weights)
+# # dp.count(vertices, ab, ['a', 'c'], k, N, weights)
 # #
 
 
@@ -152,7 +152,7 @@ for i in range(0, runs):
     td.edge_bags(ab, edges)
 
     s = time.time()
-    dp.count(vertices, edges, ab, ['b','c'], k, N, weights)
+    dp.count(vertices, ab, ['b','c'], k, N, weights)
     e = time.time()
     t[i] = (e-s)
 

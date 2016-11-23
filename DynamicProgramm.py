@@ -1,23 +1,23 @@
 from BagType import BagType
-
-import utils as ut
+import Utils as ut
 import numpy as np
+
 
 outputFile = './output/test.txt'
 
 
-def count(vertices, edges, niceTreeDecomp, terminals, k, N, weights):
+def count(vertices, nice_tree_decomp, terminals, k, N, weights):
     # startTime = time.time()
     # in-order traversal
     empty = np.zeros((1,1))
     k += 1
     indices = {vertices[i]: i for i in range(0,len(vertices))}
-    result = inorder(niceTreeDecomp, indices, None, k, N, terminals, weights)
+    result = inorder(nice_tree_decomp, indices, None, k, N, terminals, weights)
     # we search for a solution with k nodes but the arrays indices start at 0
     sol = 0
     # print("solution of size " +str(k-1) + "?")
-    for j in range(0,(k-1)*N):
-        if(result[0,k-1,j] % 2) == 1:
+    for j in range(0, (k-1) * N):
+        if(result[0, k - 1, j] % 2) == 1:
                 print("Yes")
                 sol += 1
     if sol == 0:
