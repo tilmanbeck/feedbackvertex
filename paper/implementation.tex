@@ -157,5 +157,8 @@ Die Laufzeit des dynamischen Programms wurde anhand von Beispielen getestet. Zu 
 \end{tabular}
 \end{table}
 
+Es ist ersichtlich, dass der Algorithmus schon bei kleinen Graphenerweiterungen merkbare Laufzeitverlängerungen aufweist. Es ist anzunehmen, dass der Algorithmus in der Praxis nur eingeschränkt nutzbar ist. Praxisrelevante Probleme werden sich wahrscheinlich in Graphen repräsentieren, die weit aus komplexer sind, als die von uns getesteten Beispiele. Wir vermuten die Laufzeit wäre dort nichtmehr tragbar oder zumindest nicht effizient genug. Desweiteren ist der Speicherbedarf der Cut \& Count-Technik nicht außer acht zu lassen. Jeder Bag benötigt eine $3^t\times k\times kN$-Matrix. Bei größeren Graphen und hohem gewählten $N$, zur Verringerung des Falsch-Negativ Ergebnisses, kann diese schnell sehr groß werden.
+
 \section{Ausblick}
 \label{sec:outlook}
+
