@@ -229,13 +229,13 @@ passing it to article class \MessageBreak
 
 % various sizes and settings for monographs
 
-\setlength{\textwidth}{117mm}
+\setlength{\textwidth}{150mm}
 %\setlength{\textheight}{12pt}\multiply\textheight by 45\relax
 \setlength{\textheight}{191mm}
 \setlength{\topmargin}{0cm}
-\setlength\oddsidemargin   {63\p@}
-\setlength\evensidemargin  {63\p@}
-\setlength\marginparwidth{90\p@}
+\setlength\oddsidemargin   {23\p@}
+\setlength\evensidemargin  {23\p@}
+\setlength\marginparwidth{50\p@}
 \setlength\headsep   {12\p@}
 
 \newdimen\svparindent

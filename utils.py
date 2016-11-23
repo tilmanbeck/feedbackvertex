@@ -1,10 +1,10 @@
 import math as m
 
 
-#value zB [0,1,2,2,0]
-#missing_nodes zB [0,4]
-#indices []
-#indices of the missing_nodes in value have to be zero!d
+# value zB [0,1,2,2,0]
+# missing_nodes zB [0,4]
+# indices []
+# indices of the missing_nodes in value have to be zero!d
 def calculate_indices(value, missing_nodes):
     indices = calculate_indices_rec(value, missing_nodes, [])
     return list(set(indices))
@@ -14,7 +14,7 @@ def calculate_indices_rec(value, missing_nodes, indices):
     if not missing_nodes:
         return indices
     else:
-        # Honorshema
+        # Hornerschema
         start_point = 0
         for i in range(0,len(value)):
             start_point += 3**i * value[i]
@@ -64,7 +64,7 @@ def get_indices_for_introduce_edge(indices, first_vertex, scnd_vertex):
     return first+scnd
 
 
-#indices_kv = key-value dict where the keys are
+# indices_kv = key-value dict where the keys are
 # the nodes (e.g. 'a') and the value is the
 # index in the index-array according to order
 def get_nodes_by_coloring(nodes, coloring, indices_kv):
