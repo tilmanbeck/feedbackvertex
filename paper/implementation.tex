@@ -155,6 +155,20 @@ Als Ergebnis gibt die Funktion in diesem Fall die Liste \texttt{[2,5,8]} als Erg
 
 \section{Evaluierung}
 \label{sec:eval}
+Die Laufzeit des dynamischen Programms wurde anhand von Beispielen getestet. Zu sehen sind die Input-Parameter k und N sowie die Anzahl der Knoten des Graphen sowie die in der Nice-Tree-Decomposition erhaltene \textit{treewidth}.
+\begin{table}
+\centering
+\begin{tabular}{l | l} 
+\textbf{Input} & \textbf{ $\varnothing$ T in $s$}\\
+\hline
+(k=2, N= 6, |V|=3, tw(G)=2) & $ \sim 0.002$ \\
+(k=3, N=14, |V|=7, tw(G)=3) & $ \sim 0.83$ \\
+(k=4, N=32, |V|=16, tw(G)=5) & $ \sim 14.23$ \\
+\end{tabular}
+\end{table}
+
+Es ist ersichtlich, dass der Algorithmus schon bei kleinen Graphenerweiterungen merkbare Laufzeitverlängerungen aufweist. Es ist anzunehmen, dass der Algorithmus in der Praxis nur eingeschränkt nutzbar ist. Praxisrelevante Probleme werden sich wahrscheinlich in Graphen repräsentieren, die weit aus komplexer sind, als die von uns getesteten Beispiele. Wir vermuten die Laufzeit wäre dort nichtmehr tragbar oder zumindest nicht effizient genug. Desweiteren ist der Speicherbedarf der Cut \& Count-Technik nicht außer acht zu lassen. Jeder Bag benötigt eine $3^t\times k\times kN$-Matrix. Bei größeren Graphen und hohem gewählten $N$, zur Verringerung des Falsch-Negativ Ergebnisses, kann diese schnell sehr groß werden.
 
 \section{Ausblick}
 \label{sec:outlook}
+
