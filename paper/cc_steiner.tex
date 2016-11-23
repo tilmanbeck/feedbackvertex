@@ -88,7 +88,8 @@ Im dynamischen Programm werden die folgenden Berechnungsregeln für jede $A_x(i,
 \\In der äußeren Summe wird über den Parameter $i$ der Bags der Kinder iteriert. Ist die Summe gleich der Summe von $i$ und der Anzahl der Knoten die $1_1$ und $1_2$ gefärbt sind, so werden sie akkumuliert.
 \end{itemize}
 \end{itemize}
-Da alle Berechnungen der Bags jeweils nur von den Werten des Kindes abhängig sind, kann das Ergebnis des Algorithmus im Wurzelknoten ausgelesen werden. 
+Da alle Berechnungen der Bags jeweils nur von den Werten des Kindes abhängig sind, kann das Ergebnis des Algorithmus im Wurzelknoten ausgelesen werden. Die Matrix des Wurzelknotens $A_r(k,W,\emptyset)$ enthält an den Stellen k und W eine 1, zu denen es eine Lösung der Größe k mit Gesamtgewicht W existiert. Kleinere Kardinalitäten können hierbei auch direkt überprüft werden.
 
 \section{Monte-Carlo Algorithmus und Laufzeit}
+
 \label{sec:mc_alg}
