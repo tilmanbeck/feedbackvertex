@@ -27,12 +27,15 @@ Eine weitere zu definierende Menge ist $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[
 $\cup_W \mathcal{S}_W$ bildet so die Lösungsmenge. Gibt es nun ein Gewicht $W$ für das die Menge nicht leer ist, so gibt der Algorithmus eine positive Antwort.\\
 Von der Menge der Terminalknoten wird ein Terminal als $v_1$-Terminal festgelegt. Dieses dient dazu, dass bei der Bildung von konsistenten Cuts keine Cuts doppelt gezählt werden.\\
 Die konsistenten Cuts werden in der Menge  $\mathcal{C}_W$ beschrieben. Diese Bilden die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$.
+
 \begin{figure}
 \label{fig:st_cut}
   \centering
     \includegraphics[width=1.0\textwidth]{./imgs/terminal_v1.png}
-  	\caption{Konsistente Cuts ohne Beschränkung $v_1 \in X_1$. Man sieht, dass die konsistenten Cuts 1 und 2 identisch sind.}
+  	\caption{Konsistente Cuts ohne Beschränkung $v_1 \in X_1$.}
 \end{figure}
+
+Man sieht in Abbildung \ref{fig:st_cut}, dass die konsistenten Cuts 1 und 2 identisch sind. Die Festlegung des $v1$ Terminals dient dazu, um solche Dublikate zu vermeiden.
 
 Die Anzahl der konstistenten Cuts sind im Lemma 3.3 des Papers beschrieben:\\
 Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
