@@ -38,12 +38,12 @@ Die Berechnungsvorschrift des dynamischen Programms ist in Sektion \ref{c:cc_ste
 Für die Implementierung wird vom Wurzelknoten ausgehend in symmetrischer Reihenfolge über die Nice Tree Decomposition $\mathbb{T}$ iteriert und für jeden Bag eine $k \times kN \times 3^{|B_x|}$ - Matrix berechnet, wobei die Größe der Lösung $k$ und $N$ als Eingabeparameter übergeben werden. 
 Die erste Dimension $k$ beschreibt die Größe (Anzahl Knoten) der Lösungsmenge. 
 Die zweite Dimension $kN$ steht für die Summe der Gewichte der Lösungsmenge. 
-Obwohl die Gewichte zufällig einheitlich verteilt werden, kann im schlechtesten Fall jedem Knoten das Gewicht $N$ zugewiesen werden. 
+Obwohl die Gewichte zufällig einheitlich verteilt werden, kann es einen Fall geben in dem jedem Knoten das Gewicht $N$ zugewiesen wird. 
 Daher kann die Gesamtsumme der Gewichte $W$ gleich $kN$ sein.
 $3^{|B_x|}$ beschreibt die Anzahl der möglichen Färbungen innerhalb eines Bags. 
 Während $k,N$ festgelegt sind, kann die Länge der Farb-Dimension $3^{|B_x|}$ von Bag zu Bag variieren. 
 \subsection{Implementierung der CountC-Prozedur}
-\label{ssec:countc}
+\label{ssec:impl_countc}
 Da das dynamische Programm des Cut \& Count-Algorithmus die Berechnungsvorschrift für einen Bag rekursiv über den Bag des jeweiligen Kind-Knotens definiert, steigt der Algorithmus zu Beginn in $\mathbb{T}$ rekursiv ab bis er an einem Blattknoten angekommen ist. 
 Für diesen gibt es keine Farb-Dimension (der Bag ist leer) und die $k \times kN$-Matrix wird initialisiert. 
 Anschließend wird beim rekursiven Aufstieg für jeden Bag die entsprechende Berechnungsvorschrift angewendet und eine neue Datenmatrix berechnet. 
@@ -144,7 +144,7 @@ def countC(node, indices, child_data, k, N, terminals, weights):
 \end{svgraybox}
 
 \subsection{Berechnung der Färbungen}
-\label{ssec:colors}
+\label{ssec:impl_colors}
 Für die Kodierung der Färbungsdimension muss eine geeignete Zuordnung von Färbungen zu Indices der Datenmatrix eingeführt werden. Dafür benutzen wir eine ternäre Kodierung mit folgender Zuordnung:
 \begin{center}
 $0 \rightarrow s=0$\\
