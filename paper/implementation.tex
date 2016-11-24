@@ -10,6 +10,7 @@ Anschließend erläutern wir in Sektion \ref{sec:impl_dynP} die Implementierung 
 In Sektion \ref{sec:impl_eval} zeigen und diskutieren wir unsere Ergebnisse der Laufzeit mit verschiedenen Eingabegröße.
 Sektion \ref{sec:impl_outlook} gibt einen Ausblick für mögliche Optimierungen und Erweiterungen unserer Implementierung.
 
+Der Algorithmus wurde in der Programmiersprache Python\footnote{https://www.python.org/} in der Version $3.5$ entwickelt. Als Entwicklungsumgebung wurde PyCharm\SymbReg ~von JetBrains\footnote{https://www.jetbrains.com/pycharm/} genutzt.
 \section{Nice Tree Decomposition}
 \label{sec:impl_ntd}
 Es wurde ein Algorithmus entwickelt, der als Eingabe eine standardmäßige Nice Tree Decomposition $\mathbb{T}$ eines Graphen $G$ erhält und eine Nice Tree Decomposition (siehe Kapitel \ref{sec:ntd_ntd}) ausgibt. 
@@ -38,12 +39,12 @@ Die Berechnungsvorschrift des dynamischen Programms ist in Sektion \ref{c:cc_ste
 Für die Implementierung wird vom Wurzelknoten ausgehend in symmetrischer Reihenfolge über die Nice Tree Decomposition $\mathbb{T}$ iteriert und für jeden Bag eine $k \times kN \times 3^{|B_x|}$ - Matrix berechnet, wobei die Größe der Lösung $k$ und $N$ als Eingabeparameter übergeben werden. 
 Die erste Dimension $k$ beschreibt die Größe (Anzahl Knoten) der Lösungsmenge. 
 Die zweite Dimension $kN$ steht für die Summe der Gewichte der Lösungsmenge. 
-Obwohl die Gewichte zufällig einheitlich verteilt werden, kann im schlechtesten Fall jedem Knoten das Gewicht $N$ zugewiesen werden. 
+Obwohl die Gewichte zufällig einheitlich verteilt werden, kann es einen Fall geben in dem jedem Knoten das Gewicht $N$ zugewiesen wird. 
 Daher kann die Gesamtsumme der Gewichte $W$ gleich $kN$ sein.
 $3^{|B_x|}$ beschreibt die Anzahl der möglichen Färbungen innerhalb eines Bags. 
 Während $k,N$ festgelegt sind, kann die Länge der Farb-Dimension $3^{|B_x|}$ von Bag zu Bag variieren. 
 \subsection{Implementierung der CountC-Prozedur}
-\label{ssec:countc}
+\label{ssec:impl_countc}
 Da das dynamische Programm des Cut \& Count-Algorithmus die Berechnungsvorschrift für einen Bag rekursiv über den Bag des jeweiligen Kind-Knotens definiert, steigt der Algorithmus zu Beginn in $\mathbb{T}$ rekursiv ab bis er an einem Blattknoten angekommen ist. 
 Für diesen gibt es keine Farb-Dimension (der Bag ist leer) und die $k \times kN$-Matrix wird initialisiert. 
 Anschließend wird beim rekursiven Aufstieg für jeden Bag die entsprechende Berechnungsvorschrift angewendet und eine neue Datenmatrix berechnet. 
@@ -144,7 +145,7 @@ def countC(node, indices, child_data, k, N, terminals, weights):
 \end{svgraybox}
 
 \subsection{Berechnung der Färbungen}
-\label{ssec:colors}
+\label{ssec:impl_colors}
 Für die Kodierung der Färbungsdimension muss eine geeignete Zuordnung von Färbungen zu Indices der Datenmatrix eingeführt werden. Dafür benutzen wir eine ternäre Kodierung mit folgender Zuordnung:
 \begin{center}
 $0 \rightarrow s=0$\\
@@ -185,8 +186,9 @@ def get_index_as_list(x, nr_of_vertices):
 
 \section{Evaluierung}
 \label{sec:impl_eval}
-Die Laufzeit des dynamischen Programms wurde anhand von Beispielen getestet. Zu sehen sind die Eingabeparameter k und N sowie die Anzahl der Knoten des Graphen sowie die in der Nice-Tree-Decomposition erhaltene \textit{treewidth}.
+Die Laufzeit des dynamischen Programms wurde mit verschiedenen Eingabegrößen getestet. Tabelle \ref{t:eval} zeigt die Eingabeparameter k und N, die Anzahl der Knoten des Graphen ($|V|$), die Baumweite der NTD sowie die Ergebnisse der Laufzeit in Sekunden.
 \begin{table}
+\label{t:eval}
 \centering
 \begin{tabular}{l | l} 
 \textbf{Eingabe} & \textbf{ $\varnothing$ T in $s$}\\
@@ -198,8 +200,14 @@ Die Laufzeit des dynamischen Programms wurde anhand von Beispielen getestet. Zu 
 \caption{Laufzeit des dynamischen Programms für verschiedene Eingabegrößen}
 \end{table}
 
-Es ist ersichtlich, dass der Algorithmus schon bei kleinen Grapherweiterungen merkbare Laufzeitverlängerungen aufweist. Es ist anzunehmen, dass der Algorithmus in der Praxis nur eingeschränkt nutzbar ist. Praxisrelevante Probleme werden sich wahrscheinlich in Graphen repräsentieren, die weit aus komplexer sind, als die von uns getesteten Beispiele. Wir vermuten die Laufzeit wäre dort nichtmehr tragbar oder zumindest nicht effizient genug. Desweiteren ist der Speicherbedarf der Cut \& Count-Technik nicht außer acht zu lassen. Jeder Bag benötigt eine $3^t\times k\times kN$-Matrix. Bei größeren Graphen und hohem gewählten $N$, zur Verringerung des Falsch-Negativ Ergebnisses, kann diese schnell sehr groß werden.
+Die Tabelle zeigt, dass die Laufzeit mit der Eingabegröße stark ansteigt. Dies lässt die Frage offen, inwiefern der Algorithmus eine Lösung für praxisrelevante Probleme darstellt, da die Graphen sehr viel größer sind als die hier getesteten Beispiel. 
+Die Berechnung über das dynamische Programm bietet dennoch den Vorteil Lösungen $x$ mit $x<k$ direkt aus dem Ergebnis abzulesen.
 
 \section{Ausblick}
 \label{sec:impl_outlook}
+Unsere Ergebnisse in Sektion \ref{sec:impl_eval} eröffnen die Fragestellung inwiefern die Cut &\ Count-Technik das Steinerbaumproblem effizient löst. Hier bedarf es weiterer Vergleiche mit anderen Ansätzen, wie z.~B. einer Brute-Force-Suche, welche für kleinere Graphen womöglich effizienter Lösungen berechnet.
 
+In der Arbeit \cite{cygan_solving_2011} nicht auf den Speicherbedarf eingegangen. 
+Dieser ist abhängig von der Baumweite als auch von der Beschaffenheit der Nice Tree Decomposition, da für jeden Bag eine $3^t\times k\times kN$-Datenmatrix berechnet wird. Für speicherkritische Anwendungen stellt die Cut \& Count-Technik keine zufriedenstellende Lösung dar. Eine Optimierung des Speicherbedarfs des dynamischen Programms wurde von uns nicht untersucht.
+
+Weiterhin ist vermutlich die Wahrscheinlichkeit von $\frac{1}{2}$ für ein falsch-negativ-Ergebnis für die meisten praxisrelevanten Probleme nicht ausreichend. Diese Wahrscheinlichkeit lässt sich durch das Isolations-Lemma zwar weiter verringern, dies wirkt sich jedoch stark auf den Speicherbedarf der Berechnung aus.

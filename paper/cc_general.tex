@@ -1,46 +1,64 @@
-%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% sample chapter
-%
-% Use this file as a template for your own input.
-%
-%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
-%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
 \chapter{Cut \& Count-Technik}
-\label{c:cc_general} % Always give a unique label
-% use \chaptermark{}
-% to alter or adjust the chapter heading in the running head
-
+\label{c:cc_general}
 
 \section{Einführendes}
 \label{sec:cc_intro}
-Die Cut \& Count-Technik wird benutzt um connectivity-type Probleme mithilfe von Randomisierung zu lösen. Dabei handelt es sich um Graphen-Probleme, bei denen zusammenhängende Submengen der Knoten gefunden werden müssen, die problemspezifische  Eigenschaften erfüllen müssen. Beispiele hierfür sind Longest Path, Steiner Tree, Feedback Vertex Set, uvm.
-Bei Verwendung der Cut \& Count-Technik wird jedem Element des Problems eine zufällig und unabhängig gewählte Eigenschaft zugeteilt. Dies folg daher, dass die Technik nur korrekt funktioniert, wenn es eine oder keine Lösung gibt. Beim Lösen des Problems muss diese neue Eigenschaft zusätzlich eine Anforderung erfüllen, damit die Lösungsmenge gültig ist. Diese Isolation der Lösungsmenge wird durch das Isolations-Lemma beschrieben.
+Die Cut \& Count-Technik aus \cite{cygan_solving_2011} wird benutzt um Zusammenhangs-Probleme von Graphen zu lösen.
+Dabei handelt es sich um Graphen-Probleme, bei denen zusammenhängende Submengen der Knoten gefunden werden müssen, die problemspezifische  Eigenschaften erfüllen müssen. 
+Die Technik setzt sich aus den beiden Teilen \glqq Cut\grqq ~, \glqq Count\grqq ~zusammen (siehe \ref{sec:cc_cc}) und kann auf mehrere Probleme angewendet werden, u.A. Längster Weg, Steinerbaum oder Feedback Vertex Set.
+
+Das Ergebnis ist ein Monte-Carlo-Algorithmus, welcher eine Aussage über die Existenz einer (oder mehrerer) Lösungen gibt. Dies ist in Sektion \ref{sec:cc_monte} erläutert.
+Mithilfe von Randomisierung beschränkt die Technik die Anzahl der Lösungsmengen mit einer Wahrscheinlichkeit, die durch das Isolation-Lemma begrenzt werden kann. Dies wird in Sektion \ref{sec:cc_iso} näher erklärt.
+
+
+\section{Cut \& Count}
+\label{sec:cc_cc}
+Sei $\mathcal{S}$ die Menge der Lösungen für das Graphenproblem. 
+Dann entscheidet Cut \& Count ob diese Menge leer ist. 
+Dazu kann Cut \& Count folgendermaßen aufgeteilt werden:
+
+\subsection{Cut}
+\label{ssec:cc_cut}
+Die Zusammenhangs-Bedingung aus dem Graphenproblem wird abgeschwächt, indem eine Menge von Lösungskandidaten $\mathcal{R} \supseteq \mathcal{S}$ betrachtet wird. 
+Zusätzlich wird die Menge $\mathcal{C}$ von Paaren $(X,C)$ betrachtet, wobei $X \in \mathcal{R}$ und $\mathcal{C}$ einen konsistenten Schnitt beschreibt. 
+
+\subsection{Count}
+\label{ssec:cc_count}
+Berechne $|\mathcal{C}|$ modulo 2 mithilfe der Prozedur $\mathtt{countC}$ (siehe Sektion \ref{ssec:impl_countc}). 
+Dadurch werden alle unzusammenhängenden Lösungskandidaten $X \in \mathcal{R} \ \mathcal{S}$ ignoriert, da die Anzahl derer mit einer geraden Anzahl von konsistenten Schnitten konsistent sind. Es bleiben die zusammenhängenden Lösungskandidaten $x \in \mathcal{S}$ übrig. 
+
+Der Algorithmus \glqq zählt\grqq ~nicht die Lösungen, sondern die Anzahl der Lösungskandidaten, die einen konsistenten Schnitt bilden.
 
 \section{Monte-Carlo-Algorithmus}
 \label{sec:cc_monte}
+Ein Monte-Carlo-Algorithmus ist ein randomisierter Algorithmus, welcher mit einer nach oben beschränkten Wahrscheinlichkeit ein falsches Ergebnis liefern darf. 
+Für die Cut \& Count-Technik bedeutet dies, dass der hervorgegangene Algorithmus niemals ein falsch-positives Ergebnis \footnote{Der Algorithmus gibt eine positive Antwort auf das Problem, obwohl keine Lösung existiert} ausgeben kann, aber zu einer gewissen Wahrscheinlichkeit ein falsch-negatives Ergebnis \footnote{Der Algorithmus gibt eine negative Antwort auf das Problem, obwohl eine Lösung existiert.}. 
+Die Wahrscheinlichkeit eines falsch-negativ wird durch das Isolations-Lemma bestimmt. 
+Die Ausgabe eines falsch-negativ unterliegt einer bestimmten Wahrscheinlichkeit. Daher ist sinnvoll den Algorithmus in diesem Fall mehrmals hintereinander ausführen. Es begünstigt die Wahrscheinlichkeit eine Lösungsmenge zu finden, falls diese existiert.
 
-Verwendet man die Cut \& Count-Technik um ein Algorithmus zur Lösung der connectivity-type Probleme zu entwerfen, enthält man einen Monte-Carlo-Algorithmus. Dies bedeutet, dass der hervorgegangene Algorithmus niemals ein false-positiv \footnote{Der Algorithmus gibt eine positive Antwort auf das Problem, obwohl keine Lösung existiert} ausgeben kann aber zu einer gewissen Wahrscheinlichkeit ein false-negativ \footnote{Der Algorithmus gibt eine negative Antwort auf das Problem, obwohl eine Lösung existiert.}. Die Wahrscheinlichkeit eines false-negativ wird durch das Isolations-Lemma bestimmt. Da eine Ausgabe eine false-negativ einer bestimmten Wahrscheinlichkeit unterliegt ist es ratsam Monte-Carlo-Algorithmen mehrmals hintereinander auszuführen. Es begünstigt die Wahrscheinlichkeit eine Lösungsmenge zu finden.
-
-Der hervorgegangene Monte-Carlo-Algorithmus kann bei gegebener Tree-Decomposition mit Braumbreite $t$ eines ungerichteten Graphens Lösungen bestimmen bei folgenden Probleme und Laufzeiten:
+Der Monte-Carlo-Algorithmus erreicht folgende Laufzeiten für einige bekannte Zusammenhangs-Probleme bei Graphen, wobei $t$ die Braumbreite der Tree Decomposition beschreibt:
 \begin{itemize}
-\item Steiner Tree in $3^t |V|^{O(1)}$
-\item FeedBack Vertex Set in $3^t|V|^{O(1)}$
+\item Steinerbaum in $3^t |V|^{O(1)}$
+\item Feedback Vertex Set in $3^t|V|^{O(1)}$
 \item ...
 \end{itemize}
 
 \section{Isolation Lemma}
 \label{sec:cc_iso}
+Da im Count-Teil die Menge mithilfe $|\mathcal{C}|$ modulo 2 berechnet wird, muss sichergestellt werden, dass die Menge der Lösungen begrenzt wird. 
+Für eine gerade Anzahl von Lösungen würde der Algorithmus sonst ein falsch-negatives Ergebnis liefern, da jede gerade Anzahl durch die Modulo-Operation nicht erkannt wird. 
+Daher muss die Lösungsmenge reduziert werden. Dafür wird auf das Isolations-Lemma zurückgegriffen. Dieses ist wie folgt definiert:
 
-Wie zuvor erwähnt ist die Cut \& Count-Technik nur dann korrekt, wenn eine oder keine Lösung existiert. Da es bei vielen der connectivity-type Probleme sehr  wahrscheinlich ist, dass mehrere Lösungen existieren, muss die Lösungsmenge reduziert werden. Dafür wird auf das Isolations-Lemma zurück gegriffen. Es ist wie folgt definiert:
+\begin{definition}
+Isolation Lemma\\
+ A function $\omega : U \rightarrow \mathbb{Z}$ isolates a set family $\mathcal{F} \subseteq 2^U$ if there is a unique $S' \in \mathcal{F}$ with $\omega (S')=min_{S \in \mathcal{S}} \omega(S)$\\
+\end{definition}
 
-A function $\omega : U \rightarrow \mathbb{Z}$ isolates a set family $\mathcal{F} \subseteq 2^U$ if there is a unique $S' \in \mathcal{F}$ with $\omega (S')=min_{S \in \mathcal{S}} \omega(S)$\\
-
-Im Paper wird es im Lemma 2.5 verwendet, um etwas über die Wahrscheinlichkeit der Isolation auszusagen:\\
+In der Arbeit \cite{cygan_solving_2011} wird das Isolations-Lemma in Lemma 2.5 verwendet, um folgende Aussage über die Wahrscheinlichkeit der Isolation auszusagen:\\
 \\Let $\mathcal{F} \subseteq 2^U$ be a set family over a universe $U$ with $|\mathcal{F}| > 0$. For each $u \in U$ ,
 choose a weight $\omega(u) \in {1, 2, . . . , N }$ uniformly and independently at random. Then
 \begin{center}
 $prob[\omega$ isolates $\mathcal{F}]\geq 1 - \frac{|U|}{N}$
 \end{center}
 
-Durch die Wahl eines großen $N$ kann somit die Wahrscheinlichkeit eines false-negativ stark reduziert werden aber es wird zugleich auch die Laufzeit des Algorithmus erhöht.
+Durch die Wahl eines großen $N$ kann die Wahrscheinlichkeit eines falsch-negativ reduziert werden. Dies geht mit einer Erhöhung der Laufzeit des Algorithmus einher.

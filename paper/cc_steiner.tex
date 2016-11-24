@@ -6,66 +6,85 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
-\chapter{Cut \& Count für Steiner Tree}
+\chapter{Cut \& Count für das Steinerbaum-Problem}
 \label{c:cc_steiner}
 
-\section{Steiner Tree}
+\section{Steinerbaum}
 \label{sec:steiner}
 \begin{definition}
-Steiner Tree\\
-\textbf{Input}: An undirected graph $G = (V, E)$, a set of terminals $T \subseteq V$ and an integer $k$. \\
-\textbf{Question}: Is there a set $X \subseteq V$ of cardinality $k$ such that $T \subseteq X$ and $G[X]$ is connected?
+Steinerbaum-Problem\\
+\textbf{Eingabe}: Sei $G = (V, E)$ ein ungerichteter Graph, $T \subseteq V$ eine Menge von Terminalknoten und $k$ eine positive Ganzzahl. \\
+\textbf{Problemstellung}: Gibt es eine Menge $X \subseteq V$ der Kardinalität $k$, so dass $T \subseteq X$ und $G[X]$ zusammenhängend ist?
 \end{definition}
 
-Bei dem Steiner-Tree Problem handelt es sich um ein connectivity-Typ Problem. In einen gegebenen Graphen sind einige Knoten als Terminale makiert. Nun wird nach einem Subgraphen innerhalb des Ursprungsgraphen gesucht, der alle Terminale enthält und aus k vielen Knoten insgesamt besteht. Desweiteren müssen alle Knoten innerhalb des Subgraphen über Kanten untereinander erreichbar sein.
+In einem gegebenen Graphen ist eine Menge $T \subseteq V$ als Terminale markiert. Gesucht ist ein Subgraph innerhalb des Ursprungsgraphen, der alle Terminale enthält und genau $k$ Knoten enthält. Zudem muss der Subgraph zusammenhängend sein, es muss also jeder Knoten von jedem anderen Knoten des Subgraphen über einen Pfad innerhalb des Subgraphen erreichbar sein.
 
 \section{Cut}
 \label{sec:st_cut}
-Zu beginn des Cut-Part wird eine zufällige Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ definiert. Diese wird für die Isolation der Lösungsmenge verwendet.\\
-Desweiteren wird im Cut-Part die Menge $\mathcal{R}_W$ definiert. Sie ist die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$. Somit stellt die Menge $\mathcal{R}_W$ die Menge aller Lösungskandidaten dar.\\
-Eine weitere zu definierende Menge ist $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[X]$ ist zusammenhängend$\}$. Somit bildet die Menge $\mathcal{S}_W$ Lösungen für ein gegebenes bestimmtes Gewicht $W$.\\
-$\cup_W \mathcal{S}_W$ bildet so die Lösungsmenge. Gibt es nun ein Gewicht $W$ für das die Menge nicht leer ist, so gibt der Algorithmus eine positive Antwort.\\
-Von der Menge der Terminalknoten wird ein Terminal als $v_1$-Terminal festgelegt. Dieses dient dazu, dass bei der Bildung von konsistenten Cuts keine Cuts doppelt gezählt werden.\\
-Die konsistenten Cuts werden in der Menge  $\mathcal{C}_W$ beschrieben. Diese Bilden die Menge aller Subgraphen, die einen konsistenten Cut $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$.
-
+Zu Beginn des Cut-Teils wird eine zufällige Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ definiert. 
+Diese wird für die Isolation der Lösungsmenge verwendet. 
+$\omega$ weist jedem Knoten zufäälig ein Gewicht zu. 
+Wird $\omega$ auf eine Menge von Knoten angewendet, ist das Ergebnis die Summe der einzelnen Knotengewichte.\\
+Anschließend definieren wir die Menge $\mathcal{R}$, welche die Zusammenhangs-Bedingung abschwächt. 
+Somit ist $\mathcal{R}_W$ die Menge aller Teilmengen von $X$ aus $V$ mit $T \subseteq X$, $\omega(X)=W$ und $|X|=k$. Die Menge $\mathcal{R}_W$ beschreibt alle Lösungskandidaten.\\
+Die Menge $\mathcal{S}_W=\{X \in \mathcal{R}_W | G[X]$ ist zusammenhängend$\}$ umfasst die Lösungsmenge für eine Menge $\mathcal{R}_W$. 
+$\cup_W \mathcal{S}_W$ bildet so die gesamte Lösungsmenge. 
+Gibt es ein Gewicht $W$ für das die Menge nicht leer ist, so gibt der Algorithmus eine positive Antwort.\\
+Von der Menge der Terminalknoten wird ein zufälliges Terminal als $v_1$-Terminal festgelegt. 
+Dieses dient dazu, dass bei der Bildung von konsistenten Schnitten kein Schnitt doppelt gezählt wird.\\
+Ein Schnitt $(V_1,V_2)$ eines ungerichteten Graphen $G=(V,E)$ ist konsistent, falls $u \in V_1$ und $v \in V_2$ impliziert, dass $uv \notin E$. 
+Ein Subgraph, der einen konsistenten Schnitt aus $G$ bildet, ist ein Paar $(X,(X_1,X_2))$, so dass $(X_1,X_2)$ ein konsistenter Schnitt von $G[X]$ ist.
+$\mathcal{C}_W$ sei die Menge aller Subgraphen, die einen konsistenten Schnitt $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$.
 \begin{figure}
 \label{fig:st_cut}
   \centering
     \includegraphics[width=1.0\textwidth]{./imgs/terminal_v1.png}
-  	\caption{Konsistente Cuts ohne Beschränkung $v_1 \in X_1$.}
+  	\caption{Konsistente Schnitte ohne Beschränkung $v_1 \in X_1$.}
 \end{figure}
 
-Man sieht in Abbildung \ref{fig:st_cut}, dass die konsistenten Cuts 1 und 2 identisch sind. Die Festlegung des $v1$ Terminals dient dazu, um solche Dublikate zu vermeiden.
-
-Die Anzahl der konstistenten Cuts sind im Lemma 3.3 des Papers beschrieben:\\
+Die Anzahl der Subgraphen, welche einen konsistenten Schnitte bilden, sind in Lemma 3.3 in \cite{cygan_solving_2011} definiert:\\
 Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
 
-Beweis: Per Definition ist bekannt, dass für jeden konsistenten Cut $(X,(X_1,X_2))$ und Connected Component $C$ aus $G[X]$ $C$ entweder in $X_1$ oder in $X_2$ enthalten sein muss. Für die Connected Component, die $v_1$ enthält ist die Wahl der Submenge fix. Für alle anderen Connected Components kann die Zugehörigkeit von Submengen frei gewählt werden. Daher erhalten wir $2^{cc(G[X])-1}$ verschiedene konsistente Cuts.
+Ausgehend von der Definition $\mathcal{C}_W$ ist für jeden Subgraphen, der einen konsistenten Schnitt $(X,(X_1,X_2))$ bildet, und für jede Zusammenhangskomponente $C$ aus $G[X]$ bekannt, dass  $C$ entweder in $X_1$ oder in $X_2$ enthalten sein muss. Für die Zusammenhangskomponente, die $v_1$ enthält, ist die Seite des Schnitts fest. Für alle anderen Zusammenhangskomponenten kann die Seiten der Mengen $X_1,X_2$ frei gewählt werden. Daher erhalten wir $2^{cc(G[X])-1}$ verschiedene konsistente Schnitte.
+
+In Abbildung \ref{c:cc_general} sind die verschiedenenen Schnittmöglichkeiten eines Graphen ohne die Beschränkung des $v_1$-Terminals visualisiert. Um nicht beide identischen Schnitte (in der Abbildung $1.$ und $2.$ Schnitt) zu zählen, wird $v_1 \in X_1$ festgelegt. 
 
 \section{Count}
 \label{sec:st_count}
-Aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$. Wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |\{X \in \mathcal{R} |cc(G[X]) = 1\}| = |\mathcal{S}|$. In Worte gefasst bedeutet dies, dass die Anzahl der konsistenten Cuts eines Graphen modulo zwei gleich die Anzahl der Lösungen ist. Im Lemma 3.4 trifft das Paper dazu eine Aussage: Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
+Aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$. \\
+Durch die Randomisierung mithilfe der Knotengewichte wird die Wahrscheinlichkeit, dass die Menge der Lösungskandidaten $\mathcal{R}$ mehrere Lösungen enthält, reduziert. 
+Für eine Lösung $\mathcal{S} \in \mathcal{R}$ gilt, dass $G[X]$ zusammenhängend ist. 
+Durch die Festlegung des $v_1$-Terminals wird zudem die Möglichkeit des Schnitts für eine Lösung auf eins reduziert (Schnitt mit der leeren Menge). 
+Daher gilt $|\mathcal{S}| = |\{X \in \mathcal{R}\}| cc(G[X]=1)$.
+Also können wir schreiben: $|\mathcal{C}_W| \equiv |\mathcal{S}_W|$.
+
+Diese Äquivalenz erlaubt es ein dynamisches Programm zu beschreiben, dass nicht die Menge der Lösungen $\mathcal{S}$, sondern die Anzahl der Subgraphen $|\mathcal{C}_W|$, die einen konsistenten Schnitt bilden, zu berechnen. Dieses Programm ist in folgender Sektion näher erläutert.
+%Wir legen $W$ fest und ignorieren die Indices: $|\mathcal{C}| \equiv |\{X \in \mathcal{R} |cc(G[X]) = 1\}| = |\mathcal{S}|$. 
+%Das bedeutet, dass die Anzahl der konsistenten Schnitte eines Graphen modulo zwei gleich der Anzahl der Lösungen ist. 
+%Im Lemma 3.4 trifft das Paper dazu eine Aussage: Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. 
+%Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
 
 \section{Dynamisches Programm}
 \label{sec:dynP}
 
-$|\mathcal{C}_W|$ modulo $2$ kann mit dynamischen Programm auf der NTD $\mathbb{T}$ berechnet werden.
-für jeden Bag $x \in \mathbb{T}$, integers $0 \leq i \leq k,0 \leq w \leq kN$ und Färbung $s \in \{0,1_1,1_2 \}^{B_x}$ definiere:
+Für das dynamische Programm werden für jeden Bag $x \in \mathbb{T}$, die Zahlen $0 \leq i \leq k,0 \leq w \leq kN$ und die Färbung $s \in \{0,1_1,1_2 \}^{B_x}$ folgende Mengen definiert:
 \begin{itemize}
-\item $\mathcal{R}_x(i,w)=\{X \subseteq V_x | (T \cap V_x) \subseteq X$ $\wedge$ $|X| = i$ $\wedge$ $\omega (X) = w \}$
-\item $\mathcal{C}_x (i,w) =\{ (X,(X_1,X_2)) | X \in \mathcal{R}_x(i,w)$ $\wedge$ $(X,(X_1,X_2))$ is a consistently cut subgraph of $G_x$ $\wedge$ $(v_1 \in V_x \Rightarrow v_1 \in X_1 \} $
-\item $\mathcal{A}_x(i,w,s)=| \{ (X,(X_1,X_2)) \in \mathcal{C}_x(i,w) | (s(v) = 1_j \Rightarrow v \in X_j)$ $\wedge$ $(s(v)=0 \Rightarrow v \notin X \} |$
+\item $\mathcal{R}_x(i,w)=\{X \subseteq V_x | (T \cap V_x) \subseteq X$ $\wedge$ $|X| = i$ $\wedge$ $\omega (X) = w \}$ \\
+beschreibt die Menge der Lösungskandidaten
+\item $\mathcal{C}_x (i,w) =\{ (X,(X_1,X_2)) | X \in \mathcal{R}_x(i,w)$ $\wedge$ $(X,(X_1,X_2))$ ist ein Subgraph, der einen konsistenten Schnitt von $G_x$ bildet $\wedge$ $(v_1 \in V_x \Rightarrow v_1 \in X_1 \} $
+\item $\mathcal{A}_x(i,w,s)=| \{ (X,(X_1,X_2)) \in \mathcal{C}_x(i,w) | (s(v) = 1_j \Rightarrow v \in X_j)$ $\wedge$ $(s(v)=0 \Rightarrow v \notin X \} |$ \\
+beschreibt die Anzahl der Mengen $\mathcal{C}_x(i,w)$, wobei die in $X$ enthaltenen Knoten mit $s \in \{1_1,1_2\}$ gefärbt sind und die restlichen Knoten mit $s=0$ 
 \end{itemize}
-Die Färbungen der Knoten gibt an ob sie zu einem konsistenten Cut gehören und wenn ja zu welcher der beiden Teilmengen des konsistenten Cuts sie gehören.
-Färbung $s \in \{0,1_1,1_2 \}^{B_x}$  der Knoten aus $B_x$ bzgl. der Menge $C_x$
+Die Färbung gibt an, ob und zu welcher Seite eines konsistenten Schnitts ein Knoten gehört.
+Die Zuordnung der Färbung $s \in \{0,1_1,1_2 \}^{B_x}$  der Knoten aus Bag $B_x$ bzgl. der Menge $C_x$ ist folgendermaßen definiert:
 \begin{itemize}
 \item $s[v] = 0 \Rightarrow v \notin X$
 \item $s[v] = 1_1 \Rightarrow v \in X_1$ 
 \item $s[v] = 1_2 \Rightarrow v \in X_2$ 
 \end{itemize}
-$A_x(i,w,s)$ zählt alle möglichkeiten die Knoten gemäß der Definition zu färben.
-Ob der Algorithmus eine Lösung gefunden hat kann im Wurzel-Knoten eingesehen werden.\\
-Im dynamischen Programm werden die folgenden Berechnungsregeln für jede $A_x(i,w,s)$ Matrix eines Bags angewandt. Zur Vereinfachung der Notation beschreibt im folgenden $v$ den neu eingeführten Vertex. $y$ und $z$ stehen für das linke bzw. das rechte Kind:
+$A_x(i,w,s)$ zählt alle Möglichkeiten die Knoten eines Bags $x$ gemäß der Definition zu färben. Es gibt für einen Bag $3^{B_x}$ Möglichkeiten die Knoten zu färben.
+
+Im dynamischen Programm werden die folgenden Berechnungsregeln für jede $A_x(i,w,s)$ Matrix eines Bags $x$ angewandt. Zur Vereinfachung der Notation beschreibt im folgenden $v$ den neu eingeführten Vertex. $y$ und $z$ stehen für das linke bzw. das rechte Kind:
 \begin{itemize}
 \item \textbf{Leaf bag}:
 \begin{itemize}
@@ -87,11 +106,15 @@ Im dynamischen Programm werden die folgenden Berechnungsregeln für jede $A_x(i,
 \end{itemize}
 \item \textbf{Join bag}
 \begin{itemize}
-\item $A_x(i,w,s) = \sum\limits_{i_1+i_2=i+|s^{-1}({1_1,1_2})|} \sum\limits_{w_1+w_2=w+w(s^{-1}({1_1,1_2}))} A_y(i_1,w_1,s)A_z(i_2,w_2,s) $\\In der inneren Summe wird über die Gewichte innerhalb beider Bags der Kinder iteriert. Ist deren Summe gleich der Summe von $w$ und der Summe der Gewichte von Knoten mit der Färbung $1_1$ und $1_2$, so werden sie akkumuliert.
+\item $A_x(i,w,s) = \sum\limits_{i_1+i_2=i+|s^{-1}({1_1,1_2})|}$   $\sum\limits_{w_1+w_2=w+w(s^{-1}({1_1,1_2}))} A_y(i_1,w_1,s)A_z(i_2,w_2,s) $\\In der inneren Summe wird über die Gewichte innerhalb beider Bags der Kinder iteriert. Ist deren Summe gleich der Summe von $w$ und der Summe der Gewichte von Knoten mit der Färbung $1_1$ und $1_2$, so werden sie akkumuliert.
 \\In der äußeren Summe wird über den Parameter $i$ der Bags der Kinder iteriert. Ist die Summe gleich der Summe von $i$ und der Anzahl der Knoten die $1_1$ und $1_2$ gefärbt sind, so werden sie akkumuliert.
 \end{itemize}
 \end{itemize}
-Da alle Berechnungen der Bags jeweils nur von den Werten des Kindes abhängig sind, kann das Ergebnis des Algorithmus im Wurzelknoten ausgelesen werden. Die Matrix des Wurzelknotens $A_r(k,W,\emptyset)$ enthält an den Stellen k und W eine 1, zu denen es eine Lösung der Größe k mit Gesamtgewicht W existiert. Kleinere Kardinalitäten können hierbei auch direkt überprüft werden.
+
+
+Ob der Algorithmus eine Lösung gefunden hat, kann aus der $k \times kN$-Datenmatrix des Wurzel-Knotens $A_r(i,w,\emptyset)$ ausgelesen werden. 
+Dieser Zugriff ist konstant in $\mathcal{O}(1)$.\\
+Falls eine Lösung existiert und diese gefunden wurde, dann existiert ein $0 \leq W \leq kN$ für das $A_r(k,W,\emptyset) \equiv 2 = 1$.
 
 \section{Monte-Carlo Algorithmus und Laufzeit}
 \label{sec:mc_alg}
@@ -100,9 +123,9 @@ Im Theorem 3.6 des Papers wird zusammenfassend erwähnt:
 There exists a Monte-Carlo algorithm that given a tree decomposition of width $t$ solves STEINER TREE in $3^t|V|^{\mathcal{O}(1)}$ time. The algorithm cannot give false positives and may give false negatives with probability at most 1/2.
 \end{theorem}
 
-Die Laufzeit setzt sich wie folgt zusammen:
+Die Laufzeit setzt sich wie folgt zusammen, wobei $t$ für die Baumweite der NTD steht.
 \begin{itemize}
-\item $3^t$:\\ Da alle Knoten drei verschiedene Färbungen annehmen können und über all diese iteriert werden muss, erhalten wir $3^t$ verschiedene Färbungen. Hierbei ist die \textit{treewidth} der Falschenhals. Das Dynamische Programm berechnet nur die Färbungen für alle im Bag enthaltenen Verticies.
-\item $|V|^{\mathcal{O}(1)}$:\\ Kommt durch die beiden Input-Parameter k und N.
-\item Die Wahrscheinlichkeit von 1/2 für falsch-negativ entsteht durch die Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ und durch das Isolations-Lemma. 
+\item $3^t$:\\ Für jeden Bag muss über alle Farbkombinationen iteriert werden. Die obere Grenze hierbei ist die Anzahl der Knoten im größten Bag. Dieser besitzt $3^t$ verschiedene Färbungen.
+\item $|V|^{\mathcal{O}(1)}$:\\ obere Grenze der Eingabe-Parameter k und N.
+\item Die Wahrscheinlichkeit von 1/2 für falsch-negativ entsteht durch die Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ und durch das Isolations-Lemma, sofern $N=2|V|$ gesetzt wird. 
 \end{itemize}
