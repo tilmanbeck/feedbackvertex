@@ -86,6 +86,8 @@ target/
 *.nav
 *.snm
 *.vrb
+*.lof
+*.lot
 paper/book.pdf
 
 # Mac File
