@@ -203,11 +203,13 @@ Die Laufzeit des dynamischen Programms wurde mit verschiedenen Eingabegrößen g
 Die Tabelle zeigt, dass die Laufzeit mit der Eingabegröße stark ansteigt. Dies lässt die Frage offen, inwiefern der Algorithmus eine Lösung für praxisrelevante Probleme darstellt, da die Graphen sehr viel größer sind als die hier getesteten Beispiel. 
 Die Berechnung über das dynamische Programm bietet dennoch den Vorteil Lösungen $x$ mit $x<k$ direkt aus dem Ergebnis abzulesen.
 
-\section{Ausblick}
+\section{Diskussion und Ausblick}
 \label{sec:impl_outlook}
-Unsere Ergebnisse in Sektion \ref{sec:impl_eval} eröffnen die Fragestellung inwiefern die Cut &\ Count-Technik das Steinerbaumproblem effizient löst. Hier bedarf es weiterer Vergleiche mit anderen Ansätzen, wie z.~B. einer Brute-Force-Suche, welche für kleinere Graphen womöglich effizienter Lösungen berechnet.
+Unsere Ergebnisse in Sektion \ref{sec:impl_eval} eröffnen die Fragestellung inwiefern die Cut &\ Count-Technik das Steinerbaumproblem hinsichtlich Laufzeit und Speicherbedarf effizient löst. Hier bedarf es weiterer Vergleiche mit anderen Ansätzen, wie z.~B. einer Brute-Force-Suche, welche für kleinere Graphen womöglich effizienter Lösungen berechnet.
 
-In der Arbeit \cite{cygan_solving_2011} nicht auf den Speicherbedarf eingegangen. 
+In der Arbeit \cite{cygan_solving_2011} wird zudem nicht auf den Speicherbedarf eingegangen. 
 Dieser ist abhängig von der Baumweite als auch von der Beschaffenheit der Nice Tree Decomposition, da für jeden Bag eine $3^t\times k\times kN$-Datenmatrix berechnet wird. Für speicherkritische Anwendungen stellt die Cut \& Count-Technik keine zufriedenstellende Lösung dar. Eine Optimierung des Speicherbedarfs des dynamischen Programms wurde von uns nicht untersucht.
+
+Die Praxisrelevanz des Algorithmus wird auch durch die Art des Ergebnis verringert. Der Cut \& Count-Algorithmus liefert keine Lösung, sondern beantwortet nur die Frage ob eine solche existiert. Für Probleme, die eine Lösungsmenge benötigen, ist er somit nicht geeignet. Der Aufbau des dynamischen Programms lässt auch nicht ohne Weiteres Rückschlüsse auf die Lösungsmenge zu.
 
 Weiterhin ist vermutlich die Wahrscheinlichkeit von $\frac{1}{2}$ für ein falsch-negativ-Ergebnis für die meisten praxisrelevanten Probleme nicht ausreichend. Diese Wahrscheinlichkeit lässt sich durch das Isolations-Lemma zwar weiter verringern, dies wirkt sich jedoch stark auf den Speicherbedarf der Berechnung aus.
