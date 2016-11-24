@@ -38,11 +38,13 @@
   breaklines=true
 }
 
+% listing stuff
 \renewcommand{\lstlistingname}{Algorithmus}% Listing -> Algorithm
 \renewcommand{\lstlistlistingname}{Liste von \lstlistingname s}% List of Listings -> List of Algorithms
 \lstset{
 captionpos=b
 }
+
 
 % see the list of further useful packages
 % in the Reference Guide
@@ -81,8 +83,11 @@ Steiner~Tree-Problem}
 %\backmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\printindex
+\begingroup
 \listoffigures
+\let\clearpage\relax
 \listoftables
+\endgroup
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliography{bibliography}
