@@ -56,7 +56,7 @@ Die rekursive Berechnung in symmetrischer Reihenfolge gewährleistet, dass beide
 Der letzte Berechnungsschritt für den Wurzelknoten entspricht der Berechnung eines \glqq Forget\grqq -Knoten und führt die letzten drei Färbungen zusammen, so dass der Wurzelknoten (mit leerem Bag) eine $k \times kN$-Datenmatrix enthält. 
 Diese kann für die Abfrage der Lösungen $A_r(k,W,\emptyset)$ genutzt werden.
 
-Der Programmablauf ist im Pseudocode \ref{code:pseudo} dargestellt.
+Der Programmablauf ist im Algorithmus \ref{code:pseudo} dargestellt.
 
 \begin{svgraybox}
 \begin{lstlisting}[language=python,label={code:pseudo}, basicstyle=\small, caption=Pseudocode für das dynamische Programm]
@@ -165,7 +165,7 @@ Als Beispiel wird der Funktion \texttt{([0,2], [0])} als Parameter übergeben.
 Dies bedeutet, dass alle Färbungsmöglichkeiten der ersten Stelle (null-basiert) mit der zweiten Stelle (mit der Färbung $2 \rightarrow 1_2$) kombiniert werden. 
 Als Ergebnis gibt die Funktion in diesem Fall die Liste \texttt{[2,5,8]} als Ergebnis aus, wobei \texttt{[2,5,8]} für die Färbungen \texttt{[0,2],[1,2],[2,2]} stehen.
 
-Um auf Färbungen einzelner Knoten zurückgreifen zu können (z.~B. für die Berechnung des \glqq Introduce Edge\grqq -Bags) wird eine Funktion \texttt{get\_index\_as\_list} benötigt. Dieser wird eine Färbung als Index (in Dezimaldarstellung) und die Länge des Bags als Parameter übergeben wird. Diese berechnet die Liste der ternär codierten Färbungen mit der Länge des Bags. Der Code dafür ist in \ref{code:as_list} dargestellt. 
+Um auf Färbungen einzelner Knoten zurückgreifen zu können (z.~B. für die Berechnung des \glqq Introduce Edge\grqq -Bags) wird eine Funktion \texttt{get\_index\_as\_list} benötigt. Dieser wird eine Färbung als Index (in Dezimaldarstellung) und die Länge des Bags als Parameter übergeben wird. Diese berechnet die Liste der ternär codierten Färbungen mit der Länge des Bags. Der Code dafür ist in Algorithmus \ref{code:as_list} dargestellt. 
 
 \begin{svgraybox}
 \begin{lstlisting}[language=python,label={code:as_list}, basicstyle=\small, caption=Funktion get\_index\_as\_list zur Berechnung der ternären Färbung aus dem Index]
