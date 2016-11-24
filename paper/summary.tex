@@ -11,7 +11,17 @@
 % use \chaptermark{}
 % to alter or adjust the chapter heading in the running head
 
+%cut count ist monte carlo als result
+Verwendet man die Cut \& Count-Technik, um einen Algorithmus für Graphenprobleme zu implementieren, so erhält man einen Monte-Carlo-Algorithmus. Mittels Randomisierung und dem Isolations-Lemma\ref{sec:cc_iso} erhalten wir niemals eine falsch-positive Antwort aber zu einer, abhängig von der Wahl eines Parameters, eine falsch-negativ Antwort. 
 
-\section{Text}
-\label{sec:45}
-Use the template \emph{chapter.tex} together with the Springer document class SVMono (monograph-type books) or SVMult (edited books) to style the various elements of your chapter content in the Springer layout.
+%wurde von uns für steiner implementiert
+In dieser Arbeit haben wir uns damit beschäftigt diese Technik für das Steiner-Tree Problem \ref{sec:steiner} zu implementieren. Zusätzlich, da die Cut \& Count-Technik eine spezifische Nice-Tree-Decomposition \ref{c:ntd} benötigt, beschäftigten wir uns ebenfalls mit einer Implementation die Nice-Tree-Decompositions in die Cut \& Count spezifische überführt.
+
+%treewidth sollte klein sein
+Aufgrund der von der Technik resultierenden Laufzeit $3^t |V|^{\mathcal{O}(1)}$ sollte bei Verwendung darauf geachtet werden, dass die \textit{treewidth} der Nice-Tree-Decomposition des Problemgraphen gering ausfällt.
+
+%speicher verbrauch ist relativ hoch
+Da für jeden Bag innerhalb der Treedecomosition eine Datenmatrix angelegt werden muss, ist die Speicherbelastung recht hoch. 
+
+%laufzeit ist bei großen beispielen schnell sehr hoch, praxis tauglichkeit so lala
+Die Laufzeit zeigt schon bei kleineren Beispielen schnell merkbare Erhöhungen. Da Probleme dieser Art in der realen Welt deutlich größer ausfallen, halten wir diese Technik nur für bedingt praxis tauglich aufgrund ihrer Laufzeit.  
