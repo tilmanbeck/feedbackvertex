@@ -32,7 +32,7 @@ import DynamicProgramm as dp
 # td.edge_bags(bc, edges)
 
 # gv = GraphVisualization(bc)
-# gv.createGraph()
+# gv.create_graph()
 
 # dp.count(vertices, bc, ['d','c','e'], k, N, weights)
 
@@ -54,7 +54,7 @@ import DynamicProgramm as dp
 # td.edge_bags(bc, edges)
 #
 # gv = GraphVisualization(bc)
-# gv.createGraph()
+# gv.create_graph()
 
 #############################################################
 ######################### SMALL EXAMPLE #####################
@@ -74,7 +74,7 @@ import DynamicProgramm as dp
 # td.add_internal_nodes(ab)
 # td.edge_bags(ab,edges)
 # # v = GraphVisualization(ab)
-# # v.createGraph()
+# # v.create_graph()
 # #
 # # dp.count(vertices, ab, ['a', 'c'], k, N, weights)
 # #
@@ -131,7 +131,7 @@ td.add_internal_nodes(bc)
 td.edge_bags(bc, edges)
 
 gv = GraphVisualization(bc)
-gv.createGraph()
+gv.create_graph()
 
 # runs = 25
 # t = [0] * runs

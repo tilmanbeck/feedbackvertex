@@ -1,6 +1,15 @@
 \chapter{Implementierung}
 \label{c:impl}
 
+\section{Einführung}
+\label{sec:impl_intro}
+In unserer Implementierung liegt der Fokus auf der Implementierung des dynamischen Programms der Cut \& Count-Technik. 
+Wir nehmen an, dass für den Ursprungsgraphen $G$ bereits eine standardmäßige Nice Tree Decomposition gemäß Sektion \ref{sec:ntd_ntd} vorliegt. 
+In Sektion \ref{sec:impl_ntd} erklären wir, wie die standardmäßige Nice Tree Decomposition zu einer Nice Tree Decomposition (siehe Sektion \ref{sec:ntd_req}) erweitert wird. 
+Anschließend erläutern wir in Sektion \ref{sec:impl_dynP} die Implementierung des dynamischen Programms und gehen auf implementierungsspezifische Details ein. 
+In Sektion \ref{sec:impl_eval} zeigen und diskutieren wir unsere Ergebnisse der Laufzeit mit verschiedenen Eingabegröße.
+Sektion \ref{sec:impl_outlook} gibt einen Ausblick für mögliche Optimierungen und Erweiterungen unserer Implementierung.
+
 \section{Nice Tree Decomposition}
 \label{sec:impl_ntd}
 Es wurde ein Algorithmus entwickelt, der als Eingabe eine standardmäßige Nice Tree Decomposition $\mathbb{T}$ eines Graphen $G$ erhält und eine Nice Tree Decomposition (siehe Kapitel \ref{sec:ntd_ntd}) ausgibt. 
@@ -26,7 +35,7 @@ Nach diesen Modifikationen liegt der Graph in der Form einer Nice Tree Decomposi
 \section{Dynamisches Programm}
 \label{sec:impl_dynP}
 Die Berechnungsvorschrift des dynamischen Programms ist in Sektion \ref{c:cc_steiner} erläutert. 
-Für die Implementierung wird vom Wurzelknoten ausgehend in symmetrischer Reihenfolge über die Nice Tree Decomposition $\mathbb{T}$ iteriert und für jeden Bag eine $k \times kN \times 3^{|B_x|}$ - Matrix berechnet, wobei die Größe der Lösung $k$ und $N$ als Inputparameter übergeben werden. 
+Für die Implementierung wird vom Wurzelknoten ausgehend in symmetrischer Reihenfolge über die Nice Tree Decomposition $\mathbb{T}$ iteriert und für jeden Bag eine $k \times kN \times 3^{|B_x|}$ - Matrix berechnet, wobei die Größe der Lösung $k$ und $N$ als Eingabeparameter übergeben werden. 
 Die erste Dimension $k$ beschreibt die Größe (Anzahl Knoten) der Lösungsmenge. 
 Die zweite Dimension $kN$ steht für die Summe der Gewichte der Lösungsmenge. 
 Obwohl die Gewichte zufällig einheitlich verteilt werden, kann im schlechtesten Fall jedem Knoten das Gewicht $N$ zugewiesen werden. 
@@ -50,7 +59,7 @@ Diese kann für die Abfrage der Lösungen $A_r(k,W,\emptyset)$ genutzt werden.
 Der Programmablauf ist im Pseudocode \ref{code:pseudo} dargestellt.
 
 \begin{svgraybox}
-\begin{lstlisting}[language=python,label={code:pseudo}, caption=Pseudocode für das dynamische Programm]
+\begin{lstlisting}[language=python,label={code:pseudo}, basicstyle=\small, caption=Pseudocode für das dynamische Programm]
 v1 = terminals[0]
 def countC(node, indices, child_data, k, N, terminals, weights):
     if node.linker_Knoten is not None:
@@ -104,7 +113,7 @@ def countC(node, indices, child_data, k, N, terminals, weights):
         for s in colorings:
             for i in range(0, k):
                 for w in range(0, k * N):
-                    # berechne die drei Faerbungen, die aufsummiert werden
+                    # berechne die Indices der drei Faerbungen, die aufsummiert werden
                     indices = calculate_indices()
                     data[s, i, w] = child_data[indices[0], i, w] +
                     		    child_data[indices[1], i, w] +
@@ -142,24 +151,45 @@ $0 \rightarrow s=0$\\
 $1 \rightarrow s=1_1$\\
 $2 \rightarrow s=1_2$\\
 \end{center}
-Für die Bagtypen \glqq Forget\grqq ~und \glqq Introduce Vertex\grqq ~werden Funktionen benötigt, welche für die Reduzierung bzw. Erweiterung der Färbungsdimension die richtige Zuordnung zwischen Färbung und Kodierung gewährleisten.
-Dazu wurde die Funktion \textit{test} implementiert. 
-Diese bekommt als Parameter die Färbung als geordnete Liste (zB. \texttt{[0,2,1]} für 7 als Index), wobei jede Zahl dieser Liste für einen entsprechend der o.g. Zuordnung gefärbten Knoten steht. 
+Die ternäre Darstellung beschreibt die Färbung einer Menge von Knoten, wobei jede Ziffer einen gefärbten Knoten markiert. 
+Die entsprechende Dezimaldarstellung steht für den Index der Färbungsdimension. 
+Der Zugriff auf diesen Index liefert die $k \times kN$-Datenmatrix für die entsprechende Färbung.
+Für die Reduzierung bzw. Erweiterung der Färbungsdimension werden Funktionen benötigt, welche die richtige Zuordnung zwischen Färbung und Kodierung gewährleisten.
+Dazu wurde die Funktion \texttt{calculate\_indices} implementiert. 
+Diese bekommt als Parameter die Färbung als geordnete Liste (z.~B. \texttt{[0,2,1]} für 7 als Index), wobei jede Zahl dieser Liste für einen entsprechend der o.g. Zuordnung gefärbten Knoten steht. 
 Zusätzlich wird eine Liste von Indices übergeben, welche die \glqq freien\grqq ~Stellen der Färbungsliste markieren. 
 Die \glqq freien\grqq ~Stellen sind die Knoten, für die alle Färbungsmöglichkeiten mit den anderen Stellen der Liste kombiniert werden. 
 Die Funktion berechnet die entsprechenden Möglichkeiten mittels Horner-Schema und gibt sie als null-basierte Dezimalzahlen zurück. 
 Diese dienen im dynamischen Programm als Zugriffsindices für die Färbungsdimension der Datenmatrizen. 
 Als Beispiel wird der Funktion \texttt{([0,2], [0])} als Parameter übergeben. 
-Dies bedeutet, dass alle Färbungsmöglichkeiten der ersten Stelle (null-basiert) mit der zweiten Stelle (welche die Färbung $2 \rightarrow 1_2$ hat) kombiniert werden. 
+Dies bedeutet, dass alle Färbungsmöglichkeiten der ersten Stelle (null-basiert) mit der zweiten Stelle (mit der Färbung $2 \rightarrow 1_2$) kombiniert werden. 
 Als Ergebnis gibt die Funktion in diesem Fall die Liste \texttt{[2,5,8]} als Ergebnis aus, wobei \texttt{[2,5,8]} für die Färbungen \texttt{[0,2],[1,2],[2,2]} stehen.
 
+Um auf Färbungen einzelner Knoten zurückgreifen zu können (z.~B. für die Berechnung des \glqq Introduce Edge\grqq -Bags) wird eine Funktion \texttt{get\_index\_as\_list} benötigt. Dieser wird eine Färbung als Index (in Dezimaldarstellung) und die Länge des Bags als Parameter übergeben wird. Diese berechnet die Liste der ternär codierten Färbungen mit der Länge des Bags. Der Code dafür ist in \ref{code:as_list} dargestellt. 
+
+\begin{svgraybox}
+\begin{lstlisting}[language=python,label={code:as_list}, basicstyle=\small, caption=Funktion get\_index\_as\_list zur Berechnung der ternären Färbung aus dem Index]
+def get_index_as_list(x, nr_of_vertices):
+    if nr_of_vertices == 0:
+        return [0]
+    number = x
+    res = []
+    for i in range(nr_of_vertices-1, -1, -1):
+        value = m.floor(number/(3**i))
+        number -= (value * 3**i)
+        res.append(value)
+
+    return res
+\end{lstlisting}
+\end{svgraybox}
+
 \section{Evaluierung}
-\label{sec:eval}
-Die Laufzeit des dynamischen Programms wurde anhand von Beispielen getestet. Zu sehen sind die Input-Parameter k und N sowie die Anzahl der Knoten des Graphen sowie die in der Nice-Tree-Decomposition erhaltene \textit{treewidth}.
+\label{sec:impl_eval}
+Die Laufzeit des dynamischen Programms wurde anhand von Beispielen getestet. Zu sehen sind die Eingabeparameter k und N sowie die Anzahl der Knoten des Graphen sowie die in der Nice-Tree-Decomposition erhaltene \textit{treewidth}.
 \begin{table}
 \centering
 \begin{tabular}{l | l} 
-\textbf{Input} & \textbf{ $\varnothing$ T in $s$}\\
+\textbf{Eingabe} & \textbf{ $\varnothing$ T in $s$}\\
 \hline
 (k=2, N= 6, |V|=3, tw(G)=2) & $ \sim 0.002$ \\
 (k=3, N=14, |V|=7, tw(G)=3) & $ \sim 0.83$ \\
@@ -167,8 +197,8 @@ Die Laufzeit des dynamischen Programms wurde anhand von Beispielen getestet. Zu 
 \end{tabular}
 \end{table}
 
-Es ist ersichtlich, dass der Algorithmus schon bei kleinen Graphenerweiterungen merkbare Laufzeitverlängerungen aufweist. Es ist anzunehmen, dass der Algorithmus in der Praxis nur eingeschränkt nutzbar ist. Praxisrelevante Probleme werden sich wahrscheinlich in Graphen repräsentieren, die weit aus komplexer sind, als die von uns getesteten Beispiele. Wir vermuten die Laufzeit wäre dort nichtmehr tragbar oder zumindest nicht effizient genug. Desweiteren ist der Speicherbedarf der Cut \& Count-Technik nicht außer acht zu lassen. Jeder Bag benötigt eine $3^t\times k\times kN$-Matrix. Bei größeren Graphen und hohem gewählten $N$, zur Verringerung des Falsch-Negativ Ergebnisses, kann diese schnell sehr groß werden.
+Es ist ersichtlich, dass der Algorithmus schon bei kleinen Grapherweiterungen merkbare Laufzeitverlängerungen aufweist. Es ist anzunehmen, dass der Algorithmus in der Praxis nur eingeschränkt nutzbar ist. Praxisrelevante Probleme werden sich wahrscheinlich in Graphen repräsentieren, die weit aus komplexer sind, als die von uns getesteten Beispiele. Wir vermuten die Laufzeit wäre dort nichtmehr tragbar oder zumindest nicht effizient genug. Desweiteren ist der Speicherbedarf der Cut \& Count-Technik nicht außer acht zu lassen. Jeder Bag benötigt eine $3^t\times k\times kN$-Matrix. Bei größeren Graphen und hohem gewählten $N$, zur Verringerung des Falsch-Negativ Ergebnisses, kann diese schnell sehr groß werden.
 
 \section{Ausblick}
-\label{sec:outlook}
+\label{sec:impl_outlook}
 
