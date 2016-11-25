@@ -21,24 +21,24 @@
 }
 \end{definition}
 
-Das Konzept der Tree Decomposition wurde 1976 von Rudolf Halin\cite{Halin1976} eingeführt. Sie dient dazu die Baumweite zu definieren und Berechnungsprobleme auf Graphen schneller zu lösen.
+Das Konzept der Tree Decomposition wurde 1976 von Rudolf Halin \cite{Halin1976} eingeführt. Sie dient dazu die Baumweite zu definieren und Berechnungsprobleme auf Graphen schneller zu lösen.
 
-Die Baumweite ist eine Zahl und beschreibt die \glqq Baum-Ähnlichkeit\grqq eines Graphen. Die Baumweite $tw(\mathbb{T})$ einer Tree Decomposition $\mathbb{T}$ ist die Größe des größten Bags minus eins. Die Baumweite eines Graphen $G$ ist die minimale Baumweite aller möglichen Tree Decompositions von $G$.
+Die Baumweite ist eine Zahl und beschreibt die \glqq Baum-Ähnlichkeit\grqq ~eines Graphen. Die Baumweite $tw(\mathbb{T})$ einer Tree Decomposition $\mathbb{T}$ ist die Größe des größten Bags minus eins. Die Baumweite eines Graphen $G$ ist die minimale Baumweite aller möglichen Tree Decompositions von $G$.
 
 Ein Beispiel für eine Tree Decomposition ist in Abbildung \ref{fig:td_2} gegeben. Der Ursprungsgraph ist in Abbildung \ref{fig:td_1}.
 
 \begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{./imgs/TD_1.png}
+\caption{Ursprungsgraph für eine Tree Decomposition}
 \label{fig:td_1}
-  \centering
-    \includegraphics[width=1.0\textwidth]{./imgs/TD_1.png}
-  	\caption{Ursprungsgraph für eine Tree Decomposition}
 \end{figure}
 
 \begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{./imgs/TD_2.png}
+\caption{Eine Tree Decomposition für den in Abbildung \ref{fig:td_1} gegebenen Ursprungsgraphen}
 \label{fig:td_2}
-  \centering
-    \includegraphics[width=1.0\textwidth]{./imgs/TD_2.png}
-  	\caption{Eine Tree Decomposition für den in Abbildung \ref{fig:td_1} gegebenen Ursprungsgraphen}
 \end{figure}
 
 \section{Nice Tree Decomposition}
@@ -49,7 +49,7 @@ Kloks\cite{kloks1994} führte die sogenannte Nice Tree Decomposition ein, welche
 Eine standardmäßige Nice Tree Decomposition ist eine \textit{Tree Decomposition, für die gilt:
 \begin{itemize}
 \item jeder Bag besitzt höchstens zwei Kind-Knoten
-\item falls ein Bag zwei Kind-Knoten $l,r$ besitzt, dann gilt $B_x=B_l=B_r$
+\item falls ein Bag $x$ zwei Kind-Knoten $l,r$ besitzt, dann gilt $B_x=B_l=B_r$
 \item falls ein Bag $x$ einen Kind-Knoten besitzt, dann gilt entweder $|B_x|=|B_y| + 1$ und $B_y \subseteq B_x$ oder $|B_x| + 1 = |B_y|$ und $B_x \subseteq B_y$
 \end{itemize}
 }

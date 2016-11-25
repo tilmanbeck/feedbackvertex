@@ -1,14 +1,13 @@
 \chapter{Zusammenfassung}
 \label{c:summary}
 %cut count ist monte carlo als result
-Das Ergebnis der Anwendung der Cut \& Count-Technik auf ein Graphproblem ist ein Monte-Carlo-Algorithmus, der mit einer nach oben beschränkten Wahrscheinlichkeit Aussage über die Existenz eines Ergebnisses liefert. Mittels Randomisierung und dem Isolations-Lemma \ref{sec:cc_iso} erhalten wir niemals eine falsch-positive Antwort aber zu einer, abhängig von der Wahl eines Parameters, eine falsch-negativ Antwort. 
+Das Ergebnis der Anwendung der Cut \& Count-Technik auf ein Graphproblem ist ein Monte-Carlo-Algorithmus, der mit einer nach oben beschränkten Wahrscheinlichkeit Aussage über die Existenz eines Ergebnisses liefert. Mittels Randomisierung und dem Isolations-Lemma \ref{sec:cc_iso} erhalten wir niemals eine falsch-positive Antwort aber zu einer, abhängig von der Wahl eines Parameters, eine falsch-negative Antwort. 
 
 %wurde von uns für steiner implementiert
 In dieser Arbeit wurde diese Technik für das Steinerbaum-Problem implementiert. Zusätzlich, da die Cut \& Count-Technik eine angepasste Nice-Tree-Decomposition \ref{c:ntd} benötigt, wurde eine Implementierung entwickelt, welche eine standardmäßige Nice Tree Decomposition in die von der Cut \& Count-Technik benötigte Form überführt.
 
-%TODO es gibt keine Lösung sondern nur die Existenz einer Lösung aus
 Die Evaluation verschiedener Eingabegrößen warf die Frage auf inwiefern die Count \& Count-Technik praxisrelevante Probleme hinsichtlich der Laufzeit und des Speicherbedarfs effizient lösen kann. 
-Für die Technik ist eine effiziente Vorverarbeitung der Nice Tree Decomposition wichtig, da die deren Baumweite und Anzahl der Bags Auswirkungen auf die Laufzeit und den Speicherbedarf hat.
+Für die Technik ist eine effiziente Vorverarbeitung der Nice Tree Decomposition wichtig, da die Baumweite und die Anzahl der Bags Auswirkungen auf die Laufzeit und den Speicherbedarf haben.
 Hierbei bedarf es weiterer Forschung in Vergleich mit anderen Ansätzen, wie z.~B. einer Brute-Force-Berechnung.
 %treewidth sollte klein sein
 %Aufgrund der von der Technik resultierenden Laufzeit $3^t |V|^{\mathcal{O}(1)}$ sollte bei Verwendung darauf geachtet werden, dass die \textit{treewidth} der Nice-Tree-Decomposition des Problemgraphen gering ausfällt.
