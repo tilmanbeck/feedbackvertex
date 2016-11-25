@@ -38,15 +38,20 @@ $\mathcal{C}_W$ sei die Menge aller Subgraphen, die einen konsistenten Schnitt $
 \begin{figure}
   \centering
     \includegraphics[width=0.5\textwidth]{./imgs/terminal_v1.png}
-  	\caption{Konsistente Cuts}
+  	\caption{Konsistente Schnitte}
 	\label{fig:st_cut}
 \end{figure}
 
-In der Abbildung \ref{fig:st_cut} zeigt beispielhaft die Bildung von konsistenten Cuts. Die Knoten mit doppeltem Rand stellen Terminale da. Das Terminal $A$ wird als $v_1$ Terminal festgelegt. Zur vereinfachung wurde die Gewichtsfunktion $\omega$ weggelassen.
+Die Anzahl der Subgraphen, welche einen konsistenten Schnitte bilden, sind in Lemma 3.3 in \cite{cygan_solving_2011} definiert:\\
+\\Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.\\
+
+\\Ausgehend von der Definition $\mathcal{C}_W$ ist für jeden Subgraphen, der einen konsistenten Schnitt $(X,(X_1,X_2))$ bildet, und für jede Zusammenhangskomponente $C$ aus $G[X]$ bekannt, dass  $C$ entweder in $X_1$ oder in $X_2$ enthalten sein muss. Für die Zusammenhangskomponente, die $v_1$ enthält, ist die Seite des Schnitts fest. Für alle anderen Zusammenhangskomponenten kann die Seiten der Mengen $X_1,X_2$ frei gewählt werden. Daher erhalten wir $2^{cc(G[X])-1}$ verschiedene konsistente Schnitte.
+
+In der Abbildung \ref{fig:st_cut} zeigt beispielhaft die Bildung von konsistenten Schnitten. Die getrichelte und gepunktete Line veranschaulicht den konsistenten Schnitt visuell. Die Knoten mit doppeltem Rand stellen Terminale da. Das Terminal $A$ wird als $v_1$ Terminal festgelegt. Zur Vereinfachung wurde die Gewichte der Knoten ignoriert.
 Aus diesem Beispiel gehen mit $k=3$ folgende Mengen hervor:
 \begin{itemize}
-\item $\mathcal{R} = {{A,B,C}, {A,B,D}, {A,B,E}}$
-\item $\mathcal{S} = {{A,B,C}}$
+\item $\mathcal{R} = \{\{A,B,C\}, \{A,B,D\}, \{A,B,E\}\}$
+\item $\mathcal{S} = \{\{A,B,C\}\}$
 \end{itemize}
 
 Aus der $\mathcal{R}$ Menge ergeben sich folgende $\mathcal{C}$ Mengen:
@@ -67,14 +72,8 @@ Aus der $\mathcal{R}$ Menge ergeben sich folgende $\mathcal{C}$ Mengen:
 \end{itemize}
 \end{itemize}
 
-Ohne die Restriktion $v_1 \in X_1$ gäbe es die doppelte Menge an konsistenten Cuts. Bei jedem Cut könnte die Mengen $X_1$ und $X_2$ vertauscht werden. Durch die Restriktion von $v_1$ wird dies vermieden.
+Ohne die Restriktion $v_1 \in X_1$ gäbe es die doppelte Menge an konsistenten Schnitten. Bei jedem Schnitt könnte die Mengen $X_1$ und $X_2$ vertauscht werden. Durch die Restriktion von $v_1$ wird dies vermieden.
 
-Die Anzahl der Subgraphen, welche einen konsistenten Schnitte bilden, sind in Lemma 3.3 in \cite{cygan_solving_2011} definiert:\\
-Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.
-
-Ausgehend von der Definition $\mathcal{C}_W$ ist für jeden Subgraphen, der einen konsistenten Schnitt $(X,(X_1,X_2))$ bildet, und für jede Zusammenhangskomponente $C$ aus $G[X]$ bekannt, dass  $C$ entweder in $X_1$ oder in $X_2$ enthalten sein muss. Für die Zusammenhangskomponente, die $v_1$ enthält, ist die Seite des Schnitts fest. Für alle anderen Zusammenhangskomponenten kann die Seiten der Mengen $X_1,X_2$ frei gewählt werden. Daher erhalten wir $2^{cc(G[X])-1}$ verschiedene konsistente Schnitte.
-
-In Abbildung \ref{c:cc_general} sind die verschiedenenen Schnittmöglichkeiten eines Graphen ohne die Beschränkung des $v_1$-Terminals visualisiert. Um nicht beide identischen Schnitte (in der Abbildung $1.$ und $2.$ Schnitt) zu zählen, wird $v_1 \in X_1$ festgelegt. 
 
 \section{Count}
 \label{sec:st_count}
