@@ -88,6 +88,7 @@ target/
 *.vrb
 *.lof
 *.lot
+*.lol
 paper/book.pdf
 
 # Mac File
