@@ -205,7 +205,8 @@ Die Berechnung über das dynamische Programm bietet dennoch den Vorteil Lösunge
 
 \section{Diskussion und Ausblick}
 \label{sec:impl_outlook}
-Unsere Ergebnisse in Sektion \ref{sec:impl_eval} eröffnen die Fragestellung inwiefern die Cut &\ Count-Technik das Steinerbaumproblem hinsichtlich Laufzeit und Speicherbedarf effizient löst. Hier bedarf es weiterer Vergleiche mit anderen Ansätzen, wie z.~B. einer Brute-Force-Suche, welche für kleinere Graphen womöglich effizienter Lösungen berechnet.
+Unsere Ergebnisse in Sektion \ref{sec:impl_eval} eröffnen die Fragestellung inwiefern die Cut \& Count-Technik das Steinerbaumproblem hinsichtlich Laufzeit und Speicherbedarf effizient löst. 
+Hier bedarf es weiterer Vergleiche mit anderen Ansätzen, wie z.~B. einer Brute-Force-Suche, welche für kleinere Graphen womöglich effizienter Lösungen berechnet.
 
 In der Arbeit \cite{cygan_solving_2011} wird zudem nicht auf den Speicherbedarf eingegangen. 
 Dieser ist abhängig von der Baumweite als auch von der Beschaffenheit der Nice Tree Decomposition, da für jeden Bag eine $3^t\times k\times kN$-Datenmatrix berechnet wird. Für speicherkritische Anwendungen stellt die Cut \& Count-Technik keine zufriedenstellende Lösung dar. Eine Optimierung des Speicherbedarfs des dynamischen Programms wurde von uns nicht untersucht.
