@@ -36,11 +36,38 @@ Ein Schnitt $(V_1,V_2)$ eines ungerichteten Graphen $G=(V,E)$ ist konsistent, fa
 Ein Subgraph, der einen konsistenten Schnitt aus $G$ bildet, ist ein Paar $(X,(X_1,X_2))$, so dass $(X_1,X_2)$ ein konsistenter Schnitt von $G[X]$ ist.
 $\mathcal{C}_W$ sei die Menge aller Subgraphen, die einen konsistenten Schnitt $(X,(X_1,X_2))$ bilden, wobei $X\in \mathcal{R}_W$ und $v_1 \in X_1$.
 \begin{figure}
-\label{fig:st_cut}
   \centering
-    \includegraphics[width=1.0\textwidth]{./imgs/terminal_v1.png}
-  	\caption{Konsistente Schnitte ohne Beschränkung $v_1 \in X_1$.}
+    \includegraphics[width=0.5\textwidth]{./imgs/terminal_v1.png}
+  	\caption{Konsistente Cuts}
+	\label{fig:st_cut}
 \end{figure}
+
+In der Abbildung \ref{fig:st_cut} zeigt beispielhaft die Bildung von konsistenten Cuts. Die Knoten mit doppeltem Rand stellen Terminale da. Das Terminal $A$ wird als $v_1$ Terminal festgelegt. Zur vereinfachung wurde die Gewichtsfunktion $\omega$ weggelassen.
+Aus diesem Beispiel gehen mit $k=3$ folgende Mengen hervor:
+\begin{itemize}
+\item $\mathcal{R} = {{A,B,C}, {A,B,D}, {A,B,E}}$
+\item $\mathcal{S} = {{A,B,C}}$
+\end{itemize}
+
+Aus der $\mathcal{R}$ Menge ergeben sich folgende $\mathcal{C}$ Mengen:
+\begin{itemize}
+\item Für $\mathcal{R}_1$:
+\begin{itemize}
+\item $\mathcal{C}_{1.1} = \{(A,B,C),  (\{A,B,C\}, \{\emptyset\})\}$
+\end{itemize}
+\item Für $\mathcal{R}_2$:
+\begin{itemize}
+\item $\mathcal{C}_{2.1} = \{(A,B,D),  (\{A,B\}, \{D\})\}$
+\item $\mathcal{C}_{2.2} = \{(A,B,D),  (\{A,B,D\}, \{\emptyset\})\}$ 
+\end{itemize}
+\item Für $\mathcal{R}_3$:
+\begin{itemize}
+\item $\mathcal{C}_{3.1} = \{(A,B,E),  (\{A,B\}, \{E\})\}$
+\item $\mathcal{C}_{2.1} = \{(A,B,D),  (\{A,B,E\}, \{\emptyset\})\}$
+\end{itemize}
+\end{itemize}
+
+Ohne die Restriktion $v_1 \in X_1$ gäbe es die doppelte Menge an konsistenten Cuts. Bei jedem Cut könnte die Mengen $X_1$ und $X_2$ vertauscht werden. Durch die Restriktion von $v_1$ wird dies vermieden.
 
 Die Anzahl der Subgraphen, welche einen konsistenten Schnitte bilden, sind in Lemma 3.3 in \cite{cygan_solving_2011} definiert:\\
 Let $G=(V,E)$ be a graph and let $X$ be a subset of vertices such that $v_1 \in X \subseteq V$. The number of consistently cut subgraphs $(X,(X_1,X_2))$ such that $v_1 \in X_1$ is equal to $2^{cc(G[X])-1}$.

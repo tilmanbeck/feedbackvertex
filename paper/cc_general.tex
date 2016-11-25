@@ -54,6 +54,12 @@ Isolation Lemma\\
  A function $\omega : U \rightarrow \mathbb{Z}$ isolates a set family $\mathcal{F} \subseteq 2^U$ if there is a unique $S' \in \mathcal{F}$ with $\omega (S')=min_{S \in \mathcal{S}} \omega(S)$\\
 \end{definition}
 
+Die Funktion $\omega : U \rightarrow \mathbb{Z}$ weißt jedem Element $U$ einen Zahlenwert unabhängig und zufällig zu.
+Bei der Anwendung auf das Steiner-Tree-Problem steht das $U$ stellvertretend für einen Knoten.
+Die Funktion $\omega$ heißt dabei Gewichtsfunktion und die zugewiesene Zahl ist das Gewicht des Knoten.
+Die Set-Familie $\mathcal{F}$ ist die Menge aller Knoten.
+Gibt es nun genau ein Subset $S'$ aus $\mathcal{F}$ mit mit der Eigenschaft $\omega (S')=min_{S \in \mathcal{S}} \omega(S)$, so sagt man das $\omega$ $\mathcal{F}$ isoliert.
+
 In der Arbeit \cite{cygan_solving_2011} wird das Isolations-Lemma in Lemma 2.5 verwendet, um folgende Aussage über die Wahrscheinlichkeit der Isolation auszusagen:\\
 \\Let $\mathcal{F} \subseteq 2^U$ be a set family over a universe $U$ with $|\mathcal{F}| > 0$. For each $u \in U$ ,
 choose a weight $\omega(u) \in {1, 2, . . . , N }$ uniformly and independently at random. Then
