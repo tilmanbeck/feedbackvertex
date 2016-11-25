@@ -3,9 +3,9 @@
 
 \section{Einführendes}
 \label{sec:cc_intro}
-Die Cut \& Count-Technik aus \cite{cygan_solving_2011} wird benutzt um Zusammenhangs-Probleme von Graphen zu lösen.
+Die Cut \& Count-Technik aus \cite{cygan_solving_2011} wird benutzt, um Zusammenhangs-Probleme von Graphen zu lösen.
 Dabei handelt es sich um Graphen-Probleme, bei denen zusammenhängende Submengen der Knoten gefunden werden müssen, die problemspezifische  Eigenschaften erfüllen müssen. 
-Die Technik setzt sich aus den beiden Teilen \glqq Cut\grqq ~, \glqq Count\grqq ~zusammen (siehe Sektion \ref{sec:cc_cc}) und kann auf mehrere Probleme angewendet werden, u.A. Längster Weg, Steinerbaum oder Feedback Vertex Set.
+Die Technik setzt sich aus den beiden Teilen \glqq Cut\grqq ~und \glqq Count\grqq ~zusammen (siehe Sektion \ref{sec:cc_cc}) und kann auf mehrere Probleme angewendet werden, u.A. Längster Weg, Steinerbaum oder Feedback Vertex Set.
 
 Das Ergebnis ist ein Monte-Carlo-Algorithmus, welcher eine Aussage über die Existenz einer (oder mehrerer) Lösungen gibt. Dies ist in Sektion \ref{sec:cc_monte} erläutert.
 Mithilfe von Randomisierung beschränkt die Technik die Anzahl der Lösungsmengen mit einer Wahrscheinlichkeit, die durch das Isolation-Lemma begrenzt werden kann. Dies wird in Sektion \ref{sec:cc_iso} näher erklärt.
@@ -19,22 +19,26 @@ Dazu kann Cut \& Count folgendermaßen aufgeteilt werden:
 
 \subsection{Cut}
 \label{ssec:cc_cut}
-Die Zusammenhangs-Bedingung aus dem Graphenproblem wird abgeschwächt, indem eine Menge von Lösungskandidaten $\mathcal{R} \supseteq \mathcal{S}$ betrachtet wird. 
+Die Zusammenhangs-Bedingung aus dem Graphenproblem wird abgeschwächt, indem eine Menge $\mathcal{R} \supseteq \mathcal{S}$ betrachtet wird. 
+Diese Menge $\mathcal{R}$ beschreibt die Menge deren Elemente alle Anforderungen bis auf die Zusammenhangs-Bedingung des Graphenproblems erfüllen. Dies entspricht der Menge der Lösungskandidaten.
 Zusätzlich wird die Menge $\mathcal{C}$ von Paaren $(X,C)$ betrachtet, wobei $X \in \mathcal{R}$ und $C$ einen konsistenten Schnitt beschreibt. 
 
+Mithilfe dieser beiden Mengen können wir auf die Anzahl der Lösungsmengen schließen. Die Graphenprobleme, für welche die Cut \& Count-Technik angewendet werden kann, unterschieden sich hinsichtlich ihrer Zusammenhangs-Bedingung und der Lösungsmenge.
+Dementsprechend muss die Menge $\mathcal{R}$ angepasst werden.
 \subsection{Count}
 \label{ssec:cc_count}
-Berechne $|\mathcal{C}|$ modulo 2 mithilfe der Prozedur $\mathtt{countC}$ (siehe Sektion \ref{ssec:impl_countc}). 
-Dadurch werden alle unzusammenhängenden Lösungskandidaten $X \in \mathcal{R} \setminus \mathcal{S}$ ignoriert, da die Anzahl derer mit einer geraden Anzahl von konsistenten Schnitten konsistent sind. Es bleiben die zusammenhängenden Lösungskandidaten $x \in \mathcal{S}$ übrig. 
+Im Count-Teil der Technik wird die Anzahl der konsistenten Schnitte $|\mathcal{C}|$ gezählt.
+Da die Menge der Lösungskandidaten $\mathcal{R}$ vom Graphenproblem abhängig ist, muss auch für jedes Problem entschieden werden welches Lösungskandidat-Schnitt-Paar gezählt wird.
 
-Der Algorithmus \glqq zählt\grqq ~nicht die Lösungen, sondern die Anzahl der Lösungskandidaten, die einen konsistenten Schnitt bilden.
+Durch die Isolierung auf wenige Kandidaten kann mit der Anzahl der konsistenten Schnitte entschieden werden, ob es eine Lösung gibt oder nicht.
+Der Algorithmus \glqq zählt\grqq ~also nicht die Lösungen, sondern die Anzahl der Lösungskandidaten, die einen konsistenten Schnitt bilden.
 
 \section{Monte-Carlo-Algorithmus}
 \label{sec:cc_monte}
 Ein Monte-Carlo-Algorithmus ist ein randomisierter Algorithmus, welcher mit einer nach oben beschränkten Wahrscheinlichkeit ein falsches Ergebnis liefern darf. 
 Für die Cut \& Count-Technik bedeutet dies, dass der hervorgegangene Algorithmus niemals ein falsch-positives Ergebnis\footnote{Der Algorithmus gibt eine positive Antwort auf das Problem, obwohl keine Lösung existiert} ausgeben kann, aber zu einer gewissen Wahrscheinlichkeit ein falsch-negatives Ergebnis\footnote{Der Algorithmus gibt eine negative Antwort auf das Problem, obwohl eine Lösung existiert.}. 
 Die Wahrscheinlichkeit eines falsch-negativ wird durch das Isolations-Lemma begrenzt. 
-Die Ausgabe eines falsch-negativ unterliegt einer bestimmten Wahrscheinlichkeit. Daher ist sinnvoll den Algorithmus in diesem Fall mehrmals hintereinander ausführen. Es begünstigt die Wahrscheinlichkeit eine Lösungsmenge zu finden, falls diese existiert.
+Die Ausgabe eines falsch-negativ unterliegt einer bestimmten Wahrscheinlichkeit. Daher ist es sinnvoll den Algorithmus in diesem Fall mehrmals hintereinander ausführen. Es begünstigt die Wahrscheinlichkeit eine Lösungsmenge zu finden, falls diese existiert.
 
 Der Monte-Carlo-Algorithmus erreicht folgende Laufzeiten für einige bekannte Zusammenhangs-Probleme bei Graphen, wobei $t$ die Braumbreite der Tree Decomposition beschreibt:
 \begin{itemize}
@@ -55,10 +59,8 @@ Isolation Lemma\\
 \end{definition}
 
 Die Funktion $\omega : U \rightarrow \mathbb{Z}$ weißt jedem Element $U$ einen Zahlenwert unabhängig und zufällig zu.
-Bei der Anwendung auf das Steiner-Tree-Problem steht das $U$ stellvertretend für einen Knoten.
-Die Funktion $\omega$ heißt dabei Gewichtsfunktion und die zugewiesene Zahl ist das Gewicht des Knoten.
-Die Set-Familie $\mathcal{F}$ ist die Menge aller Knoten.
-Gibt es nun genau ein Subset $S'$ aus $\mathcal{F}$ mit mit der Eigenschaft $\omega (S')=min_{S \in \mathcal{S}} \omega(S)$, so sagt man das $\omega$ $\mathcal{F}$ isoliert.
+Bei der Anwendung auf das Steinerbaum-Problem ist $X \subseteq U$, wobei $U=|V|$.
+Die Funktion $\omega$ heißt dabei Gewichtsfunktion und die zugewiesene Zahl ist das Gewicht des Knoten. Angewendet auf eine Menge von Knoten ergibt $\omega(X)=\sum_{u \in X}\omega(u)$.
 
 In der Arbeit \cite{cygan_solving_2011} wird das Isolations-Lemma in Lemma 2.5 verwendet, um folgende Aussage über die Wahrscheinlichkeit der Isolation auszusagen:\\
 \\Let $\mathcal{F} \subseteq 2^U$ be a set family over a universe $U$ with $|\mathcal{F}| > 0$. For each $u \in U$ ,
@@ -67,4 +69,6 @@ choose a weight $\omega(u) \in {1, 2, . . . , N }$ uniformly and independently a
 $prob[\omega$ isolates $\mathcal{F}]\geq 1 - \frac{|U|}{N}$
 \end{center}
 
-Durch die Wahl eines großen $N$ kann die Wahrscheinlichkeit eines falsch-negativ reduziert werden. Dies geht mit einer Erhöhung der Laufzeit des Algorithmus einher.
+Das Isolations-Lemma erlaubt es die Größe einer Menge modulo 2 zu rechnen, da es mit hoher Wahrscheinlichkeit die Menge der Lösungen auf eine einzige reduziert. Durch die Wahl eines großen $N$ kann die Wahrscheinlichkeit eines falsch-negativ reduziert werden. Dies geht mit einer Erhöhung der Laufzeit des Algorithmus einher.
+
+Die Anwendung und der Nutzen des Isolation-Lemma wird in Kapitel \ref{c:cc_steiner} deutlich.
