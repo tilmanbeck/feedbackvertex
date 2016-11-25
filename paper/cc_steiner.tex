@@ -6,10 +6,10 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
-\chapter{Cut \& Count für das Steinerbaum-Problem}
+\section{Cut \& Count für das Steinerbaum-Problem}
 \label{c:cc_steiner}
 
-\section{Steinerbaum}
+\subsection{Steinerbaum}
 \label{sec:steiner}
 \begin{definition}
 Steinerbaum-Problem\\
@@ -19,7 +19,7 @@ Steinerbaum-Problem\\
 
 In einem gegebenen Graphen ist eine Menge $T \subseteq V$ als Terminale markiert. Gesucht ist ein Subgraph innerhalb des Ursprungsgraphen, der alle Terminale und genau $k$ Knoten enthält. Zudem muss der Subgraph zusammenhängend sein, es muss also jeder Knoten von jedem anderen Knoten des Subgraphen über einen Pfad innerhalb des Subgraphen erreichbar sein.
 
-\section{Cut}
+\subsection{Cut}
 \label{sec:st_cut}
 Zu Beginn des Cut-Teils wird eine zufällige Gewichtsfunktion $\omega:V\rightarrow \{1,\dots,N\}$ definiert. 
 Diese wird für die Isolation der Lösungsmenge verwendet. 
@@ -77,7 +77,7 @@ Aus der $\mathcal{R}$ Menge ergeben sich folgende $\mathcal{C}$ Mengen:
 Ohne die Restriktion $v_1 \in X_1$ gäbe es die doppelte Menge an konsistenten Schnitten. Bei jedem Schnitt könnte die Mengen $X_1$ und $X_2$ vertauscht werden. Durch die Restriktion von $v_1$ wird dies vermieden.
 
 
-\section{Count}
+\subsection{Count}
 \label{sec:st_count}
 Aus Lemma 3.3 ist bekannt: $|\mathcal{C}|=\sum_{X \in \mathcal{R}} 2^{cc(G[X])-1}$. \\
 Durch die Randomisierung mithilfe der Knotengewichte wird die Wahrscheinlichkeit, dass die Menge der Lösungskandidaten $\mathcal{R}$ mehrere Lösungen enthält, reduziert. 
@@ -92,7 +92,7 @@ Diese Äquivalenz erlaubt es ein dynamisches Programm zu beschreiben, dass nicht
 %Im Lemma 3.4 trifft das Paper dazu eine Aussage: Let $G,$ $\omega$, $\mathcal{C}_W$ and $\mathcal{S}_W$ be as defined above. 
 %Then for every $W$, $|\mathcal{S}_W| \equiv |\mathcal{C}_W|$.
 
-\section{Dynamisches Programm}
+\subsection{Dynamisches Programm}
 \label{sec:dynP}
 
 Für das dynamische Programm werden für jeden Bag $x \in \mathbb{T}$, die Zahlen $0 \leq i \leq k,0 \leq w \leq kN$ und die Färbung $s \in \{0,1_1,1_2 \}^{B_x}$ folgende Mengen definiert:
@@ -144,7 +144,7 @@ Ob der Algorithmus eine Lösung gefunden hat, kann aus der $k \times kN$-Datenma
 Dieser Zugriff ist konstant in $\mathcal{O}(1)$.\\
 Falls eine Lösung existiert und diese gefunden wurde, dann existiert ein $0 \leq W \leq kN$ für das $A_r(k,W,\emptyset) \equiv 2 = 1$.
 
-\section{Monte-Carlo Algorithmus und Laufzeit}
+\subsection{Monte-Carlo Algorithmus und Laufzeit}
 \label{sec:mc_alg}
 Im Theorem 3.6 aus \cite{cygan_solving_2011} wird zusammenfassend erwähnt:
 \begin{theorem}

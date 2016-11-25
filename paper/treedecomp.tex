@@ -1,16 +1,7 @@
-%%%%%%%%%%%%%%%%%%%%% chapter.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% sample chapter
-%
-% Use this file as a template for your own input.
-%
-%%%%%%%%%%%%%%%%%%%%%%%% Springer-Verlag %%%%%%%%%%%%%%%%%%%%%%%%%%
-%\motto{Use the template \emph{chapter.tex} to style the various elements of your chapter content.}
-\chapter{(Nice) Tree Decomposition}
-\label{c:ntd} % Always give a unique label
-% use \chaptermark{}
+\section{(Nice) Tree Decomposition}
+\label{c:ntd}
 
-\section{Tree Decomposition}
+\subsection{Tree Decomposition}
 \label{sec:ntd_td}
 \begin{definition}
 (Tree decomposition, \cite{robertson1984graph}). Eine Tree Decomposition \textit{eines (ungerichteten oder gerichteten) Graphen $G$ ist ein Baum $\mathbb{T}$ in dem jedem Knoten $x \in \mathbb{T}$ eine Menge von Knoten $B_x \subseteq V$ (genannt \glqq Bag\grqq) zugeordnet ist, so dass 
@@ -41,7 +32,7 @@ Ein Beispiel für eine Tree Decomposition ist in Abbildung \ref{fig:td_2} gegebe
 \label{fig:td_2}
 \end{figure}
 
-\section{Nice Tree Decomposition}
+\subsection{Nice Tree Decomposition}
 \label{sec:ntd_ntd}
 Kloks \cite{kloks1994} führte die sogenannte Nice Tree Decomposition ein, welche oft für Algorithmen mit dynamischen Programmen genutzt werden. Da in Sektion \ref{sec:ntd_req} weitere Modifikationen auf Basis der Nice Tree Decomposition eingeführt werden, wird die hier vorgestellte Nice Tree Decomposition als \textit{standardmäßige Nice Tree Decomposition} bezeichnet.
 
@@ -55,7 +46,7 @@ Eine standardmäßige Nice Tree Decomposition ist eine \textit{Tree Decompositio
 }
 \end{definition}
 
-\section{Weitere Modifikationen}
+\subsection{Weitere Modifikationen}
 \label{sec:ntd_req}
 Für den von \cite{cygan_solving_2011} beschriebenen Algorithmus wird die standardmäßige Nice Tree Decomposition zusätzlich noch auf folgende Weise modifiziert:
 \begin{definition}

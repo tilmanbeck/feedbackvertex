@@ -1,4 +1,4 @@
-\chapter{Implementierung}
+\section{Implementierung}
 \label{c:impl}
 In unserer Implementierung liegt der Fokus auf der Implementierung des dynamischen Programms der Cut \& Count-Technik. 
 Wir nehmen an, dass für den Ursprungsgraphen $G$ bereits eine standardmäßige Nice Tree Decomposition gemäß Sektion \ref{sec:ntd_ntd} vorliegt. 
@@ -9,7 +9,7 @@ Sektion \ref{sec:impl_outlook} diskutiert unsere Ergebnisse und gibt einen Ausbl
 
 Der Algorithmus wurde in der Programmiersprache Python\footnote{https://www.python.org/} in der Version $3.5$ entwickelt. 
 Als Entwicklungsumgebung wurde PyCharm\SymbReg ~von JetBrains\footnote{https://www.jetbrains.com/pycharm/} genutzt.
-\section{Nice Tree Decomposition}
+\subsection{Nice Tree Decomposition}
 \label{sec:impl_ntd}
 Es wurde ein Algorithmus entwickelt, der als Eingabe eine standardmäßige Nice Tree Decomposition $\mathbb{T}$ eines Graphen erhält und eine Nice Tree Decomposition ausgibt. 
 Da der Fokus dieser Arbeit auf der Implementierung des dynamischen Programms des Cut \& Count-Algorithmus liegt, wurde der Algorithmus nicht hinsichtlich der Laufzeit optimiert. 
@@ -32,7 +32,7 @@ Beim ersten gemeinsamen Auftreten der Knoten der Kante $e$ innerhalb eines Bags,
 
 Nach diesen Modifikationen liegt der Graph in der Form einer Nice Tree Decomposition aus Sektion \ref{sec:ntd_ntd} vor und kann zur Berechnung des dynamischen Programms verwendet werden.
 
-\section{Dynamisches Programm}
+\subsection{Dynamisches Programm}
 \label{sec:impl_dynP}
 Die Berechnungsvorschrift des dynamischen Programms ist in Sektion \ref{c:cc_steiner} erläutert. 
 Für die Implementierung wird vom Wurzelknoten ausgehend in symmetrischer Reihenfolge über die Nice Tree Decomposition $\mathbb{T}$ iteriert und für jeden Bag eine $k \times kN \times 3^{|B_x|}$ - Matrix berechnet, wobei die Größe der Lösung $k$ und $N$ als Eingabeparameter übergeben werden. 
@@ -42,7 +42,7 @@ Obwohl die Gewichte zufällig einheitlich verteilt werden, kann es einen Fall ge
 Daher kann die Gesamtsumme der Gewichte $W$ gleich $kN$ sein.
 $3^{|B_x|}$ beschreibt die Anzahl der möglichen Färbungen innerhalb eines Bags. 
 Während $k,N$ festgelegt sind, variiert die Länge der Farb-Dimension $3^{|B_x|}$ von Bag zu Bag.
-\subsection{Implementierung der CountC-Prozedur}
+\subsubsection{Implementierung der CountC-Prozedur}
 \label{ssec:impl_countc}
 Da das dynamische Programm des Cut \& Count-Algorithmus die Berechnungsvorschrift für einen Bag rekursiv über den Bag des jeweiligen Kind-Knotens definiert, steigt der Algorithmus zu Beginn in $\mathbb{T}$ rekursiv ab, bis er an einem Blattknoten angekommen ist. 
 Für diesen gibt es keine Farb-Dimension (der Bag ist leer) und die $k \times kN$-Matrix wird initialisiert. 
@@ -60,44 +60,21 @@ Der letzte Berechnungsschritt für den Wurzelknoten entspricht der Berechnung ei
 Diese kann für die Abfrage der Lösungen $A_r(k,W,\emptyset)$ genutzt werden.
 
 Der Programmablauf ist im Algorithmus \ref{code:pseudo} dargestellt.
-
-\begin{svgraybox}
-\begin{lstlisting}[language=python,label={code:pseudo}, basicstyle=\small, caption=Pseudocode für das dynamische Programm]
-v1 = terminals[0]
+\newpage
+\begin{lstlisting}[label={code:pseudo}, caption=Pseudocode für das dynamische Programm]
 def countC(node, indices, child_data, k, N, terminals, weights):
     if node.linker_Knoten is not None:
         # steige linksseitig ab
-        child_data = countC(node.linker_Knoten, indices, child_data, k, N, terminals, weights)
     if node.rechter_Knoten is not None:
 	# steige rechtsseitig ab
-	child_data_right = countC(node.rechter_Knoten, indices, child_data, k, N, terminals, weights)
     if node.Bag_Typ == Leaf:
     	# erzeuge und initialisiere k x kN Datenmatrix
-    	dm = new data[k, k*N]
-    	dm[0,0] =  1
-    	return dm
     elif node.Bag_Typ == Root:
-	# v wurde aus Bag entfernt
-	data = new data[3^node.bag.length, k, k*N]
-	for i in range(0,k):
-		for w in range(0,kN):
-			data[s,i,w] = child_data[s=0,i,w] + child_data[s=1,i,w] + child_data[s=2,i,w]
-	return data			
-    elif node.Bag_Typ == Introduce_Edge:
-	# im 'Introduce Edge'-Bag (u,v sind die Knoten der Kante e)
-	# s ist die Faerbung
-		data = data = new data[3^node.bag.length, k, k*N]
-		for s in len(data):
-			if( s(u) == 0 | s(v) == 0 | s(u) == s(v) ):
-				for i in range(0,k):
-					for w in range(0,kN):
-						data[s,i,w] = child_data[s,i,w]
-        return data
+	# v wurde aus Bag entfernt, fuehre die letzten 3 Faerbungen zusammen
     elif node.Bag_Typ == Introduce_Vertex:
         # erzeuge neue Datenmatrix (groesser als Kind, da pro Knoten im Bag drei neue Faerbungen)
         # v ist der 'introduced vertex' 
         data = new data[3^(child_data.length + 1), k, k * N]
-        
         for s in child_colorings:
         	# berechne Indices fuer neue Faerbungen
         	indices = calculate_new_indices
@@ -116,11 +93,7 @@ def countC(node, indices, child_data, k, N, terminals, weights):
         for s in colorings:
             for i in range(0, k):
                 for w in range(0, k * N):
-                    # berechne die Indices der drei Faerbungen, die aufsummiert werden
-                    indices = calculate_indices()
-                    data[s, i, w] = child_data[indices[0], i, w] +
-                    		    child_data[indices[1], i, w] +
-                                    child_data[indices[2], i, w]
+                    # summiere die Faerbungen und schreibe sie nach data[s,i,w]
         return data
     elif node.Bag_Typ == Join:
 	data = new data[node.bag.length, k, k * N]
@@ -132,21 +105,18 @@ def countC(node, indices, child_data, k, N, terminals, weights):
                     bound_w = w + get_sum_of_weights(colored_nodes)
                     for i1 in range(0, bound_i):
                         for w1 in range(0, bound_w):
-                            i2 = acc_bound_1 - i1
-                            w2 = acc_bound_2 - w1
-                            if w1 >= (k * N) or w2 >= (k * N) or i1 >= k or i2 >= k:
-                                value += 0
-                            else:
-                                value += child_data[s, i1, w1] *   
-                                         child_data_right[s, i2, w2])
-                    data[s, i, w] = value
-        return data
+                            i2 = bound_i - i1
+                            w2 = bound_w - w1
+                            # schreibe das Produkt des linken und rechten Bag nach data[i,s,w]
+                            # sofern die Grenzen fuer w1, w2, i1 und i2 stimmen
+        return data		
+    elif node.Bag_Typ == Introduce_Edge:
+	# siehe dynamisches Programm ...
     return data
 
 \end{lstlisting}
-\end{svgraybox}
 
-\subsection{Berechnung der Färbungen}
+\subsubsection{Berechnung der Färbungen}
 \label{ssec:impl_colors}
 Für die Kodierung der Färbungsdimension muss eine geeignete Zuordnung von Färbungen zu Indices der Datenmatrix eingeführt werden. Dafür benutzen wir eine ternäre Kodierung mit folgender Zuordnung:
 \begin{center}
@@ -170,7 +140,6 @@ Als Ergebnis gibt die Funktion in diesem Fall die Liste \texttt{[2,5,8]} als Erg
 
 Um auf Färbungen einzelner Knoten zurückgreifen zu können (z.~B. für die Berechnung des \glqq Introduce Edge\grqq -Bags) wird eine Funktion \texttt{get\_index\_as\_list} benötigt. Dieser wird eine Färbung als Index (in Dezimaldarstellung) und die Länge des Bags als Parameter übergeben wird. Diese berechnet die Liste der ternär codierten Färbungen mit der Länge des Bags. Der Code dafür ist in Algorithmus \ref{code:as_list} dargestellt. 
 
-\begin{svgraybox}
 \begin{lstlisting}[language=python,label={code:as_list}, basicstyle=\small, caption=Funktion get\_index\_as\_list zur Berechnung der ternären Färbung aus dem Index]
 def get_index_as_list(x, nr_of_vertices):
     if nr_of_vertices == 0:
@@ -184,9 +153,8 @@ def get_index_as_list(x, nr_of_vertices):
 
     return res
 \end{lstlisting}
-\end{svgraybox}
 
-\section{Evaluierung}
+\subsection{Evaluierung}
 \label{sec:impl_eval}
 Die Laufzeit des dynamischen Programms wurde mit verschiedenen Eingabegrößen getestet. Tabelle \ref{t:eval} zeigt die Eingabeparameter k und N, die Anzahl der Knoten des Graphen ($|V|$), die Baumweite der Nice Tree Decomposition (\textit{tw(G)}) sowie die Ergebnisse der Laufzeit in Sekunden.
 \begin{table}
@@ -205,7 +173,7 @@ Die Laufzeit des dynamischen Programms wurde mit verschiedenen Eingabegrößen g
 Die Tabelle zeigt, dass die Laufzeit mit der Eingabegröße stark ansteigt. Dies lässt die Frage offen, inwiefern der Algorithmus eine Lösung für praxisrelevante Probleme darstellt, da die Graphen sehr viel größer sind als die hier getesteten Beispiel. 
 Die Berechnung über das dynamische Programm bietet dennoch den Vorteil Lösungen $x$ mit $x<k$ direkt aus dem Ergebnis abzulesen.
 
-\section{Diskussion und Ausblick}
+\subsection{Diskussion und Ausblick}
 \label{sec:impl_outlook}
 Unsere Ergebnisse in Sektion \ref{sec:impl_eval} eröffnen die Fragestellung inwiefern die Cut \& Count-Technik das Steinerbaum-Problem hinsichtlich Laufzeit und Speicherbedarf effizient löst. 
 Hier bedarf es weiterer Vergleiche mit anderen Ansätzen, wie z.~B. einer Brute-Force-Suche. Es ist zu erforschen, ob diese für kleinere Graphen womöglich effizienter Lösungen berechnet.

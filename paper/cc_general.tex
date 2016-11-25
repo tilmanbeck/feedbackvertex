@@ -1,7 +1,7 @@
-\chapter{Cut \& Count-Technik}
+\section{Cut \& Count-Technik}
 \label{c:cc_general}
 
-\section{Einführendes}
+\subsection{Einführendes}
 \label{sec:cc_intro}
 Die Cut \& Count-Technik aus \cite{cygan_solving_2011} wird benutzt, um Zusammenhangs-Probleme von Graphen zu lösen.
 Dabei handelt es sich um Graphen-Probleme, bei denen zusammenhängende Submengen der Knoten gefunden werden müssen, die problemspezifische  Eigenschaften erfüllen müssen. 
@@ -11,13 +11,13 @@ Das Ergebnis ist ein Monte-Carlo-Algorithmus, welcher eine Aussage über die Exi
 Mithilfe von Randomisierung beschränkt die Technik die Anzahl der Lösungsmengen mit einer Wahrscheinlichkeit, die durch das Isolation-Lemma begrenzt werden kann. Dies wird in Sektion \ref{sec:cc_iso} näher erklärt.
 
 
-\section{Cut \& Count}
+\subsection{Cut \& Count}
 \label{sec:cc_cc}
 Sei $\mathcal{S}$ die Menge der Lösungen für das Graphenproblem. 
 Dann entscheidet Cut \& Count ob diese Menge leer ist. 
 Dazu kann Cut \& Count folgendermaßen aufgeteilt werden:
 
-\subsection{Cut}
+\subsubsection{Cut}
 \label{ssec:cc_cut}
 Die Zusammenhangs-Bedingung aus dem Graphenproblem wird abgeschwächt, indem eine Menge $\mathcal{R} \supseteq \mathcal{S}$ betrachtet wird. 
 Diese Menge $\mathcal{R}$ beschreibt die Menge deren Elemente alle Anforderungen bis auf die Zusammenhangs-Bedingung des Graphenproblems erfüllen. Dies entspricht der Menge der Lösungskandidaten.
@@ -25,7 +25,7 @@ Zusätzlich wird die Menge $\mathcal{C}$ von Paaren $(X,C)$ betrachtet, wobei $X
 
 Mithilfe dieser beiden Mengen können wir auf die Anzahl der Lösungsmengen schließen. Die Graphenprobleme, für welche die Cut \& Count-Technik angewendet werden kann, unterschieden sich hinsichtlich ihrer Zusammenhangs-Bedingung und der Lösungsmenge.
 Dementsprechend muss die Menge $\mathcal{R}$ angepasst werden.
-\subsection{Count}
+\subsubsection{Count}
 \label{ssec:cc_count}
 Im Count-Teil der Technik wird die Anzahl der konsistenten Schnitte $|\mathcal{C}|$ gezählt.
 Da die Menge der Lösungskandidaten $\mathcal{R}$ vom Graphenproblem abhängig ist, muss auch für jedes Problem entschieden werden welches Lösungskandidat-Schnitt-Paar gezählt wird.
@@ -33,7 +33,7 @@ Da die Menge der Lösungskandidaten $\mathcal{R}$ vom Graphenproblem abhängig i
 Durch die Isolierung auf wenige Kandidaten kann mit der Anzahl der konsistenten Schnitte entschieden werden, ob es eine Lösung gibt oder nicht.
 Der Algorithmus \glqq zählt\grqq ~also nicht die Lösungen, sondern die Anzahl der Lösungskandidaten, die einen konsistenten Schnitt bilden.
 
-\section{Monte-Carlo-Algorithmus}
+\subsection{Monte-Carlo-Algorithmus}
 \label{sec:cc_monte}
 Ein Monte-Carlo-Algorithmus ist ein randomisierter Algorithmus, welcher mit einer nach oben beschränkten Wahrscheinlichkeit ein falsches Ergebnis liefern darf. 
 Für die Cut \& Count-Technik bedeutet dies, dass der hervorgegangene Algorithmus niemals ein falsch-positives Ergebnis\footnote{Der Algorithmus gibt eine positive Antwort auf das Problem, obwohl keine Lösung existiert} ausgeben kann, aber zu einer gewissen Wahrscheinlichkeit ein falsch-negatives Ergebnis\footnote{Der Algorithmus gibt eine negative Antwort auf das Problem, obwohl eine Lösung existiert.}. 
@@ -47,7 +47,7 @@ Der Monte-Carlo-Algorithmus erreicht folgende Laufzeiten für einige bekannte Zu
 \item ...
 \end{itemize}
 
-\section{Isolation Lemma}
+\subsection{Isolation Lemma}
 \label{sec:cc_iso}
 Da im Count-Teil die Menge $|\mathcal{C}|$ modulo 2 berechnet wird, muss sichergestellt werden, dass die Menge der Lösungen begrenzt wird. 
 Für eine gerade Anzahl von Lösungen würde der Algorithmus sonst ein falsch-negatives Ergebnis liefern, da jede gerade Anzahl durch die Modulo-Operation nicht erkannt wird. 

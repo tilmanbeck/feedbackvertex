@@ -1,7 +1,5 @@
-\documentclass[graybox,envcountchap,openany]{svmono}
+\documentclass[a4paper,10pt,DIV=12]{scrartcl}
 
-% choose options for [] as required from the list
-% in the Reference Guide
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -20,12 +18,18 @@
 \usepackage{multicol}        % used for the two-column index
 \usepackage[bottom]{footmisc}% places footnotes at page bottom
 
+\usepackage{xcolor}
+\usepackage{textcomp}
+
 \usepackage{listings}		% for code highlighting
-\lstset{basicstyle=\ttfamily,
+\lstset{
+  basicstyle=\ttfamily,
   showstringspaces=false,
   commentstyle=\color{red},
   keywordstyle=\color{blue},
-  breaklines=true
+  breaklines=true,
+  language=python,
+  basicstyle=\small
 }
 
 % listing stuff
@@ -34,6 +38,26 @@
 \lstset{
 captionpos=b
 }
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{proof}[1][Proof]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{definition}[1][Definition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{example}[1][Example]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\newcommand{\qed}{\nobreak \ifvmode \relax \else
+      \ifdim\lastskip<1.5em \hskip-\lastskip
+      \hskip1.5em plus0em minus0.5em \fi \nobreak
+      \vrule height0.75em width0.5em depth0.25em\fi}
+
 
 % Registered definieren
 \def\SymbReg{\textsuperscript{\textregistered}}
@@ -58,14 +82,7 @@ Tilman Beck\\
 Steinerbaum-Problem}
 \maketitle
 
-%\frontmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\setcounter{tocdepth}{1}
-\tableofcontents
-
-%\include{acronym}
-
 \setlength{\parindent}{0pt} 
-%\mainmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \include{intro}
 \include{treedecomp}
 \include{cc_general}
@@ -73,17 +90,6 @@ Steinerbaum-Problem}
 \include{implementation}
 \include{summary}
 
-%\backmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\printindex
-\begingroup
-\listoffigures
-\let\clearpage\relax
-\listoftables
-\lstlistoflistings
-\endgroup
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliography{bibliography}
 \bibliographystyle{alpha}
 

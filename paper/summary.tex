@@ -1,19 +1,9 @@
-\chapter{Zusammenfassung}
+\section{Zusammenfassung}
 \label{c:summary}
-%cut count ist monte carlo als result
 Das Ergebnis der Anwendung der Cut \& Count-Technik auf ein Graphproblem ist ein Monte-Carlo-Algorithmus, der mit einer nach oben beschränkten Wahrscheinlichkeit Aussage über die Existenz eines Ergebnisses liefert. Mittels Randomisierung und dem Isolations-Lemma \ref{sec:cc_iso} wird die Wahrscheinlichkeit einer falsch-negativen Antwort nach oben begrenzt. 
 
-%wurde von uns für steiner implementiert
 In dieser Arbeit wurde diese Technik für das Steinerbaum-Problem implementiert. Da die Cut \& Count-Technik eine angepasste Nice Tree Decomposition benötigt, wurde eine Implementierung entwickelt, welche eine standardmäßige Nice Tree Decomposition in die von der Cut \& Count-Technik benötigte Form überführt.
 
 Die Evaluation verschiedener Eingabegrößen warf die Frage auf inwiefern die Count \& Count-Technik praxisrelevante Probleme hinsichtlich der Laufzeit und des Speicherbedarfs effizient lösen kann. 
 Für die Technik ist eine effiziente Vorverarbeitung der Nice Tree Decomposition wichtig, da die Baumweite und die Anzahl der Bags Auswirkungen auf die Laufzeit und den Speicherbedarf haben.
 Hierbei bedarf es weiterer Forschung in Vergleich mit anderen Ansätzen, wie z.~B. einer Brute-Force-Suche.
-%treewidth sollte klein sein
-%Aufgrund der von der Technik resultierenden Laufzeit $3^t |V|^{\mathcal{O}(1)}$ sollte bei Verwendung darauf geachtet werden, dass die \textit{treewidth} der Nice-Tree-Decomposition des Problemgraphen gering ausfällt.
-
-%speicher verbrauch ist relativ hoch
-%Da für jeden Bag innerhalb der Treedecomosition eine Datenmatrix angelegt werden muss, ist die Speicherbelastung recht hoch. 
-
-%laufzeit ist bei großen beispielen schnell sehr hoch, praxis tauglichkeit so lala
-%Die Laufzeit zeigt schon bei kleineren Beispielen schnell merkbare Erhöhungen. Da Probleme dieser Art in der realen Welt deutlich größer ausfallen, halten wir diese Technik nur für bedingt praxis tauglich aufgrund ihrer Laufzeit.  
