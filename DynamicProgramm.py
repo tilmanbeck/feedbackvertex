@@ -34,7 +34,7 @@ def inorder(node, indices, data, k, N, terminals, weights):
     if node.bag_type == BagType.L:
         new_data = np.zeros((1, k, (k-1) * N))
         new_data[0,0,0] = 1    # leaf initialization
-        # ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
+        ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
     elif node.bag_type == BagType.R:
 
@@ -42,7 +42,7 @@ def inorder(node, indices, data, k, N, terminals, weights):
         for i in range(0, k):
             for w in range(0, (k -1) * N):
                 new_data[0, i, w] = data[0, i, w] + data[1, i, w] + data[2,  i, w]
-        # ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
+        ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
 
     elif node.bag_type == BagType.IE:
@@ -61,7 +61,7 @@ def inorder(node, indices, data, k, N, terminals, weights):
                 for i in range(0, k):
                     for w in range(0, (k - 1) * N):
                         new_data[s, i, w] = data[s, i, w]
-        # ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
+        ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
 
     elif node.bag_type == BagType.IV:
@@ -105,7 +105,7 @@ def inorder(node, indices, data, k, N, terminals, weights):
                         new_data[indices[2], i, w] = data[s, i - 1, w - weights.get(introduced_vertex)]
                     else:
                         new_data[indices[2], i, w] = 0
-        # ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
+        ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
 
     elif node.bag_type == BagType.F:
@@ -131,7 +131,7 @@ def inorder(node, indices, data, k, N, terminals, weights):
                     # add the three matrices and write back to new matrix
                     new_data[s, i, w] = data[indices_to_sum[0], i, w] + data[indices_to_sum[1], i, w] +\
                                        data[indices_to_sum[2], i, w]
-        # ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
+        ut.write_to_file(outputFile, 'a', new_data, new_data.shape[0], str(node.bag_type) + str(node.get_bag()))
         return new_data
 
     elif node.bag_type == BagType.J:

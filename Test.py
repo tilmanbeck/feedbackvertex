@@ -10,31 +10,33 @@ import DynamicProgramm as dp
 #############################################################
 ######################### BIG EXAMPLE #######################
 #############################################################
-# k = 3
-# vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-# N = 2 * len(vertices)
-# edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
-#          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
-#          {'c', 'd'}, {'d', 'e'}]
-# weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
-#
-# ecd = td.TreeDecomposition(None, None, ['e', 'c', 'd'])
-# efg = td.TreeDecomposition(None, None, ['e', 'f', 'g'])
-# abg = td.TreeDecomposition(None, None, ['a', 'b', 'g'])
-# ecg = td.TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
-# bcg = td.TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
-# bc = td.TreeDecomposition(bcg, None, ['b', 'c'])
-#
-# bc = td.root(bc)
-# td.leaf(bc)
-# td.join(bc)
-# td.add_internal_nodes(bc)
-# td.edge_bags(bc, edges)
+k = 3
+vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+N = 2 * len(vertices)
+terminals = ['d', 'b', 'c']
+edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
+         {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
+         {'c', 'd'}, {'d', 'e'}]
 
-# gv = GraphVisualization(bc)
-# gv.create_graph()
+weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
 
-# dp.count(vertices, bc, ['d','c','e'], k, N, weights)
+ecd = td.TreeDecomposition(None, None, ['e', 'c', 'd'])
+efg = td.TreeDecomposition(None, None, ['e', 'f', 'g'])
+abg = td.TreeDecomposition(None, None, ['a', 'b', 'g'])
+ecg = td.TreeDecomposition(efg, ecd, ['e', 'c', 'g'])
+bcg = td.TreeDecomposition(abg, ecg, ['b', 'c', 'g'])
+bc = td.TreeDecomposition(bcg, None, ['b', 'c'])
+
+bc = td.root(bc)
+td.leaf(bc)
+td.join(bc)
+td.add_internal_nodes(bc)
+td.edge_bags(bc, edges)
+
+gv = GraphVisualization(bc)
+gv.create_graph()
+
+dp.count(vertices, bc, terminals, k, N, weights)
 
 # k = 3
 # vertices = ['a', 'b', 'c', 'd', 'e']
@@ -47,8 +49,8 @@ import DynamicProgramm as dp
 # ecg = td.TreeDecomposition(None, None, ['e', 'c', 'd'])
 # bcg = td.TreeDecomposition(abg, ecg, ['b', 'c', 'd'])
 # bc = td.TreeDecomposition(bcg, None, ['b', 'c'])
-# bc = td.td.root(bc)
-# td.td.leaf(bc)
+# bc = td.root(bc)
+# td.leaf(bc)
 # td.join(bc)
 # td.add_internal_nodes(bc)
 # td.edge_bags(bc, edges)
@@ -85,53 +87,53 @@ import DynamicProgramm as dp
 #############################################################
 #UNSER GEHIRNSCHMALZ
 #
-vertices = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
-
-edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
-         {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
-         {'c', 'd'}, {'d', 'e'}, {'h', 'g'}, {'h', 'f'},
-         {'h', 'i'}, {'i', 'f'}, {'i', 'j'}, {'j', 'f'},
-         {'k', 'l'}, {'k', 'o'}, {'k', 'm'}, {'o', 'l'},
-         {'m', 'n'}, {'m', 'p'}, {'n', 'p'}, {'e', 'k'},
-         {'d', 'k'}]
-k = 4
-N = 2 * len(vertices)
-
-
-weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
-
-
-mnp = td.TreeDecomposition(None, None, ['m', 'n', 'p'])
-
-fij = td.TreeDecomposition(None, None, ['f', 'i', 'j'])
-klo = td.TreeDecomposition(None, None, ['k', 'l', 'o'])
-kmn = td.TreeDecomposition(mnp, None, ['k', 'm', 'n'])
-
-hfi = td.TreeDecomposition(fij, None, ['h', 'f', 'i'])
-ekl = td.TreeDecomposition(klo, None, ['e', 'k', 'l'])
-dmk = td.TreeDecomposition(kmn, None, ['d', 'm', 'k'])
-
-ghf = td.TreeDecomposition(hfi, None, ['g', 'h', 'f'])
-edk = td.TreeDecomposition(ekl, dmk, ['e', 'd', 'k'])
-
-ecd = td.TreeDecomposition(edk, None, ['e', 'c', 'd'])
-gfe = td.TreeDecomposition(ghf, None, ['g', 'f', 'e'])
-
-cge = td.TreeDecomposition(gfe, ecd, ['c', 'g', 'e'])
-bga = td.TreeDecomposition(None, None, ['b', 'g', 'a'])
-
-bcg = td.TreeDecomposition(bga, cge, ['b', 'c', 'g'])
-
-bc = td.TreeDecomposition(bcg, None, ['b', 'c'])
-
-bc = td.root(bc)
-td.leaf(bc)
-td.join(bc)
-td.add_internal_nodes(bc)
-td.edge_bags(bc, edges)
-
-gv = GraphVisualization(bc)
-gv.create_graph()
+# vertices = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
+#
+# edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
+#          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
+#          {'c', 'd'}, {'d', 'e'}, {'h', 'g'}, {'h', 'f'},
+#          {'h', 'i'}, {'i', 'f'}, {'i', 'j'}, {'j', 'f'},
+#          {'k', 'l'}, {'k', 'o'}, {'k', 'm'}, {'o', 'l'},
+#          {'m', 'n'}, {'m', 'p'}, {'n', 'p'}, {'e', 'k'},
+#          {'d', 'k'}]
+# k = 4
+# N = 2 * len(vertices)
+#
+#
+# weights = {vertices[i]: rnd.randint(1, N) for i in range(0, len(vertices))}
+#
+#
+# mnp = td.TreeDecomposition(None, None, ['m', 'n', 'p'])
+#
+# fij = td.TreeDecomposition(None, None, ['f', 'i', 'j'])
+# klo = td.TreeDecomposition(None, None, ['k', 'l', 'o'])
+# kmn = td.TreeDecomposition(mnp, None, ['k', 'm', 'n'])
+#
+# hfi = td.TreeDecomposition(fij, None, ['h', 'f', 'i'])
+# ekl = td.TreeDecomposition(klo, None, ['e', 'k', 'l'])
+# dmk = td.TreeDecomposition(kmn, None, ['d', 'm', 'k'])
+#
+# ghf = td.TreeDecomposition(hfi, None, ['g', 'h', 'f'])
+# edk = td.TreeDecomposition(ekl, dmk, ['e', 'd', 'k'])
+#
+# ecd = td.TreeDecomposition(edk, None, ['e', 'c', 'd'])
+# gfe = td.TreeDecomposition(ghf, None, ['g', 'f', 'e'])
+#
+# cge = td.TreeDecomposition(gfe, ecd, ['c', 'g', 'e'])
+# bga = td.TreeDecomposition(None, None, ['b', 'g', 'a'])
+#
+# bcg = td.TreeDecomposition(bga, cge, ['b', 'c', 'g'])
+#
+# bc = td.TreeDecomposition(bcg, None, ['b', 'c'])
+#
+# bc = td.root(bc)
+# td.leaf(bc)
+# td.join(bc)
+# td.add_internal_nodes(bc)
+# td.edge_bags(bc, edges)
+#
+# gv = GraphVisualization(bc)
+# gv.create_graph()
 
 # runs = 25
 # t = [0] * runs
