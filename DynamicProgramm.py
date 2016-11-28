@@ -9,6 +9,7 @@ outputFile = './output/test.txt'
 def count(vertices, nice_tree_decomp, terminals, k, N, weights):
     # startTime = time.time()
     # in-order traversal
+    ut.delete_file(outputFile)
     empty = np.zeros((1,1))
     k += 1
     indices = {vertices[i]: i for i in range(0,len(vertices))}

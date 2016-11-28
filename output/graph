@@ -1,0 +1,74 @@
+graph {
+	graph [bgcolor="#333333" fontcolor=white fontsize=16 label="Nice Tree Decomposition" labelloc=top rankdir=TB]
+	node [color=white fillcolor="#006699" fontcolor=white fontname=Helvetica shape=box style=filled]
+	edge [arrowhead=open color=white fontcolor=white fontname=Courier fontsize=12 style=dashed]
+		A0 [label="root | [] | label: {}"]
+		B0 [label="forget | ['c'] | label: b"]
+			A0 -- B0
+		C0 [label="introduce edge | ['b', 'c'] | label: {'b', 'c'}"]
+			B0 -- C0
+		D0 [label="forget | ['b', 'c'] | label: g"]
+			C0 -- D0
+		E0 [label="introduce edge | ['b', 'c', 'g'] | label: {'g', 'b'}"]
+			D0 -- E0
+		F0 [label="join | ['b', 'c', 'g'] | label: {}"]
+			E0 -- F0
+		G0 [label="introduce vertex | ['b', 'c', 'g'] | label: c"]
+			F0 -- G0
+		H0 [label="introduce vertex | ['b', 'c', 'g'] | label: b"]
+			F0 -- H0
+		I0 [label="forget | ['b', 'g'] | label: a"]
+			G0 -- I0
+		J0 [label="introduce edge | ['a', 'b', 'g'] | label: {'g', 'a'}"]
+			I0 -- J0
+		K0 [label="introduce edge | ['a', 'b', 'g'] | label: {'b', 'a'}"]
+			J0 -- K0
+		L0 [label="introduce vertex | ['a', 'b', 'g'] | label: a"]
+			K0 -- L0
+		M0 [label="introduce vertex | ['b', 'g'] | label: b"]
+			L0 -- M0
+		N0 [label="introduce vertex | ['g'] | label: g"]
+			M0 -- N0
+		O0 [label="leaf | [] | label: {}"]
+			N0 -- O0
+		P0 [label="forget | ['c', 'g'] | label: e"]
+			H0 -- P0
+		Q0 [label="introduce edge | ['e', 'c', 'g'] | label: {'e', 'g'}"]
+			P0 -- Q0
+		R0 [label="introduce edge | ['e', 'c', 'g'] | label: {'e', 'c'}"]
+			Q0 -- R0
+		S0 [label="join | ['e', 'c', 'g'] | label: {}"]
+			R0 -- S0
+		T0 [label="introduce vertex | ['e', 'c', 'g'] | label: c"]
+			S0 -- T0
+		U0 [label="introduce vertex | ['e', 'c', 'g'] | label: g"]
+			S0 -- U0
+		V0 [label="forget | ['e', 'g'] | label: f"]
+			T0 -- V0
+		W0 [label="introduce edge | ['e', 'f', 'g'] | label: {'f', 'e'}"]
+			V0 -- W0
+		X0 [label="introduce edge | ['e', 'f', 'g'] | label: {'f', 'g'}"]
+			W0 -- X0
+		A1 [label="introduce vertex | ['e', 'f', 'g'] | label: e"]
+			X0 -- A1
+		B1 [label="introduce vertex | ['f', 'g'] | label: f"]
+			A1 -- B1
+		C1 [label="introduce vertex | ['g'] | label: g"]
+			B1 -- C1
+		D1 [label="leaf | [] | label: {}"]
+			C1 -- D1
+		E1 [label="forget | ['e', 'c'] | label: d"]
+			U0 -- E1
+		F1 [label="introduce edge | ['e', 'c', 'd'] | label: {'e', 'd'}"]
+			E1 -- F1
+		G1 [label="introduce edge | ['e', 'c', 'd'] | label: {'c', 'd'}"]
+			F1 -- G1
+		H1 [label="introduce vertex | ['e', 'c', 'd'] | label: e"]
+			G1 -- H1
+		I1 [label="introduce vertex | ['c', 'd'] | label: c"]
+			H1 -- I1
+		J1 [label="introduce vertex | ['d'] | label: d"]
+			I1 -- J1
+		K1 [label="leaf | [] | label: {}"]
+			J1 -- K1
+}

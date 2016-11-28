@@ -1,4 +1,5 @@
 import math as m
+import os
 
 
 # value zB [0,1,2,2,0]
@@ -102,3 +103,8 @@ def write_to_file(filename, mode, array, fst, step_info):
             f.write(str(array[i]))
             f.write("\n\n")
         f.write("-----------------------------------------------\n")
+
+
+def delete_file(filename):
+    if os.path.exists(filename):
+        os.remove(filename)

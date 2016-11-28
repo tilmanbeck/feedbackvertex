@@ -2,6 +2,7 @@ import graphviz as gv
 import string
 
 index = 0
+outputPath = './output/'
 
 
 class GraphVisualization:
@@ -100,7 +101,7 @@ class GraphVisualization:
         g = self.apply_styles(g, styles)
         # filename = g.save('graph', '.')
         # render doesnt work so i save it
-        g.render(filename='./graph', view=True)
+        g.render(filename= outputPath + 'graph', view=True)
 
 
 

@@ -13,7 +13,7 @@ import DynamicProgramm as dp
 k = 3
 vertices = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 N = 2 * len(vertices)
-terminals = ['d', 'b', 'c']
+terminals = ['e', 'd', 'c']
 edges = [{'a', 'b'}, {'a', 'g'}, {'b', 'g'}, {'b', 'c'},
          {'c', 'e'}, {'g', 'e'}, {'g', 'f'}, {'e', 'f'},
          {'c', 'd'}, {'d', 'e'}]
@@ -35,7 +35,7 @@ td.edge_bags(bc, edges)
 
 gv = GraphVisualization(bc)
 gv.create_graph()
-
+print(str(weights))
 dp.count(vertices, bc, terminals, k, N, weights)
 
 # k = 3
